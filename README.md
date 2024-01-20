@@ -37,7 +37,7 @@ Welcome to the Purchaser project! This is a full-stack web application for B2C f
 
 1. Clone the repository:
  ```bash
-    git clone 
+    git clone https://github.com/yburdakova/Purchaser
 ```
 
 2. Install dependencies for the frontend and backend
