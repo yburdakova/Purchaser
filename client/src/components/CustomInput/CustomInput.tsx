@@ -3,8 +3,7 @@ import styles from './CustomInput.module.css'
 import { CustomInputProps } from '../../data/types';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
-
-const CustomInput = ({ label, type, ...props }: CustomInputProps) => {
+const CustomInput = ({ label, type, required, ...props }: CustomInputProps) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState('');
@@ -16,27 +15,30 @@ const CustomInput = ({ label, type, ...props }: CustomInputProps) => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (
-    <div className={`${styles.floatingLabelInput} ${isFocused || value ? styles.focused : ''}`}>
-    <input
-      {...props}
-      type={showPassword ? 'text' : type}
-      value={value}
-      onChange={handleChange}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      className={`${styles.input} ${isFocused ? styles.hidePlaceholder : ''}`}
-      placeholder=" " 
-    />
-    {type === 'password' && (
-        <div onClick={toggleShowPassword} className={styles.togglePasswordButton}>
-          {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
-        </div>
-      )}
-    <label className={`${styles.label} ${value || isFocused ? styles.filled : ''}`}>
-      {label}
-    </label>
+    <div className={styles.inputBox}>
+      <div className={`${styles.floatingLabelInput} ${isFocused || value ? styles.focused : ''}`}>
+        <input
+          {...props}
+          required={required}
+          type={showPassword ? 'text' : type}
+          value={value}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          className={`${styles.input} ${isFocused ? styles.hidePlaceholder : ''}`}
+          placeholder=" " 
+        />
+        {type === 'password' && (
+            <div onClick={toggleShowPassword} className={styles.togglePasswordButton}>
+              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+            </div>
+          )}
+        <label className={`${styles.label} ${value || isFocused ? styles.filled : ''}`}>
+          {label}
+        </label>
+      </div>
     </div>
-  );
+  )
 };
 
 export default CustomInput;

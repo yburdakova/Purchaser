@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element ={ user && admin ?  <Navigate to="/admin"/> : user ? <Home /> :  <Navigate to="/login"/>} />
-        <Route path="/repassword" element={<PasswordRequest/>} />
+        <Route path="/reqest_password" element={<PasswordRequest/>} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/login" element={<Login />} />
         

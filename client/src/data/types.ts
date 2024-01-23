@@ -22,6 +22,6 @@ export interface UserState {
 export interface CustomInputProps {
   label: string;
   placeholder: string;
-  required: boolean;
+  required?: boolean;
   type: string;
 }
