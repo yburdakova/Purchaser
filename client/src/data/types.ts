@@ -27,3 +27,9 @@ export interface CustomInputProps {
   isMask?: boolean;
   getValue?: (value: string) => void;  
 }
+
+export interface MenuItemProps{
+  title: string;
+  path: string;
+  icon: React.ReactNode;
+}

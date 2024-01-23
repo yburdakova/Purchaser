@@ -1,0 +1,42 @@
+.itemContainer{
+  display: flex;
+  align-items: center;
+  list-style: none;
+  cursor: pointer;
+  border: 1px solid #8A8F99;
+  border-radius: 8px;
+  gap: 10px;
+  padding: 10px;
+  transition: all 0.3s ease 0s;
+}
+.itemContainer:hover{
+  background-color: #1D2634;
+}
+.icon{
+  color: #8A8F99;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+
+}
+.link{
+  color: rgba(255, 255, 255, 0.87);
+  width: 100%;
+  height: 100%;
+}
+
+.active{
+  background-color: #1D2634;
+}
+
+@media (prefers-color-scheme: light) {
+  .link{
+    color: #213547;
+  }
+  .active{
+    background-color: #F8F9FC
+  }
+  .itemContainer:hover{
+    background-color: #F8F9FC
+  }
+}

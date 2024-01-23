@@ -34,7 +34,8 @@ const PasswordRequest = () => {
   };
 
   return (
-    <div className={styles.container}>
+<div className={styles.wrapper}>
+<div className={styles.container}>
     <div className={styles.title}>
       Запрос клиентского доступа
     </div>
@@ -77,6 +78,7 @@ const PasswordRequest = () => {
     }
     
   </div>
+</div>
   )
 }
 

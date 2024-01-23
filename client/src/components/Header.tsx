@@ -14,11 +14,11 @@ const Header = () => {
   }
 
   return (
-    <div>
+    <header>
       <div className="logout-icon" onClick={handleClickLogout}>
         <FaPowerOff size={40} />
       </div>
-    </div>
+    </header>
   )
 }
 
