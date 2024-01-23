@@ -54,5 +54,11 @@
 
 
 @media (prefers-color-scheme: light) {
-  
+  .input {
+    background-color: #ffffff;
+  }
+  .focused .label,
+  .input:not(:placeholder-shown) + .label {
+    background-color: #ffffff
+  }
 }
