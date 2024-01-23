@@ -3,7 +3,6 @@ import { RootState } from './redux/store';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AdminPanel, Login, PasswordRequest, Home } from './pages';
-import { Footer } from './components';
 
 function App() {
   const user = useSelector((state: RootState) => state.user.currentUser);

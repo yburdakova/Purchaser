@@ -42,3 +42,17 @@
 .hidePlaceholder::placeholder {
   color: transparent;
 }
+.togglePasswordButton{
+  position: absolute;
+  right: 10px;
+  top: 20%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color:  #57606E;
+}
+
+
+@media (prefers-color-scheme: light) {
+  
+}
