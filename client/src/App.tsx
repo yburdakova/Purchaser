@@ -11,13 +11,12 @@ function App() {
   console.log(user, admin)
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element ={ user && admin ?  <Navigate to="/admin"/> : user ? <Home /> :  <Navigate to="/login"/>} />
-        <Route path="/reqest_password" element={<PasswordRequest/>} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/login" element={<Login />} />
-        
-      </Routes>
+        <Routes>
+          <Route path="/" element={ user&&admin ? <Navigate to="/admin"/> : user ? <Home /> : <Navigate to="/login"/> } />
+          <Route path="/login" element ={ <Login/>} />
+          <Route path="/admin" element={user&&admin ?<AdminPanel /> : <Navigate to="/"/>} />
+          <Route path="/reqest_password" element={<PasswordRequest />} />
+        </Routes>
     </BrowserRouter>
   )
 }

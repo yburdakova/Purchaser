@@ -16,7 +16,7 @@ export interface UserState {
   isFetching: boolean;
   isAdmin: boolean;
   isActive: boolean;
-  error: boolean
+  error: string | null;
 }
 
 export interface CustomInputProps {
@@ -24,4 +24,5 @@ export interface CustomInputProps {
   placeholder: string;
   required?: boolean;
   type: string;
+  getValue?: (value: string) => void;  
 }

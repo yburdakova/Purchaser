@@ -1,9 +1,9 @@
-import  { SetStateAction, useState } from 'react';
+import  { useState } from 'react';
 import styles from './CustomInput.module.css'
 import { CustomInputProps } from '../../data/types';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
-const CustomInput = ({ label, type, required, ...props }: CustomInputProps) => {
+const CustomInput = ({ label, type, required, getValue, ...props }: CustomInputProps) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState('');
@@ -11,7 +11,15 @@ const CustomInput = ({ label, type, required, ...props }: CustomInputProps) => {
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () => setIsFocused(value.length !== 0 ? true : false);
-  const handleChange = (e: { target: { value: SetStateAction<string>; }; }) => setValue(e.target.value);
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue);
+    if (getValue) { 
+      getValue(newValue); 
+    }
+  };
+
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
   return (

@@ -1,8 +1,11 @@
 import React from 'react'
+import { Header } from '../components'
 
 const AdminPanel = () => {
   return (
-    <div>AdminPanel</div>
+    <div>AdminPanel
+      <Header/>
+    </div>
   )
 }
 

@@ -22,10 +22,24 @@
   background-color: #253043;
   border-radius: 20px;
   padding: 40px;
+  position: relative;
 }
 
 .button{
   margin-top: 10px;
+}
+.link{
+  margin-top: 20px;
+}
+.error {
+  color: red;
+  height: 20px; 
+  margin-bottom: 10px; 
+  visibility: hidden; 
+}
+
+.error.active {
+  visibility: visible; 
 }
 
 @media (prefers-color-scheme: light) {
