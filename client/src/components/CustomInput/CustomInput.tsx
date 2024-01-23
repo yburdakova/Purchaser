@@ -1,16 +1,20 @@
 import  { useState } from 'react';
 import styles from './CustomInput.module.css'
+import InputMask from 'react-input-mask';
+
 import { CustomInputProps } from '../../data/types';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
-const CustomInput = ({ label, type, required, getValue, ...props }: CustomInputProps) => {
+const CustomInput = ({ label, type, required, isMask, getValue, ...props }: CustomInputProps) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(value.length !== 0 ? true : false);
+  const handleBlur = () =>{ 
+    const phoneMask = "+7-___-___-__-__";
+    setIsFocused(value !== phoneMask ? false : true )};
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -25,7 +29,7 @@ const CustomInput = ({ label, type, required, getValue, ...props }: CustomInputP
   return (
     <div className={styles.inputBox}>
       <div className={`${styles.floatingLabelInput} ${isFocused || value ? styles.focused : ''}`}>
-        <input
+        <InputMask
           {...props}
           required={required}
           type={showPassword ? 'text' : type}
@@ -33,6 +37,7 @@ const CustomInput = ({ label, type, required, getValue, ...props }: CustomInputP
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
+          mask={isMask? "+7 999 999-99-99": ""}
           className={`${styles.input} ${isFocused ? styles.hidePlaceholder : ''}`}
           placeholder=" " 
         />

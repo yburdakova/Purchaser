@@ -24,5 +24,6 @@ export interface CustomInputProps {
   placeholder: string;
   required?: boolean;
   type: string;
+  isMask?: boolean;
   getValue?: (value: string) => void;  
 }
