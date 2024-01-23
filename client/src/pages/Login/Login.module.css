@@ -1,0 +1,11 @@
+.container{
+  max-width: 520px;
+  margin: 0px auto;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
