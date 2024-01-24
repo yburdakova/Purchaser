@@ -54,8 +54,6 @@ header{
   }
 }
 
-
-
 .notification{
   position: absolute;
   display: flex;
@@ -70,7 +68,6 @@ header{
   width: 20px;
   height: 20px;
   font-weight: 600;
-
 }
 
 .headerIcon:hover{
@@ -81,12 +78,13 @@ header{
   transition: all 0.3s ease 0s;
 }
 .infopage{
-  width: 100%;
+  margin: 0 40px;
   display: flex;
   flex-direction: column;
   overflow-y: auto; 
   flex-grow: 1;
   overflow-y: auto;
+
 }
 
 footer {

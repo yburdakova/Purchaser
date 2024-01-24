@@ -24,6 +24,7 @@ function App() {
           <Route path="/" element={ user&&admin ? <Navigate to="/admin"/> : user ? <Home /> : <Navigate to="/login"/> } />
           <Route path="/login" element ={ <Login/>} />
           <Route path="/admin" element={user&&admin ?<AdminPanel /> : <Navigate to="/"/>} >
+            <Route path="" element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="orders" element={<AdminOrders />} />
             <Route path="customers" element={<AdminCustomers />} />

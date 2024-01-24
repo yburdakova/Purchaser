@@ -12,8 +12,10 @@ const MenuItem = ({title, path, icon}: MenuItemProps) => {
   
   return (
     <li className={isActive? `${styles.itemContainer} ${styles.active}` : styles.itemContainer}>
-      <div className={styles.icon}>{icon}</div>
-      <Link to={path} className={styles.link}>{title}</Link>
+      <Link to={path} className={styles.link}>
+        <div className={styles.icon}>{icon}</div>
+        <div className={styles.title}>{title}</div>
+      </Link>
     </li>
   )
 }
