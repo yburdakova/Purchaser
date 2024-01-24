@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './MenuPanel.module.css'
 import { menuLinks } from "../../data/constants.tsx"
 import logo from '../../assets/logo.svg'

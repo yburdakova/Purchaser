@@ -4,7 +4,8 @@ import PasswordRequest from './PasswordRequest/PasswordRequest.tsx'
 import Home from './Home.tsx'
 import AdminDashboard from './AdminDashboard.tsx'
 import AdminOrders from './AdminOrders.tsx'
-
+import AdminCustomers from './AdminCustomers.tsx'
+import AdminProducts from './AdminProducts.tsx'
 
 export {
   Login,
@@ -12,5 +13,7 @@ export {
   PasswordRequest,
   Home,
   AdminDashboard,
-  AdminOrders
+  AdminOrders,
+  AdminCustomers,
+  AdminProducts
 }

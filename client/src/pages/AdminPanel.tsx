@@ -4,11 +4,11 @@ import { Outlet } from 'react-router'
 
 const AdminPanel = () => {
   return (
-    <div className='pageWrapper'>
+    <div className="pageWrapper">
       <MenuPanel/>
       <div className="pageContainer">
         <Header/>
-        <Outlet /> 
+        <Outlet/> 
         <Footer/>
       </div>
       

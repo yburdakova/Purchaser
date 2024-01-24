@@ -2,7 +2,7 @@ import React from 'react'
 
 const AdminDashboard = () => {
   return (
-    <div>adminDashboard</div>
+    <div className='infopage'>adminDashboard</div>
   )
 }
 

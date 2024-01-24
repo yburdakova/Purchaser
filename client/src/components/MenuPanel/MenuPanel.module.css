@@ -2,8 +2,8 @@
   width: 258px;
   overflow-y: auto;
   height: 100vh;
-  margin-right: 60px;
   background-color: #253043;
+  flex-shrink: 0;
 }
 
 .logoBox{
