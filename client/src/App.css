@@ -25,7 +25,19 @@ header{
   top: 0;
   z-index: 100;
   margin: 20px 0;
-  padding-right: 40px;
+  padding: 0 40px;
+  justify-content: space-between;
+}
+.page_title{
+  display: flex;
+  text-align: center;
+  color:  #4A7BD0; 
+  font-size: 32px;
+  font-weight: 600; 
+}
+
+.header_icons{
+  display: flex;
   justify-content: flex-end;
 }
 
@@ -131,6 +143,14 @@ footer {
   transition: width 0.3s ease-in-out; 
 }
 
+.widgetBox{
+  width: 20%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #253043;
+
+}
+
 .dev_link:hover::after {
   width: 41%; 
 }
@@ -153,5 +173,10 @@ footer {
   }
   .footer_contact:hover .footerIcon{
     background-color: rgba(238, 234, 234, 0.87);
+  }
+  .widgetBox{
+    background-color: #ffffff;
+    box-shadow:  3px 3px 0px #f3f4f7,
+                -3px -3px 0px #fdfeff;
   }
 }
