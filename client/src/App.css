@@ -116,6 +116,23 @@ footer {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.87);
   padding-left: 6px;
+  display: inline-block; 
+  text-decoration: none;
+  position: relative;
+}
+.dev_link::after {
+  content: '';
+  position: absolute;
+  left: 109px;
+  bottom: -2px;
+  width: 0;
+  height: 1px; 
+  background-color:  #4A7BD0; 
+  transition: width 0.3s ease-in-out; 
+}
+
+.dev_link:hover::after {
+  width: 41%; 
 }
 
 @media (prefers-color-scheme: light) {
