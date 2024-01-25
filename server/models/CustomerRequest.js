@@ -2,19 +2,17 @@ import mongoose from 'mongoose';
 
 const CustomerRequestSchema = new mongoose.Schema(
     {
-        username: {
+        name: {
             type: String,
             required: true,
         },
         email:{
             type: String,
             required: true,
-            unique: true
         },
         phone:{
             type: String,
             required: true,
-            unique: true
         },
         isProcessed: {
             type: Boolean,

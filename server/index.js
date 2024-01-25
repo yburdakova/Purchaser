@@ -33,7 +33,7 @@ app.use("/api/categories", categoryRouter)
 app.use("/api/users", userRouter)
 app.use("/api/auth", authRouter)
 app.use("/api/products", productRouter)
-app.use("/api/request", requestRouter)
+app.use("/api/requests", requestRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
