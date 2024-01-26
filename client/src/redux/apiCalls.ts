@@ -46,10 +46,10 @@ export const getAdminData = async <T>(
   }
 };
 
-export const postAdminData = async <T>(
+export const postAdminData = async <T, U>(
   dispatch: Dispatch, 
   path: string,
-  bodyObj: Object,
+  bodyObj: U,
   token: string, 
   admin: boolean,
   successAction: SuccessAction<T>

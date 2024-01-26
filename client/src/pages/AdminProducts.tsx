@@ -87,7 +87,6 @@ const AdminProducts = () => {
     }
     setNewProductTitle('')
     setNewProductPrice('')
-    console.log("Added new product")
   }
 
   const addNewCategory = (e: React.FormEvent) => {
@@ -100,7 +99,6 @@ const AdminProducts = () => {
       postAdminData<CategoryData[]>(dispatch, '/categories/add_category', data, user?.accessToken, user?.isAdmin, postDataSuccess)
     }
     setNewCategoryTitle('')
-    console.log("Added new category")
   }
   
   return (
