@@ -41,6 +41,17 @@ const AdminProducts = () => {
     setShowCategories(categories);
   }, [categories]);
 
+  useEffect(() => {
+    if (searchedProducts) {
+      const filteredProducts = products.filter(product =>
+        product.title.toLowerCase().includes(searchedProducts.toLowerCase())
+      );
+      setShowProducts(filteredProducts);
+    } else {
+      setShowProducts(products); 
+    }
+  }, [searchedProducts, products]);
+
   const handleClickToggleProductButton = () => {
     if (showNewCategoryWindow) {
       setNewCategoryWindow (false)
@@ -79,11 +90,11 @@ const AdminProducts = () => {
       title: newProductTitle,
       category: newProductCategory,
       measure: newProductMeasure,
-      price: newProductPrice
+      price: Number(newProductPrice)
     }
 
     if (user?.isAdmin && user.accessToken) {
-      postAdminData<ProductData[]>(dispatch, '/products/add_product', data, user?.accessToken, user?.isAdmin, postDataSuccess)
+      postAdminData<ProductData[], ProductData>(dispatch, '/products/add_product', data, user?.accessToken, user?.isAdmin, postDataSuccess)
     }
     setNewProductTitle('')
     setNewProductPrice('')
@@ -96,7 +107,7 @@ const AdminProducts = () => {
     }
 
     if (user?.isAdmin && user.accessToken) {
-      postAdminData<CategoryData[]>(dispatch, '/categories/add_category', data, user?.accessToken, user?.isAdmin, postDataSuccess)
+      postAdminData<CategoryData[], CategoryData>(dispatch, '/categories/add_category', data, user?.accessToken, user?.isAdmin, postDataSuccess)
     }
     setNewCategoryTitle('')
   }
@@ -176,7 +187,11 @@ const AdminProducts = () => {
         </div>
         <div className="block">
           <div className="">Быстрый поиск по названию продукта</div>
-          <input onChange={(e) => setSelectedProducts(e.target.value)}  className='prodInput'/>
+          <input 
+            value={searchedProducts}
+            onChange={(e) => setSelectedProducts(e.target.value)}  
+            className='prodInput'
+          />
           <IoSearch className='seachIcon'/>
         </div>
       </div>

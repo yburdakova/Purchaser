@@ -22,7 +22,7 @@ export interface ProductData {
   _id?: string;
   customId? : string;
   title: string;
-  description: string;
+  description?: string;
   category: string;
   measure: string;
   price: number;
