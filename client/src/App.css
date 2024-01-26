@@ -129,6 +129,7 @@ footer {
   z-index: 100;
   background-color: #1D2634;
 }
+
 .footer_contact{
   display: flex;
   gap: 8px;
@@ -136,6 +137,7 @@ footer {
   align-items: center;
   color:  rgba(255, 255, 255, 0.87);
 }
+
 .footer_contact:hover .shake{
   animation: spin 0.5s ease-in-out;
   transition: all 0.3s ease 0s;
@@ -144,6 +146,7 @@ footer {
 .footer_contact:hover .footerIcon{
   background-color: #2F3744;
 }
+
 .dev_link{
   font-size: 10px;
   color: rgba(255, 255, 255, 0.87);
@@ -152,6 +155,7 @@ footer {
   text-decoration: none;
   position: relative;
 }
+
 .dev_link::after {
   content: '';
   position: absolute;
@@ -210,34 +214,74 @@ th, td {
   border: 1px solid #57606E;
   padding: 10px;
   border-radius: 8px;
-  margin-top: 10px;
   font-size: 16px;
 }
+.extra-space-top{
+  margin-top: 10px;
+}
+.tools{
+  display: flex;
+  padding-top: 10px;
+  justify-content: flex-start;
+  align-items:center;
+  gap: 40px;
+}
+.block{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.prodInput{
+  background-color:#253043;
+  border: 1px solid #57606E;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  
+}
+
+.seachIcon{
+  position: absolute;
+  right: 10px;
+}
+
 .newDataButton{
   margin-top: 10px;
 }
+
+.tools{
+  margin-top: 10px;
+}
+
 .addSpace{
   display: flex;
   justify-content: flex-end;
   align-items: center;
   position: relative;
 }
+
 .formSpace{
   position: absolute;
   left: 0;
   top: 0;
 }
+
 .buttonSpace{
   display: flex;
   gap: 10px;
   margin: 10px;
 }
+
 .addButton{
   width: 220px;
 }
+
 .addButton2{
   width: 240px;
 }
+
 .tableSpace{
   margin-top: 10px;
 }
@@ -246,31 +290,42 @@ th, td {
   .headerIcon:hover{
     background-color: rgba(238, 234, 234, 0.87);
   }
+
   .customSelect{
     background-color: #F8F9FC;
   }
+
   .addForm{
     background-color: #ffffff;
     box-shadow:  3px 3px 0px #f3f4f7,
                 -3px -3px 0px #fdfeff;
   }
+
   .headerIcon{
     color: #2b4357;
   }
+
   footer {
     background-color: #F8F9FC;
   }
+
+  .prodInput{
+    background-color: #F8F9FC;
+  }
+
   .dev_link{
     color: #2b4357;
   }
+
   .footer_contact{
     color: #2b4357;
   }
+
   .footer_contact:hover .footerIcon{
     background-color: rgba(238, 234, 234, 0.87);
   }
-  .widgetBox{
 
+  .widgetBox{
     background-color: #ffffff;
     box-shadow:  3px 3px 0px #f3f4f7,
                 -3px -3px 0px #fdfeff;

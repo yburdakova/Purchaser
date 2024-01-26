@@ -35,6 +35,9 @@ const adminSlice = createSlice({
     addCategories: (state, action) => {
       state.categories = action.payload
     },
+    postDataSuccess: (state, action)=>{
+        console.log(action.payload)
+    },
     updateNotify: (state, action) => {
       state.notifyCounter = action.payload
     },
@@ -58,7 +61,7 @@ export const {
   updateNotify,
   fetchingFailure,
   resetError,
-
+  postDataSuccess
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

@@ -5,10 +5,10 @@ import InputMask from 'react-input-mask';
 import { CustomInputProps } from '../../data/types';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
-const CustomInput = ({ label, type, required, isMask, getValue, ...props }: CustomInputProps) => {
+const CustomInput = ({ label, type, required, isMask, getValue, valueProps, ...props }: CustomInputProps) => {
 
   const [isFocused, setIsFocused] = useState(false);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(valueProps);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleFocus = () => setIsFocused(true);
@@ -33,7 +33,7 @@ const CustomInput = ({ label, type, required, isMask, getValue, ...props }: Cust
           {...props}
           required={required}
           type={showPassword ? 'text' : type}
-          value={value}
+          value={valueProps}
           onChange={handleChange}
           onFocus={handleFocus}
           onBlur={handleBlur}

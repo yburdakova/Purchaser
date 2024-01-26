@@ -1,27 +1,45 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { CustomInput, TableRow } from '../components';
-import { ProductData } from '../data/types';
+import { CategoryData, ProductData } from '../data/types';
 import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
-const AdminProducts = () => {
+import { getAdminData, postAdminData } from '../redux/apiCalls';
+import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux';
 
+const AdminProducts = () => {
+  
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.currentUser);
   const products = useSelector((state: RootState) => state.admin.products);
   const categories = useSelector((state: RootState) => state.admin.categories);
   
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
+  const[showCategories, setShowCategories] =useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
 
-  const [showNewProductWindow, setNewProductWindow] = useState(true)
-  const [showNewCategoryWindow, setNewCategoryWindow] = useState(true)
+  const [showNewProductWindow, setNewProductWindow] = useState(false)
+  const [showNewCategoryWindow, setNewCategoryWindow] = useState(false)
   const [newProductTitle, setNewProductTitle] = useState('')
   const [newProductPrice, setNewProductPrice] = useState('')
+  const [newProductCategory, setNewProductCategory] = useState(categories[0]?.title || '')
+  const [newProductMeasure, setNewProductMeasure] = useState(measures[0] || '')
   const [newCategoryTitle, setNewCategoryTitle] = useState('')
 
-  const addNewProduct = () => {
-    console.log("Added new product")
-  }
+  useEffect(() => {
+    if (user?.isAdmin && user.accessToken) {
+      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
+    }
+    setShowProducts(products);
+  }, [products]);
+
+  useEffect(() => {
+    if (user?.isAdmin && user.accessToken) {
+      getAdminData<CategoryData[]>(dispatch, '/categories', user?.accessToken, user?.isAdmin, addCategories)
+    }
+    setShowCategories(categories);
+  }, [categories]);
 
   const handleClickToggleProductButton = () => {
     if (showNewCategoryWindow) {
@@ -45,9 +63,44 @@ const AdminProducts = () => {
     }
   }
 
+  const handleCategoryChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    console.log("Selected category:", e.target.value);
+    setNewProductCategory(e.target.value);
+  };
+  
+  const handleMeasureChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    console.log("Selected measure:", e.target.value);
+    setNewProductMeasure(e.target.value);
+  };
 
-  const addNewCategory = () => {
+  const addNewProduct = (e: React.FormEvent) => {
+    e.preventDefault()
+    const data = {
+      title: newProductTitle,
+      category: newProductCategory,
+      measure: newProductMeasure,
+      price: newProductPrice
+    }
+
+    if (user?.isAdmin && user.accessToken) {
+      postAdminData<ProductData[]>(dispatch, '/products/add_product', data, user?.accessToken, user?.isAdmin, postDataSuccess)
+    }
+    setNewProductTitle('')
+    setNewProductPrice('')
     console.log("Added new product")
+  }
+
+  const addNewCategory = (e: React.FormEvent) => {
+    e.preventDefault()
+    const data = {
+      title: newCategoryTitle,
+    }
+
+    if (user?.isAdmin && user.accessToken) {
+      postAdminData<CategoryData[]>(dispatch, '/categories/add_category', data, user?.accessToken, user?.isAdmin, postDataSuccess)
+    }
+    setNewCategoryTitle('')
+    console.log("Added new category")
   }
   
   return (
@@ -56,8 +109,14 @@ const AdminProducts = () => {
         <div className="formSpace">
           {showNewCategoryWindow&&
           <div className="addForm">
-            <form onSubmit={addNewCategory} className='newProductForm'>
-              <CustomInput label='Название категории' placeholder='Название категории' getValue={setNewCategoryTitle} type='text'/>
+            <form onSubmit={e =>addNewCategory(e)} className='newProductForm'>
+              <CustomInput 
+                label='Название категории' 
+                placeholder='Название категории' 
+                getValue={setNewCategoryTitle} 
+                valueProps={newCategoryTitle}
+                type='text'
+              />
               <button className='newDataButton'>Добавить</button>
             </form>
           </div>
@@ -65,13 +124,35 @@ const AdminProducts = () => {
           }
           {showNewProductWindow&&
             <div className="addForm">
-              <form onSubmit={addNewProduct} className='newProductForm'>
-                <CustomInput label='Название продукта' placeholder='Название продукта' getValue={setNewProductTitle} type='text'/>
-                <CustomInput label='Цена' placeholder='Цена' getValue={setNewProductPrice} type='number'/>
-                <select name="" id="" className='customSelect'>
-                  {categories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
+              <form onSubmit={e => addNewProduct(e)} className='newProductForm'>
+                <CustomInput 
+                  label='Название продукта' 
+                  placeholder='Название продукта' 
+                  getValue={setNewProductTitle} 
+                  valueProps={newProductTitle}
+                  type='text'
+                />
+                <CustomInput 
+                  label='Цена' 
+                  placeholder='Цена' 
+                  getValue={setNewProductPrice}
+                  valueProps={newProductPrice} 
+                  type='number'
+                />
+                <select 
+                  name="cat" 
+                  id="cat" 
+                  className='customSelect extra-space-top' 
+                  onChange={handleCategoryChange}
+                >
+                  {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
                 </select>
-                <select name="" id="" className='customSelect'>
+                <select 
+                  name="measure" 
+                  id="measure" 
+                  className='customSelect extra-space-top' 
+                  onChange={handleMeasureChange}
+                >
                   {measures.map(measure => <option value={measure} key={measure}>{measure}</option>)}
                 </select>
                 <button className='newDataButton'>Добавить</button>
@@ -88,8 +169,20 @@ const AdminProducts = () => {
           </button>
         </div>
       </div>
+      <div className="tools">
+        <div className="block">
+          <div className="">Выбрать категорию</div>
+          <select name="" id="" className='customSelect'>
+            {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
+          </select>
+        </div>
+        <div className="block">
+          <div className="">Быстрый поиск по названию продукта</div>
+          <input onChange={(e) => setSelectedProducts(e.target.value)}  className='prodInput'/>
+          <IoSearch className='seachIcon'/>
+        </div>
+      </div>
       <div className="tableSpace">
-        <input value={searchedProducts}/><IoSearch />
       </div>
       <table>
         <thead>

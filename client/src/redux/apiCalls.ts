@@ -45,3 +45,27 @@ export const getAdminData = async <T>(
     }
   }
 };
+
+export const postAdminData = async <T>(
+  dispatch: Dispatch, 
+  path: string,
+  bodyObj: Object,
+  token: string, 
+  admin: boolean,
+  successAction: SuccessAction<T>
+  ) => {
+  dispatch(fetchingStart())
+  if (admin && token) {
+    try {
+      const response = await userRequest(token).post(path, bodyObj);
+      dispatch(successAction(response.data));
+      dispatch(fetchingSuccess())
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (error) {
+        const status = axiosError.response ? axiosError.response.status : 500; 
+        dispatch(fetchingFailure(status));
+        }
+    }
+  }
+};
