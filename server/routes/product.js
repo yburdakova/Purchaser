@@ -1,11 +1,15 @@
 import express from "express";
 import { Product } from "../models/Product.js";
 import { verifyTokenAndAdmin } from "../middleware/verifyToken.js";
+import { getNextSequenceValue } from "../middleware/getNextSequenceValue.js"
+
 const router = express.Router();
 
 //NEW PRODUCT
 router.post("/add_product", verifyTokenAndAdmin, async (req, res) => {
+    const customId = await getNextSequenceValue('productid');
     const newProduct = new Product({
+        customId,
         title: req.body.title,
         description: req.body.description,
         category: req.body.category,
@@ -25,26 +29,31 @@ router.post("/add_product", verifyTokenAndAdmin, async (req, res) => {
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     
     try {
-    const updatedProduct = await Product.findByIdAndUpdate(
-        req.params.id,
-        {
-        $set: req.body,
-        },
-        { new: true }
-    );
-    res.status(200).json(updatedProduct);
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json("Product not found");
+        }
+        if (req.body.price && req.body.price !== product.price) {
+            product.priceHistory.push({ price: product.price });
+        }
+        for (let key in req.body) {
+            product[key] = req.body[key];
+        }
+
+        const updatedProduct = await product.save();
+        res.status(200).json(updatedProduct);
     } catch (err) {
-    res.status(500).json(err);
+        res.status(500).json(err);
     }
 });
 
 //DELETE PRODUCT
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
     try {
-    await Product.findByIdAndDelete(req.params.id);
-    res.status(200).json("Product has been deleted...");
+        await Product.findByIdAndDelete(req.params.id);
+        res.status(200).json("Product has been deleted...");
     } catch (err) {
-    res.status(500).json(err);
+        res.status(500).json(err);
     }
 });
 

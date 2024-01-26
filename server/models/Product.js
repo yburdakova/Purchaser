@@ -1,7 +1,22 @@
 import mongoose from 'mongoose';
 
+const PriceHistorySchema = new mongoose.Schema({
+    price: {
+        type: Number,
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 const ProductSchema = new mongoose.Schema(
     {
+        customId: {
+            type: String,
+            unique: true
+        },
         title: {
             type: String,
             required: true,
@@ -20,7 +35,8 @@ const ProductSchema = new mongoose.Schema(
         price: {
             type: Number,
             required: true
-        }
+        },
+        priceHistory: [PriceHistorySchema]
     },
     {
         timestamps: true

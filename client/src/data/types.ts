@@ -63,3 +63,7 @@ export interface MenuItemProps{
   path: string;
   icon: React.ReactNode;
 }
+
+export interface TableRowProps {
+  product: ProductData
+}
