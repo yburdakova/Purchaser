@@ -18,6 +18,11 @@ const AdminProducts = () => {
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
   const[showCategories, setShowCategories] =useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+  const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSelectedCategory(e.target.value);
+  };
 
   const [showNewProductWindow, setNewProductWindow] = useState(false)
   const [showNewCategoryWindow, setNewCategoryWindow] = useState(false)
@@ -42,15 +47,22 @@ const AdminProducts = () => {
   }, [categories]);
 
   useEffect(() => {
+    let filteredProducts = products;
+  
+    if (selectedCategory && selectedCategory !== "all") {
+      filteredProducts = filteredProducts.filter(product =>
+        product.category === selectedCategory
+      );
+    }
+  
     if (searchedProducts) {
-      const filteredProducts = products.filter(product =>
+      filteredProducts = filteredProducts.filter(product =>
         product.title.toLowerCase().includes(searchedProducts.toLowerCase())
       );
-      setShowProducts(filteredProducts);
-    } else {
-      setShowProducts(products); 
     }
-  }, [searchedProducts, products]);
+  
+    setShowProducts(filteredProducts);
+  }, [selectedCategory, searchedProducts, products]);
 
   const handleClickToggleProductButton = () => {
     if (showNewCategoryWindow) {
@@ -181,7 +193,13 @@ const AdminProducts = () => {
       <div className="tools">
         <div className="block">
           <div className="">Выбрать категорию</div>
-          <select name="" id="" className='customSelect'>
+          <select 
+            name="categoryFilter" 
+            id="categoryFilter" 
+            className='customSelect' 
+            onChange={handleCategoryFilterChange}
+          >
+          <option value="all">Все категории</option>
             {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
           </select>
         </div>
