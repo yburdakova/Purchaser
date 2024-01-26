@@ -7,6 +7,7 @@ const adminSlice = createSlice({
     customerRequests: [],
     users: [],
     products: [],
+    categories: [],
     isFetching: false,
     error: null,
     notifyCounter: 0,
@@ -31,6 +32,9 @@ const adminSlice = createSlice({
     addProducts: (state, action) => {
       state.products = action.payload
     },
+    addCategories: (state, action) => {
+      state.categories = action.payload
+    },
     updateNotify: (state, action) => {
       state.notifyCounter = action.payload
     },
@@ -50,6 +54,7 @@ export const {
   addCustomerRequests,
   addUsers,
   addProducts,
+  addCategories,
   updateNotify,
   fetchingFailure,
   resetError,

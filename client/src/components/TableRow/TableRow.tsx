@@ -4,14 +4,14 @@ import { MdOutlinePriceChange } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { FaRegEye} from 'react-icons/fa6';
 
-const TableRow = ({product}: TableRowProps) => {
+const TableRow = ({rowData}: TableRowProps) => {
   return (
     <tr>
-      <td>{product._id}</td>
-      <td>{product.title}</td>
-      <td>{product.category}</td>
-      <td>{product.measure}</td>
-      <td>{product.price} ₽</td>
+      <td>{rowData.customId}</td>
+      <td>{rowData.title}</td>
+      <td>{rowData.category}</td>
+      <td>{rowData.measure}</td>
+      <td>{rowData.price} ₽</td>
       <td>
         <MdOutlinePriceChange />
         <FaRegEdit />

@@ -25,3 +25,9 @@ export const menuLinks: MenuItemProps[] = [
     path: "products"
   },
 ]
+
+export const measures = [
+  'кг',
+  'шт',
+  'л'
+]

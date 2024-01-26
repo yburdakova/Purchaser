@@ -95,6 +95,7 @@ header{
 .footerIcon{
   transition: all 0.3s ease 0s;
 }
+
 .infopage{
   margin: 0 40px;
   display: flex;
@@ -102,7 +103,19 @@ header{
   overflow-y: auto; 
   flex-grow: 1;
   overflow-y: auto;
+  position: relative;
+}
 
+.popup{
+  position: absolute;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color:  #253043;
 }
 
 footer {
@@ -167,10 +180,79 @@ th, td {
 .dev_link:hover::after {
   width: 41%; 
 }
+.addForm{
+  background-color: #253043;
+  padding: 0 10px 10px 10px;
+  display: flex;
+  width: fit-content;
+  border-radius: 10px;
+  animation: fadeInDown 0.5s ease-out forwards;
+  transition: all 0.3s ease 0s;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.newProductForm{
+  display: flex;
+  flex-direction: row;
+}
+.customSelect{
+  background-color:#253043;
+  border: 1px solid #57606E;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  font-size: 16px;
+}
+.newDataButton{
+  margin-top: 10px;
+}
+.addSpace{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+.formSpace{
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.buttonSpace{
+  display: flex;
+  gap: 10px;
+  margin: 10px;
+}
+.addButton{
+  width: 220px;
+}
+.addButton2{
+  width: 240px;
+}
+.tableSpace{
+  margin-top: 10px;
+}
 
 @media (prefers-color-scheme: light) {
   .headerIcon:hover{
     background-color: rgba(238, 234, 234, 0.87);
+  }
+  .customSelect{
+    background-color: #F8F9FC;
+  }
+  .addForm{
+    background-color: #ffffff;
+    box-shadow:  3px 3px 0px #f3f4f7,
+                -3px -3px 0px #fdfeff;
   }
   .headerIcon{
     color: #2b4357;

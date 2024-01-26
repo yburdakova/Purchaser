@@ -11,13 +11,23 @@ export interface UserData {
   accessToken?: string
 }
 
+export interface CategoryData {
+  _id?: string;
+  title: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface ProductData {
   _id?: string;
+  customId? : string;
   title: string;
   description: string;
   category: string;
   measure: string;
   price: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface CustomerRequest {
@@ -42,6 +52,7 @@ export interface AdminState {
   customerRequests: CustomerRequest[],
   users: UserData[];
   products: ProductData[];
+  categories: CategoryData[];
   notifyCounter: number;
   isFetching: boolean;
   error: string | null;
@@ -65,5 +76,5 @@ export interface MenuItemProps{
 }
 
 export interface TableRowProps {
-  product: ProductData
+  rowData: ProductData
 }
