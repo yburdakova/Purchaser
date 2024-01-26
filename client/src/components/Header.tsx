@@ -15,7 +15,9 @@ const Header = () => {
   const location = useLocation();
 
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const [notifyCounter, setNotifyCounter] = useState(0)
+  const notifyQuantity = useSelector((state: RootState) => state.admin.notifyCounter);
+  
+  
   const [pageTitle, setPageTitle] = useState('Page Name');
 
   useEffect(() => {
@@ -28,16 +30,23 @@ const Header = () => {
     dispatch(loginFinish());
     navigate('/');
   }
+  const handleClickNotify = () => {
+
+  }
 
   return (
     <header>
       <div className="page_title">{user&&user.isAdmin ? "Администратор" : "Клиент"} / {pageTitle}</div>
       <div className="header_icons">
-        <div className="headerIcon" onClick={handleClickLogout}>
-          < FaRegBell />
-          <div className="notification">
-            {notifyCounter}
-          </div>
+        <div className="headerIcon bell" onClick={handleClickNotify}>
+          < FaRegBell className='bell-icon'/>
+          {notifyQuantity
+            ? <div className="notification">
+              {notifyQuantity}
+            </div>
+            : <div className=""></div>
+          }
+          
         </div>
         
         <div className="headerIcon" onClick={handleClickLogout}>

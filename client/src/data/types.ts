@@ -11,7 +11,16 @@ export interface UserData {
   accessToken?: string
 }
 
-export interface customerRequest {
+export interface ProductData {
+  _id?: string;
+  title: string;
+  description: string;
+  category: string;
+  measure: string;
+  price: number;
+}
+
+export interface CustomerRequest {
   _id?: string;
   name?: string;
   email: string;
@@ -30,11 +39,15 @@ export interface UserState {
 }
 
 export interface AdminState {
-  customerRequests: customerRequest[],
+  customerRequests: CustomerRequest[],
+  users: UserData[];
+  products: ProductData[];
   notifyCounter: number;
   isFetching: boolean;
   error: string | null;
 }
+
+export type SuccessAction<T> = (data: T) => { type: string; payload: T };
 
 export interface CustomInputProps {
   label: string;

@@ -16,21 +16,20 @@ const PasswordRequest = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  setIsSending(true);
+    setIsSending(true);
 
-  try {
-    const response = await axios.post(`${BASE_URL}/request/send_request`, {
-      email,
-      username,
-      phone,
-    });
-    console.log(response.data);
-    setIsSubmitted(true);
-  } catch (error) {
-    console.error('Failed to send request', error);
-  }
-
-  setIsSending(false);
+    try {
+      const response = await axios.post(`${BASE_URL}/request/send_request`, {
+        email,
+        username,
+        phone,
+      });
+      console.log(response.status);
+      setIsSubmitted(true);
+    } catch (error) {
+      console.error('Failed to send request', error);
+    }
+    setIsSending(false);
   };
 
   return (

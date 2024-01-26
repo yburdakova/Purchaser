@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/add_product", verifyTokenAndAdmin, async (req, res) => {
     const newProduct = new Product({
         title: req.body.title,
-        decription: req.body.decription,
+        description: req.body.description,
         category: req.body.category,
         measure: req.body.measure,
         price: req.body.price

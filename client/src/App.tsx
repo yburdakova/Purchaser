@@ -17,7 +17,6 @@ function App() {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const admin = user?.isAdmin;
 
-  console.log(user, admin)
   return (
     <BrowserRouter>
         <Routes>
