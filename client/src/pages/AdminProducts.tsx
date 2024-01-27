@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { CustomInput, TableRow } from '../components';
+import { CustomInput} from '../components';
 import { CategoryData, ProductData } from '../data/types';
 import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
-import { getAdminData, postAdminData } from '../redux/apiCalls';
+import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
 import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux';
+import { MdOutlinePriceChange } from 'react-icons/md';
+import { FaRegEye } from 'react-icons/fa6';
+import { RiDeleteBin6Line } from 'react-icons/ri';
 
 const AdminProducts = () => {
   
@@ -123,6 +126,12 @@ const AdminProducts = () => {
     }
     setNewCategoryTitle('')
   }
+
+  const handeDeleteProduct = (id:string) => {
+    if (user?.isAdmin && user.accessToken) {
+      deleteAdminData<ProductData[]>(dispatch, '/products', id, user?.accessToken, user?.isAdmin, postDataSuccess)
+    }
+  }
   
   return (
     <div className='infopage'>
@@ -215,7 +224,7 @@ const AdminProducts = () => {
       </div>
       <div className="tableSpace">
       </div>
-      <table>
+      <table className='purTable'>
         <thead>
           <tr>
             <th>ID</th>
@@ -226,8 +235,22 @@ const AdminProducts = () => {
             <th>Действия</th>
           </tr>
         </thead>
-        <tbody>
-          {showProducts.map((product) => <TableRow key={product._id} rowData={product} />)}
+        <tbody className='tableBody'>
+          {showProducts.map((product) => 
+            <tr className='rowTable' key={product._id}>
+              <td>{product.customId}</td>
+              <td>{product.title}</td>
+              <td>{product.category}</td>
+              <td>{product.measure}</td>
+              <td>{product.price} ₽</td>
+              <td className='iconTableCell'>
+                <MdOutlinePriceChange className="editPriceIcon"/>
+                <FaRegEye/>
+                <RiDeleteBin6Line onClick={() => product._id && handeDeleteProduct(product._id)}/>
+              </td>
+          </tr>
+          )}
+
         </tbody>
       </table>
     </div>

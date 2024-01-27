@@ -100,12 +100,43 @@ header{
   margin: 0 40px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto; 
   flex-grow: 1;
-  overflow-y: auto;
   position: relative;
 }
 
+table thead, table tbody tr {
+  display: table;
+  width: 98%;
+  table-layout: fixed; 
+  margin: 10px 0;
+}
+
+tr{
+  border: 1px solid #777E8A;
+  border-radius: 8px;
+  padding: 10px;
+}
+.tableBody{
+    display: block;
+    max-height: 560px; 
+    overflow-y: auto;
+}
+th:nth-child(1), td:nth-child(1) { /* ID столбец */
+  width: 10%; /* или любая другая ширина, которая вам подходит */
+}
+th:nth-child(2), td:nth-child(2) { /* Название продукта столбец */
+  width: 32%; /* или любая другая ширина, которая вам подходит */
+}
+th:nth-child(3), td:nth-child() { /* Название продукта столбец */
+  width: 30%; /* или любая другая ширина, которая вам подходит */
+}
+
+th, td {
+  text-align: left;
+}
+.rowTable:hover{
+  background-color: #253043;
+}
 .popup{
   position: absolute;
   border-radius: 50px;
@@ -122,6 +153,7 @@ footer {
   display: flex;
   justify-content: space-between;
   padding-left:  20px;
+  padding-top:  10px;
   padding-right:  40px;
   margin: 20px 0;
   position: sticky;
@@ -173,12 +205,6 @@ footer {
   padding: 20px;
   border-radius: 10px;
   background-color: #253043;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-  border: 1px solid #a05353;
 }
 
 .dev_link:hover::after {
@@ -281,16 +307,29 @@ th, td {
 .addButton2{
   width: 240px;
 }
+th{
+  color: #5182D4;
+}
 
 .tableSpace{
   margin-top: 10px;
 }
+.iconTableCell{
+  display: flex;
+  gap: 20px;
+  font-size: 26px;
+}
+.editPriceIcon{
+  font-size: 28px;
+} 
 
 @media (prefers-color-scheme: light) {
   .headerIcon:hover{
     background-color: rgba(238, 234, 234, 0.87);
   }
-
+  .rowTable:hover{
+    background-color: #E1E8F5;
+  }
   .customSelect{
     background-color: #F8F9FC;
   }

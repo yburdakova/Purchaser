@@ -3,7 +3,6 @@ import Header from "./Header";
 import CustomInput from "./CustomInput/CustomInput";
 import MenuPanel from "./MenuPanel/MenuPanel";
 import MenuItem from "./MenuItem/MenuItem";
-import TableRow from "./TableRow/TableRow";
 
 
 export {
@@ -11,6 +10,5 @@ export {
   Footer,
   CustomInput,
   MenuPanel,
-  MenuItem,
-  TableRow
+  MenuItem
 }
