@@ -7,7 +7,7 @@ import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
 import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
 import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux';
-import { MdOutlinePriceChange } from 'react-icons/md';
+import { MdOutlineAddTask, MdOutlineCancel, MdOutlinePriceChange } from 'react-icons/md';
 import { FaRegEye } from 'react-icons/fa6';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 
@@ -22,6 +22,8 @@ const AdminProducts = () => {
   const[showCategories, setShowCategories] =useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [newPrice, setNewPrice] = useState('');
+  const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
 
   const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setSelectedCategory(e.target.value);
@@ -132,6 +134,31 @@ const AdminProducts = () => {
       deleteAdminData<ProductData[]>(dispatch, '/products', id, user?.accessToken, user?.isAdmin, postDataSuccess)
     }
   }
+
+  const handleUpdatePrice = (productId: string, newPrice: number) => {
+    if (user?.isAdmin && user.accessToken) {
+      const bodyObj = { newPrice };
+      postAdminData<ProductData, { newPrice: number }>(
+        dispatch,
+        `/products/update-price/${productId}`,
+        bodyObj,
+        user.accessToken,
+        user.isAdmin,
+        postDataSuccess
+      );
+    }
+  };
+  
+  const handleUpdatePriceClick = (id:string) => {
+    setOpenPriceFormProductId(id)
+  }
+
+  const handleSubmitNewPrice = (e: React.FormEvent<HTMLFormElement>, id: string) => {
+    e.preventDefault()
+    handleUpdatePrice(id, Number(newPrice))
+    setNewPrice('')
+    setOpenPriceFormProductId('')
+  }
   
   return (
     <div className='infopage'>
@@ -232,6 +259,7 @@ const AdminProducts = () => {
             <th>Категория</th>
             <th>Фасовка</th>
             <th>Цена</th>
+            <th></th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -242,10 +270,34 @@ const AdminProducts = () => {
               <td>{product.title}</td>
               <td>{product.category}</td>
               <td>{product.measure}</td>
-              <td>{product.price} ₽</td>
+              <td >{product.price} ₽</td>
+              <td className='priceCell'>
+              { product._id === openPriceFormProductId &&
+                <form
+                  className='newPriceForm'
+                  onSubmit={(e) => product._id && handleSubmitNewPrice(e, product._id)}
+                >
+                  <input
+                    className='newPriceInput'
+                    type="number"
+                    value={newPrice}
+                    onChange={(e) => setNewPrice(e.target.value)}
+                    required
+                  />
+                  <div className="newPriceFormButtons">
+                    <button type="submit"> <MdOutlineAddTask /></button>
+                    <button onClick={() => (setOpenPriceFormProductId(''), setNewPrice(''))}> <MdOutlineCancel /></button>
+                  </div>
+                  
+                </form>
+              }
+              </td>
               <td className='iconTableCell'>
-                <MdOutlinePriceChange className="editPriceIcon"/>
-                <FaRegEye/>
+                <MdOutlinePriceChange 
+                  className="editPriceIcon" 
+                  onClick={() => product._id && handleUpdatePriceClick(product._id)} 
+                />
+                <FaRegEye />
                 <RiDeleteBin6Line onClick={() => product._id && handeDeleteProduct(product._id)}/>
               </td>
           </tr>

@@ -47,6 +47,27 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     }
 });
 
+//ADD NEW PRICE
+router.post("/update-price/:id", verifyTokenAndAdmin, async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (product) {
+            const newPriceHistory = {
+                price: req.body.newPrice,
+                date: new Date()
+            };
+            product.priceHistory.push(newPriceHistory);
+            product.price = req.body.newPrice;
+            await product.save();
+            res.status(200).json(product);
+        } else {
+            res.status(404).json({ message: "Product not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error updating product price", error });
+    }
+});
+
 //DELETE PRODUCT
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
     try {

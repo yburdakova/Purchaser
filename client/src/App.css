@@ -116,20 +116,22 @@ tr{
   border-radius: 8px;
   padding: 10px;
 }
+
 .tableBody{
-    display: block;
-    max-height: 560px; 
-    overflow-y: auto;
+  display: block;
+  max-height: 560px; 
+  overflow-y: auto;
 }
-th:nth-child(1), td:nth-child(1) { /* ID столбец */
-  width: 10%; /* или любая другая ширина, которая вам подходит */
+th:nth-child(1), td:nth-child(1) { 
+  width: 8%; 
 }
-th:nth-child(2), td:nth-child(2) { /* Название продукта столбец */
-  width: 32%; /* или любая другая ширина, которая вам подходит */
+th:nth-child(2), td:nth-child(2) { 
+  width: 24%; 
 }
-th:nth-child(3), td:nth-child() { /* Название продукта столбец */
-  width: 30%; /* или любая другая ширина, которая вам подходит */
+th:nth-child(3), td:nth-child(3) { 
+  width: 15%; 
 }
+
 
 th, td {
   text-align: left;
@@ -218,6 +220,35 @@ footer {
   border-radius: 10px;
   animation: fadeInDown 0.5s ease-out forwards;
   transition: all 0.3s ease 0s;
+}
+.priceCell{
+  position: relative;
+}
+.newPriceForm{
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  width: 100px;
+  top: -5px;
+  left: -40px;
+}
+.newPriceForm input{
+  background-color:#253043;
+  border: 1px solid #57606E;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  width: 80px;
+}
+.newPriceFormButtons{
+  display: flex;
+  gap: 10px;
+}
+.newPriceFormButtons > button {
+  padding: 6px;
+  min-width: auto;
+  font-size: 24px;
+
 }
 
 @keyframes fadeInDown {
@@ -333,7 +364,9 @@ th{
   .customSelect{
     background-color: #F8F9FC;
   }
-
+  .newPriceForm input{
+    background-color: #F8F9FC;
+  }
   .addForm{
     background-color: #ffffff;
     box-shadow:  3px 3px 0px #f3f4f7,
