@@ -131,7 +131,9 @@ th:nth-child(2), td:nth-child(2) {
 th:nth-child(3), td:nth-child(3) { 
   width: 15%; 
 }
-
+.b{
+  font-weight: 600;
+}
 
 th, td {
   text-align: left;
@@ -163,7 +165,9 @@ footer {
   z-index: 100;
   background-color: #1D2634;
 }
-
+.priceBlock{
+  display: flex;
+}
 .footer_contact{
   display: flex;
   gap: 8px;
@@ -227,6 +231,7 @@ footer {
 .newPriceForm{
   position: absolute;
   display: flex;
+  background-color:#253043;
   flex-direction: row;
   width: 100px;
   top: -5px;

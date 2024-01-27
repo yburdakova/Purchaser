@@ -17,7 +17,10 @@ export interface CategoryData {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
+interface HisoryPrice {
+    price: number;
+    date?: Date;
+}
 export interface ProductData {
   _id?: string;
   customId? : string;
@@ -26,6 +29,7 @@ export interface ProductData {
   category: string;
   measure: string;
   price: number;
+  priceHistory: HisoryPrice[]
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -107,7 +107,10 @@ const AdminProducts = () => {
       title: newProductTitle,
       category: newProductCategory,
       measure: newProductMeasure,
-      price: Number(newProductPrice)
+      price: Number(newProductPrice),
+      priceHistory: [
+        { price:  Number(newProductPrice)}
+      ]
     }
 
     if (user?.isAdmin && user.accessToken) {
@@ -264,33 +267,43 @@ const AdminProducts = () => {
           </tr>
         </thead>
         <tbody className='tableBody'>
-          {showProducts.map((product) => 
-            <tr className='rowTable' key={product._id}>
+          {showProducts.map((product) => {
+            
+            let priceDifference = null;
+            if (product.priceHistory.length >= 2) {
+              const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
+              const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
+              priceDifference = latestPrice - previousPrice;
+            }
+            
+            return (
+              <tr className='rowTable' key={product._id}>
               <td>{product.customId}</td>
-              <td>{product.title}</td>
+              <td className='b'>{product.title}</td>
               <td>{product.category}</td>
               <td>{product.measure}</td>
-              <td >{product.price} ₽</td>
+              <td>{product.price.toFixed(2)} ₽</td>
               <td className='priceCell'>
-              { product._id === openPriceFormProductId &&
-                <form
-                  className='newPriceForm'
-                  onSubmit={(e) => product._id && handleSubmitNewPrice(e, product._id)}
-                >
-                  <input
-                    className='newPriceInput'
-                    type="number"
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
-                    required
-                  />
-                  <div className="newPriceFormButtons">
-                    <button type="submit"> <MdOutlineAddTask /></button>
-                    <button onClick={() => (setOpenPriceFormProductId(''), setNewPrice(''))}> <MdOutlineCancel /></button>
-                  </div>
-                  
-                </form>
-              }
+                {priceDifference !== null && <div>{priceDifference.toFixed(2)} ₽</div>}
+                { product._id === openPriceFormProductId &&
+                  <form
+                    className='newPriceForm'
+                    onSubmit={(e) => product._id && handleSubmitNewPrice(e, product._id)}
+                  >
+                    <input
+                      className='newPriceInput'
+                      type="number"
+                      value={newPrice}
+                      onChange={(e) => setNewPrice(e.target.value)}
+                      required
+                    />
+                    <div className="newPriceFormButtons">
+                      <button type="submit"> <MdOutlineAddTask /></button>
+                      <button onClick={() => (setOpenPriceFormProductId(''), setNewPrice(''))}> <MdOutlineCancel /></button>
+                    </div>
+                    
+                  </form>
+                }
               </td>
               <td className='iconTableCell'>
                 <MdOutlinePriceChange 
@@ -301,7 +314,10 @@ const AdminProducts = () => {
                 <RiDeleteBin6Line onClick={() => product._id && handeDeleteProduct(product._id)}/>
               </td>
           </tr>
-          )}
+            )
+
+          })
+        }
 
         </tbody>
       </table>
