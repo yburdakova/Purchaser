@@ -31,3 +31,12 @@ export const measures = [
   'шт',
   'л'
 ]
+
+export const notificationTitles = {
+  customerRequest: "Запрос доступа",
+  newOrder: "Новый заказ",
+  newProduct: "Новый продукт",
+  priceChange: "Изменение цены",
+  statusChange: "Изменение статуса",
+  orderStatusChange: "Изменение статуса заказа"
+};

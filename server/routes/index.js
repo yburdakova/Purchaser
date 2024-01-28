@@ -3,6 +3,7 @@ import userRouter from './user.js'
 import authRouter from './auth.js'
 import productRouter from './product.js'
 import requestRouter from './request.js'
+import notifyRouter from './notify.js'
 
 
 export {
@@ -10,5 +11,6 @@ export {
   userRouter,
   authRouter,
   productRouter,
-  requestRouter
+  requestRouter,
+  notifyRouter
 }
