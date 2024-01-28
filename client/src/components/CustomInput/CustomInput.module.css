@@ -82,7 +82,7 @@
 
 
 @media (prefers-color-scheme: light) {
-  .input, .inputDark, .labelDark {
+  .input, .label, .inputDark, .labelDark {
     background-color: #ffffff;
   }
 

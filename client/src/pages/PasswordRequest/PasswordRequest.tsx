@@ -19,9 +19,9 @@ const PasswordRequest = () => {
     setIsSending(true);
 
     try {
-      const response = await axios.post(`${BASE_URL}/request/send_request`, {
+      const response = await axios.post(`${BASE_URL}/requests/send_request`, {
         email,
-        username,
+        name: username,
         phone,
       });
       console.log(response.status);
