@@ -72,6 +72,7 @@ export interface CustomInputProps {
   isMask?: boolean;
   getValue?: (value: string) => void;  
   valueProps?: string;
+  dark?: boolean;
 }
 
 export interface MenuItemProps{

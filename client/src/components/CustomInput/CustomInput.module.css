@@ -21,6 +21,16 @@
   border-radius: 8px;
   background-color:#253043;
 }
+.inputDark {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 12px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background-color:#1D2634;
+}
 
 .label {
   position: absolute;
@@ -30,14 +40,25 @@
   transition: all 0.3s ease;
   pointer-events: none;
   padding: 0 6px;
+  background-color:#253043;
+}
+.labelDark{
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  color:  #57606E;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  padding: 0 6px;
+  background-color:#1D2634;
 }
 
-.focused .label,
-.input:not(:placeholder-shown) + .label {
+.focused .label, .focusedDark .labelDark,
+.input:not(:placeholder-shown) + .label,
+.inputDark:not(:placeholder-shown) + .labelDark {
   top: -10px;
   left: 10px;
   font-size: 12px;
-  background-color:#253043;
 }
 
 .filled {
@@ -61,11 +82,13 @@
 
 
 @media (prefers-color-scheme: light) {
-  .input {
+  .input, .inputDark, .labelDark {
     background-color: #ffffff;
   }
-  .focused .label,
-  .input:not(:placeholder-shown) + .label {
+
+  .focused .label, .focusedDark .labelDark,
+  .input:not(:placeholder-shown) + .label,
+  .inputDark:not(:placeholder-shown) + .labelDark {
     background-color: #ffffff
   }
 }

@@ -1,4 +1,5 @@
 import './App.css'
+import './Table.css'
 import { RootState } from './redux/store';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';

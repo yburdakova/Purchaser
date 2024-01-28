@@ -1,6 +1,7 @@
-import React from 'react'
+
 
 const AdminCustomers = () => {
+  
   return (
     <div className='infopage'>
       <div className="">AdminCustomers</div>

@@ -1,0 +1,53 @@
+table thead, table tbody tr {
+  display: table;
+  width: 98%;
+  table-layout: fixed; 
+  margin: 10px 0;
+}
+
+tr{
+  border: 1px solid #777E8A;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.tableBody{
+  display: block;
+  max-height: 560px; 
+  overflow-y: auto;
+}
+th:nth-child(1), td:nth-child(1) { 
+  width: 8%; 
+}
+th:nth-child(2), td:nth-child(2) { 
+  width: 24%; 
+}
+th:nth-child(3), td:nth-child(3) { 
+  width: 15%; 
+}
+.b{
+  font-weight: 600;
+}
+
+th, td {
+  text-align: left;
+}
+
+.rowTable:hover{
+  background-color: #253043;
+}
+
+@media (prefers-color-scheme: light) {
+  .newPriceForm input{
+    background-color: #F8F9FC;
+  }
+  .newPriceForm{
+    background-color: #F8F9FC;
+  }
+  .rowTable:hover .newPriceForm{
+    background-color: #E1E8F5;
+  }
+  .rowTable:hover{
+    background-color: #E1E8F5;
+  }
+}

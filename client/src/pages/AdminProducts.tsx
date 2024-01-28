@@ -10,6 +10,8 @@ import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux
 import { MdOutlineAddTask, MdOutlineCancel, MdOutlinePriceChange } from 'react-icons/md';
 import { FaRegEye } from 'react-icons/fa6';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { IoIosArrowRoundDown, IoIosArrowRoundUp } from 'react-icons/io';
+import { PiWarningCircleBold } from 'react-icons/pi';
 
 const AdminProducts = () => {
   
@@ -24,13 +26,12 @@ const AdminProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setSelectedCategory(e.target.value);
   };
 
-  const [showNewProductWindow, setNewProductWindow] = useState(false)
-  const [showNewCategoryWindow, setNewCategoryWindow] = useState(false)
   const [newProductTitle, setNewProductTitle] = useState('')
   const [newProductPrice, setNewProductPrice] = useState('')
   const [newProductCategory, setNewProductCategory] = useState(categories[0]?.title || '')
@@ -69,27 +70,15 @@ const AdminProducts = () => {
     setShowProducts(filteredProducts);
   }, [selectedCategory, searchedProducts, products]);
 
-  const handleClickToggleProductButton = () => {
-    if (showNewCategoryWindow) {
-      setNewCategoryWindow (false)
-    }
-    if (showNewProductWindow) {
-      setNewProductWindow (false)
-    } else {
-      setNewProductWindow (true)
-    }
-  }
-
-  const handleClickToggleCategoryButton = () => {
-    if (showNewProductWindow) {
-      setNewProductWindow (false)
-    }
-    if (showNewCategoryWindow) {
-      setNewCategoryWindow (false)
-    } else {
-      setNewCategoryWindow (true)
-    }
-  }
+  const handleProductTitleChange = (value: string) => {
+    setNewProductTitle(value);
+    if (!value) setErrorMessage('');
+  };
+  
+  const handleCategoryTitleChange = (value: string) => {
+    setNewCategoryTitle(value);
+    if (!value) setErrorMessage('');
+  };
 
   const handleCategoryChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     console.log("Selected category:", e.target.value);
@@ -103,6 +92,13 @@ const AdminProducts = () => {
 
   const addNewProduct = (e: React.FormEvent) => {
     e.preventDefault()
+
+    const existingProduct = products.find(product => product.title === newProductTitle);
+    if (existingProduct) {
+      setErrorMessage('Такой продукт уже существует');
+      return;
+    }
+
     const data = {
       title: newProductTitle,
       category: newProductCategory,
@@ -118,10 +114,17 @@ const AdminProducts = () => {
     }
     setNewProductTitle('')
     setNewProductPrice('')
+    setErrorMessage('');
   }
 
   const addNewCategory = (e: React.FormEvent) => {
     e.preventDefault()
+    const existingCategory = categories.find(category => category.title === newCategoryTitle);
+    if (existingCategory) {
+      setErrorMessage('Такая категория уже существует');
+      return;
+    }
+
     const data = {
       title: newCategoryTitle,
     }
@@ -130,6 +133,7 @@ const AdminProducts = () => {
       postAdminData<CategoryData[], CategoryData>(dispatch, '/categories/add_category', data, user?.accessToken, user?.isAdmin, postDataSuccess)
     }
     setNewCategoryTitle('')
+    setErrorMessage('');
   }
 
   const handeDeleteProduct = (id:string) => {
@@ -165,32 +169,17 @@ const AdminProducts = () => {
   
   return (
     <div className='infopage'>
-      <div className="addSpace">
-        <div className="formSpace">
-          {showNewCategoryWindow&&
-          <div className="addForm">
-            <form onSubmit={e =>addNewCategory(e)} className='newProductForm'>
-              <CustomInput 
-                label='Название категории' 
-                placeholder='Название категории' 
-                getValue={setNewCategoryTitle} 
-                valueProps={newCategoryTitle}
-                type='text'
-              />
-              <button className='newDataButton'>Добавить</button>
-            </form>
-          </div>
-            
-          }
-          {showNewProductWindow&&
+      <div className="addContainer">
+        <div className="addSpace"> 
             <div className="addForm">
               <form onSubmit={e => addNewProduct(e)} className='newProductForm'>
                 <CustomInput 
                   label='Название продукта' 
                   placeholder='Название продукта' 
-                  getValue={setNewProductTitle} 
+                  getValue={handleProductTitleChange} 
                   valueProps={newProductTitle}
                   type='text'
+                  dark
                 />
                 <CustomInput 
                   label='Цена' 
@@ -198,6 +187,7 @@ const AdminProducts = () => {
                   getValue={setNewProductPrice}
                   valueProps={newProductPrice} 
                   type='number'
+                  dark
                 />
                 <select 
                   name="cat" 
@@ -218,17 +208,23 @@ const AdminProducts = () => {
                 <button className='newDataButton'>Добавить</button>
               </form>
             </div>
-          }
+            <div className="addForm">
+              <form onSubmit={e =>addNewCategory(e)} className='newProductForm'>
+                <CustomInput 
+                  label='Название категории' 
+                  placeholder='Название категории' 
+                  getValue={handleCategoryTitleChange} 
+                  valueProps={newCategoryTitle}
+                  type='text'
+                  dark
+                />
+                <button className='newDataButton'>Добавить</button>
+              </form>
+          </div>
         </div>
-        <div className="buttonSpace">
-          <button onClick={handleClickToggleProductButton} className='addButton'>
-            {showNewProductWindow? 'ЗАКРЫТЬ ФОРМУ' : 'ДОБАВИТЬ ПРОДУКТ'}
-            </button>
-          <button onClick={handleClickToggleCategoryButton} className='addButton2'>
-            {showNewCategoryWindow? 'ЗАКРЫТЬ ФОРМУ' : 'ДОБАВИТЬ КАТЕГОРИЮ'}
-          </button>
-        </div>
+        
       </div>
+      {errorMessage ? <div className="error-message"> <PiWarningCircleBold />{errorMessage}</div> : ' '}
       <div className="tools">
         <div className="block">
           <div className="">Выбрать категорию</div>
@@ -262,7 +258,7 @@ const AdminProducts = () => {
             <th>Категория</th>
             <th>Фасовка</th>
             <th>Цена</th>
-            <th></th>
+            <th>Изменение цены</th>
             <th>Действия</th>
           </tr>
         </thead>
@@ -284,7 +280,14 @@ const AdminProducts = () => {
               <td>{product.measure}</td>
               <td>{product.price.toFixed(2)} ₽</td>
               <td className='priceCell'>
-                {priceDifference !== null && <div>{priceDifference.toFixed(2)} ₽</div>}
+                {priceDifference !== null && 
+                  <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
+                    <div className="">{priceDifference.toFixed(2)} ₽</div>
+                    <div className="iconContainer">
+                      {priceDifference > 0 ? <IoIosArrowRoundUp size={22} /> : <IoIosArrowRoundDown size={22} />}
+                    </div>
+                  </div>
+                }
                 { product._id === openPriceFormProductId &&
                   <form
                     className='newPriceForm'
