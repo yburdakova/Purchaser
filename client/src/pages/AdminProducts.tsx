@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { CustomInput} from '../components';
-import { CategoryData, ProductData } from '../data/types';
+import { CategoryData, InputRefs, ProductData } from '../data/types';
 import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
 import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
@@ -19,6 +19,7 @@ const AdminProducts = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const products = useSelector((state: RootState) => state.admin.products);
   const categories = useSelector((state: RootState) => state.admin.categories);
+  const inputRefs = useRef<InputRefs>({});
   
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
   const[showCategories, setShowCategories] =useState<CategoryData[]>(categories)
@@ -158,6 +159,9 @@ const AdminProducts = () => {
   
   const handleUpdatePriceClick = (id:string) => {
     setOpenPriceFormProductId(id)
+    setTimeout(() => {
+      inputRefs.current[id]?.focus?.();
+    }, 0);
   }
 
   const handleSubmitNewPrice = (e: React.FormEvent<HTMLFormElement>, id: string) => {
@@ -299,6 +303,10 @@ const AdminProducts = () => {
                       value={newPrice}
                       onChange={(e) => setNewPrice(e.target.value)}
                       required
+                      step="0.01"
+                      ref={(el) => {
+                        if (product._id) inputRefs.current[product._id] = el;
+                      }}
                     />
                     <div className="newPriceFormButtons">
                       <button type="submit"> <MdOutlineAddTask /></button>

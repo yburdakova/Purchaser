@@ -33,6 +33,9 @@ export interface ProductData {
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface InputRefs {
+  [key: string]: HTMLInputElement | null;
+}
 
 export interface CustomerRequest {
   _id?: string;
