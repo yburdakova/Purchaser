@@ -322,7 +322,9 @@ const AdminProducts = () => {
                   onClick={() => product._id && handleUpdatePriceClick(product._id)} 
                 />
                 <FaRegEye />
-                <RiDeleteBin6Line onClick={() => product._id && handeDeleteProduct(product._id)}/>
+                <RiDeleteBin6Line 
+                  className="deletePriceIcon" 
+                  onClick={() => product._id && handeDeleteProduct(product._id)}/>
               </td>
           </tr>
             )

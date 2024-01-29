@@ -14,6 +14,17 @@ const PasswordRequest = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
+  const sendNotification = async (email: string) => {
+    try {
+      await axios.post(`${BASE_URL}/notifications/add_notification`, {
+        type: 'customerRequest',
+        message: `Запрос на доступ к системе от пользователя с email: ${email}`,
+      });
+    } catch (error) {
+      console.error('Failed to send notification', error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSending(true);
@@ -25,6 +36,7 @@ const PasswordRequest = () => {
         phone,
       });
       console.log(response.status);
+      await sendNotification(email);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Failed to send request', error);

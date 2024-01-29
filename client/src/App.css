@@ -229,11 +229,13 @@ footer {
 .newPriceFormButtons{
   display: flex;
   gap: 10px;
+  
 }
 .newPriceFormButtons > button {
   padding: 6px;
   min-width: auto;
   font-size: 24px;
+
 
 }
 
@@ -346,7 +348,20 @@ th{
 }
 .editPriceIcon{
   font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
 } 
+.editPriceIcon:hover{
+  color: #5182D4;
+}
+.deletePriceIcon{
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+}
+.deletePriceIcon:hover{
+  color: #5182D4;
+}
+
 
 @media (prefers-color-scheme: light) {
   .headerIcon:hover{
