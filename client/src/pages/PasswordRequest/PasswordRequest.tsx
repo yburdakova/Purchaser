@@ -31,12 +31,12 @@ const PasswordRequest = () => {
 
     try {
       const response = await axios.post(`${BASE_URL}/requests/send_request`, {
-        email,
+        email: email,
         name: username,
-        phone,
+        phone: phone,
       });
       console.log(response.status);
-      await sendNotification(email);
+      sendNotification(email);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Failed to send request', error);

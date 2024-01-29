@@ -7,17 +7,22 @@ const router = express.Router();
 
 // ADD NOTIFICATION
 router.post("/add_notification", async (req, res) => {
+  console.log("Request to add_notification received with body:", req.body);
   const { toUser, fromUser, title, message, type, data } = req.body;
 
   try {
+    console.log("Attempting to add a new notification");
     if (toUser) {
+      console.log("Adding notification for specific user:", toUser);
       const newNotification = new Notification({ toUser, fromUser, title, message, type, data });
       await newNotification.save();
     } else {
+      console.log("Adding notification for all users or admin");
       const isAdminNotification = type === 'customerRequest' || type === 'newOrder';
       const targetUsers = await User.find({ isAdmin: isAdminNotification });
 
       for (const user of targetUsers) {
+        console.log("Creating notification for user:", user._id);
         const newNotification = new Notification({  
           toUser,
           fromUser,
@@ -28,8 +33,10 @@ router.post("/add_notification", async (req, res) => {
         await newNotification.save();
       }
     }
+    console.log("Notification added successfully");
     res.status(201).json({ message: "Notification added successfully" });
   } catch (err) {
+    console.error("Error adding notification:", err);
     res.status(500).json({ message: err.message || 'Error adding notification' });
   }
 });

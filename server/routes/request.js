@@ -16,6 +16,7 @@ router.post("/send_request", async (req, res) => {
         const savedRequest = await newRequest.save();
         res.status(201).json(savedRequest);
     } catch (err) {
+        console.error("Error in send_request:", err);
         res.status(500).json(err);
     }
 });
