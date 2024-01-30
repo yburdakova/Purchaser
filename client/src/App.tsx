@@ -11,7 +11,8 @@ import {
   AdminDashboard, 
   AdminOrders, 
   AdminCustomers, 
-  AdminProducts 
+  AdminProducts, 
+  AdminRequests
 } from './pages';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Route path="orders" element={<AdminOrders />} />
             <Route path="customers" element={<AdminCustomers />} />
             <Route path="products" element={<AdminProducts />} />
+            <Route path="requests" element={<AdminRequests />} />
           </Route>
           <Route path="/reqest_password" element={<PasswordRequest />} />
         </Routes>

@@ -1,5 +1,5 @@
 import { GrDocumentStore } from "react-icons/gr";
-import { BsCardChecklist, BsClipboardData } from "react-icons/bs";
+import { BsCardChecklist, BsClipboardData, BsQuestionSquare } from "react-icons/bs";
 import { TbLockAccess, TbPigMoney, TbUsers } from "react-icons/tb";
 import { MenuItemProps, NotificationTitleMap } from "./types";
 import { LiaClipboardListSolid } from "react-icons/lia";
@@ -28,6 +28,11 @@ export const menuLinks: MenuItemProps[] = [
     icon: <GrDocumentStore />,
     path: "products"
   },
+  {
+    title: "Запросы",
+    icon: <BsQuestionSquare />   ,
+    path: "requests"
+  }
 ]
 
 export const measures = [

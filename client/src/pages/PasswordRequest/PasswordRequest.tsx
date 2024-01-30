@@ -17,14 +17,14 @@ const PasswordRequest = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  const users = useSelector((state: RootState) => state.admin.users);
+  const customers = useSelector((state: RootState) => state.admin.customers);
 
   const sendNotification = async (email: string, requestId: string) => {
-    const user = users.find(user => user.email === email);
+    const oldCustomer = customers.find(customers => customers.email === email);
     // const user = users.find(user => user.email === email || user.phone === phone);
 
-    const message = user
-      ? `Клиент ${user.username} запрашивает смену пароля`
+    const message = oldCustomer
+      ? `Клиент ${oldCustomer.title} запрашивает смену пароля`
       : 'Поступил запрос на доступ к системе от нового клиента';
 
     try {

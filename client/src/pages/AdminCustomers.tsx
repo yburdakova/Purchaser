@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { CustomerData, CustomerRequest, UserData } from "../data/types";
+import { CustomerData, UserData } from "../data/types";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEye } from "react-icons/fa6";
-import { TbLockCog } from "react-icons/tb";
 import { useState } from "react";
 import { CustomInput } from "../components";
 import { PiWarningCircleBold } from "react-icons/pi";
@@ -14,7 +13,6 @@ const AdminCustomers = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const requests = useSelector((state: RootState) => state.admin.customerRequests);
   const customers = useSelector((state: RootState) => state.admin.customers);
 
   const [newCustomerTitle, setNewCustomerTitle] = useState('')
@@ -23,15 +21,6 @@ const AdminCustomers = () => {
   const [newCustomerName, setNewCustomerName] = useState('')
   const [newCustomerPassword, setNewCustomerPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('');
-
-  const { passwordChangeRequests, newCustomerRequests } = requests.reduce((acc, request) => {
-    const isExistingCustomer = customers.some(customer => customer.email === request.email);
-    if (isExistingCustomer) {
-      acc.passwordChangeRequests.push(request);
-    } else {
-      acc.newCustomerRequests.push(request);
-    } return acc;
-  }, { passwordChangeRequests: [] as CustomerRequest[], newCustomerRequests: [] as CustomerRequest[] });
 
   const addNewCustomer = (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,9 +53,6 @@ const AdminCustomers = () => {
     setNewCustomerName('')
 
   }
-  const handleUpdatePasswordClick = (email: string) => {
-    console.log(email)
-  }
 
   const handeDeleteProduct = (id: string) => {
     console.log(id)
@@ -74,27 +60,6 @@ const AdminCustomers = () => {
 
   return (
     <div className='infopage'>
-      <div>Запросы от новых клиентов</div>
-      {newCustomerRequests.map(request => (
-        <div key={request._id} className="flex">
-          <div>{request.name}</div>
-          <div>{request.phone}</div>
-        </div>
-      ))}
-      <div>Запросы на смену пароля</div>
-      {passwordChangeRequests.map((request) => {
-        const client = customers.find((customer) => customer.email === request.email)
-        return (
-          <div key={request._id} className="flex">
-            <div className="">Клиент {client?.title}</div>
-            <div>{request.name}</div>
-            <div>{request.phone}</div>
-            <TbLockCog 
-              className="editPriceIcon" 
-              onClick={() => request._id && handleUpdatePasswordClick(request.email)} 
-            />
-          </div>
-        )})}
         <div className="addForm">
           <form onSubmit={e => addNewCustomer(e)} className='newProductForm'>
             <CustomInput 

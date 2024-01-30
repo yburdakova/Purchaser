@@ -252,8 +252,6 @@ const AdminProducts = () => {
           <IoSearch className='seachIcon'/>
         </div>
       </div>
-      <div className="tableSpace">
-      </div>
       <table className='purTable'>
         <thead>
           <tr>

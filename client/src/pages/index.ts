@@ -6,6 +6,7 @@ import AdminDashboard from './AdminDashboard.tsx'
 import AdminOrders from './AdminOrders.tsx'
 import AdminCustomers from './AdminCustomers.tsx'
 import AdminProducts from './AdminProducts.tsx'
+import AdminRequests from './AdminRequests.tsx'
 
 export {
   Login,
@@ -15,5 +16,6 @@ export {
   AdminDashboard,
   AdminOrders,
   AdminCustomers,
-  AdminProducts
+  AdminProducts,
+  AdminRequests
 }
