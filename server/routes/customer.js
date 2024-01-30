@@ -11,7 +11,7 @@ const router = express.Router();
 
 //NEW CUSTOMER
 router.post("/add_customer", verifyTokenAndAdmin, async (req, res) => {
-    console.log(req.body); 
+
     const newCustomer = new Customer({
         title: req.body.title,
         email: req.body.email,

@@ -16,7 +16,7 @@ export interface CustomerData {
   _id?: string;
   title?: string;
   email: string;
-  contactName: string;
+  contactName?: string;
   contactPhone: string;
   extraInfo?: string;
   createdAt?: Date;

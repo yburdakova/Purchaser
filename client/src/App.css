@@ -2,7 +2,9 @@
   display: flex;
   width: 100%;
 }
-
+.flex{
+  display: flex;
+}
 .pageWrapper{
   display: flex;
   width: 100%;

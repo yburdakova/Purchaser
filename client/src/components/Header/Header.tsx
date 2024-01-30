@@ -57,7 +57,7 @@ const Header = () => {
     navigate('/');
   }
   const handleClickNotify = () => {
-    isNotify ? setIsNotify(false) : setIsNotify( true)
+    isNotify ? setIsNotify(false) : setIsNotify(true)
   };
 
   const toNotify = (id: string, type: NotificationType) => {

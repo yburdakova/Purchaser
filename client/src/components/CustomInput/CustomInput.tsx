@@ -5,12 +5,11 @@ import InputMask from 'react-input-mask';
 import { CustomInputProps } from '../../data/types';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
 
-const CustomInput = ({ label, type, required, isMask, getValue, valueProps, ...props }: CustomInputProps) => {
+const CustomInput = ({ label, type, required, isMask, getValue, valueProps, dark, ...props }: CustomInputProps) => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState(valueProps);
   const [showPassword, setShowPassword] = useState(false);
-  const color = props.dark;
 
   const handleFocus = () => setIsFocused(true);
   const handleBlur = () =>{ 
@@ -29,7 +28,7 @@ const CustomInput = ({ label, type, required, isMask, getValue, valueProps, ...p
 
   return (
     <div className={styles.inputBox}>
-      <div className={`${styles.floatingLabelInput} ${isFocused || value ? (color ? styles.focusedDark :styles.focused) : ''}`}>
+      <div className={`${styles.floatingLabelInput} ${isFocused || value ? (dark ? styles.focusedDark :styles.focused) : ''}`}>
         <InputMask
           {...props}
           required={required}
@@ -39,7 +38,7 @@ const CustomInput = ({ label, type, required, isMask, getValue, valueProps, ...p
           onFocus={handleFocus}
           onBlur={handleBlur}
           mask={isMask? "+7 999 999-99-99": ""}
-          className={`${isFocused ? styles.hidePlaceholder : ''} ${color ? styles.inputDark : styles.input}`}
+          className={`${isFocused ? styles.hidePlaceholder : ''} ${dark ? styles.inputDark : styles.input}`}
           placeholder=" " 
         />
         {type === 'password' && (
@@ -47,7 +46,7 @@ const CustomInput = ({ label, type, required, isMask, getValue, valueProps, ...p
               {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
             </div>
           )}
-        <label className={`${value || isFocused ? styles.filled : ''} ${color ? styles.labelDark : styles.label}`}>
+        <label className={`${value || isFocused ? styles.filled : ''} ${dark ? styles.labelDark : styles.label}`}>
           {label}
         </label>
       </div>
