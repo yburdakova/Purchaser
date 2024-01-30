@@ -37,7 +37,9 @@ export interface NotificationData {
   message: string;
   isRead: boolean;
   type: NotificationType;
-  data: object;
+  data: {
+    requestId: string;
+  };
   createdAt: Date;
 }
 interface HisoryPrice {

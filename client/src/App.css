@@ -2,9 +2,19 @@
   display: flex;
   width: 100%;
 }
-.flex{
+.flexListItem{
   display: flex;
+  gap: 20px;
+  border-radius: 10px;
+  border: 1px solid #57606E;
+  margin: 10px 0;
+  padding: 10px;
 }
+
+.flexListItemFocused {
+  border: 2px solid #4A7BD0;
+}
+
 .pageWrapper{
   display: flex;
   width: 100%;

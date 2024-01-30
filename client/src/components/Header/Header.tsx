@@ -10,7 +10,9 @@ import { menuLinks } from '../../data/constants';
 import { RootState } from '../../redux/store';
 import { notificationTitles } from '../../data/constants';
 import { NotificationData, NotificationType } from '../../data/types';
-import { setFocusedId } from '../../redux/adminRedux';
+import { getNotifications, setFocusedId } from '../../redux/adminRedux';
+import { userRequest } from '../../middleware/requestMethods';
+import { getAdminData } from '../../redux/apiCalls';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -24,7 +26,6 @@ const Header = () => {
   const [pageTitle, setPageTitle] = useState('Page Name');
   const [isNotify, setIsNotify] = useState(false);
   const [notifies, setNotifies] = useState <NotificationData[]>([])
-  
 
   useEffect(() => {
     const currentPath = location.pathname.split('/').pop();
@@ -36,34 +37,42 @@ const Header = () => {
     const filtredNotify = notifications.filter(notification => !notification.isRead)
     setNotifies(filtredNotify)
   },[notifications])
-
-  useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (isNotify && target && !target.closest('#notification')) {
-        setIsNotify(false);
-      }
-    };
   
-    document.addEventListener('mousedown', handleOutsideClick);
-  
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, [isNotify]);
 
   const handleClickLogout = () => {
     dispatch(loginFinish());
     navigate('/');
   }
   const handleClickNotify = () => {
-    isNotify ? setIsNotify(false) : setIsNotify(true)
+    setIsNotify(!isNotify)
   };
+  
+  const toNotify = async (id: string, linkedId: string, type: NotificationType) => {
+    dispatch(setFocusedId(linkedId))
 
-  const toNotify = (id: string, type: NotificationType) => {
-    console.log (id, type)
-    dispatch(setFocusedId(id))
-    user?.isAdmin ? (console.log('admin')) : (console.log('not admin'))
+    if (user && user?.accessToken && user?.isAdmin) {
+      try {
+        await userRequest(user.accessToken).patch(`/notifications/update_notification/${id}`, {});
+        switch (type) {
+          case 'customerRequest':
+            navigate('/admin/requests');
+            break;
+          case 'newOrder':
+            navigate('/admin/orders');
+            break;
+          case 'newProduct':
+            navigate('/admin/products');
+            break;
+          default:
+            console.log('Unknown notification type');
+        }
+        getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+        setIsNotify(false)
+      } catch (error) {
+        console.error('Failed to update notification', error);
+      }
+    }
+      
   }
 
   return (
@@ -83,19 +92,21 @@ const Header = () => {
         { isNotify &&
           <div id="notification" className={`${styles.notifyContainer} ${styles.fadeInDown}`}>
           <div className={styles.notifyQuantity}>Новых уведомлений: {notifyQuantity}</div>
-          {notifies.map(notification =>
-            <div 
-              key={notification._id} 
-              className={styles.notifyItem} 
-              onClick={()=> toNotify(notification._id, notification.type)}
-            >
-              <div className={styles.notifyIcon}>{notificationTitles[notification.type].icon}</div>
-              <div className="">
-                <div className={styles.notifyTitle}>{notificationTitles[notification.type].title}</div>
-                <div className={styles.notifyMessage}>{notification.message}</div>
+          <div className={styles.notifyList}>
+            {notifies.map(notification =>
+              <div 
+                key={notification._id} 
+                className={styles.notifyItem} 
+                onClick={()=> toNotify(notification._id, notification.data.requestId, notification.type)}
+              >
+                <div className={styles.notifyIcon}>{notificationTitles[notification.type].icon}</div>
+                <div className="">
+                  <div className={styles.notifyTitle}>{notificationTitles[notification.type].title}</div>
+                  <div className={styles.notifyMessage}>{notification.message}</div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         }
         

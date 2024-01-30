@@ -11,7 +11,9 @@ const MenuPanel = () => {
       <div className={styles.title}>Меню администратора</div>
       <nav className="menu">
         <ul>
-          {menuLinks.map((link:MenuItemProps) => <MenuItem title={link.title} key={link.title} icon={link.icon} path={`/admin/${link.path}`}/>)}
+          {menuLinks.map((link:MenuItemProps) => 
+            <MenuItem title={link.title} key={link.title} icon={link.icon} path={`/admin/${link.path}`}/>
+          )}
         </ul>
       </nav>
     </div>
