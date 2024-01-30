@@ -6,19 +6,31 @@ import styles from './PasswordRequest.module.css'
 import { useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../middleware/requestMethods';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const PasswordRequest = () => {
+  
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
+  const users = useSelector((state: RootState) => state.admin.users);
+
   const sendNotification = async (email: string) => {
+    const user = users.find(user => user.email === email);
+    // const user = users.find(user => user.email === email || user.phone === phone);
+
+    const message = user
+      ? `Клиент ${user.username} запрашивает смену пароля`
+      : 'Поступил запрос на доступ к системе от нового клиента';
+
     try {
       await axios.post(`${BASE_URL}/notifications/add_notification`, {
         type: 'customerRequest',
-        message: `Запрос на доступ к системе от пользователя с email: ${email}`,
+        message: message,
       });
     } catch (error) {
       console.error('Failed to send notification', error);

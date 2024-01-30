@@ -17,6 +17,17 @@ export interface CategoryData {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export interface NotificationData {
+  _id?: string;
+  toUser: string;
+  fromUser: string;
+  message: string;
+  isRead: boolean;
+  type: string;
+  data: object;
+  createdAt: Date;
+}
 interface HisoryPrice {
     price: number;
     date?: Date;
@@ -60,7 +71,9 @@ export interface AdminState {
   users: UserData[];
   products: ProductData[];
   categories: CategoryData[];
+  notifications: NotificationData[];
   notifyCounter: number;
+  focusedId: string;
   isFetching: boolean;
   error: string | null;
 }

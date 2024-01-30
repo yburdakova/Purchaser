@@ -36,9 +36,9 @@
     color: #213547;
   }
   .active{
-    background-color: #F8F9FC
+    background-color: #E1E8F5;
   }
   .itemContainer:hover{
-    background-color: #F8F9FC
+    background-color: #E1E8F5;
   }
 }

@@ -8,6 +8,8 @@ const adminSlice = createSlice({
     users: [],
     products: [],
     categories: [],
+    notifications: [],
+    focusedId: '',
     isFetching: false,
     error: null,
     notifyCounter: 0,
@@ -18,6 +20,9 @@ const adminSlice = createSlice({
     fetchingStart: (state) => {
       state.isFetching = true,
       state.error = null
+    },
+    setFocusedId: (state, action) => {
+      state.focusedId = action.payload
     },
     fetchingSuccess: (state) => {
       state.isFetching = false,
@@ -35,11 +40,12 @@ const adminSlice = createSlice({
     addCategories: (state, action) => {
       state.categories = action.payload
     },
+    getNotifications: (state, action) => {
+      state.notifications = action.payload,
+      state.notifyCounter = state.notifications.filter(notification => !notification.isRead).length
+    },
     postDataSuccess: (state, action)=>{
         console.log(action.payload)
-    },
-    updateNotify: (state, action) => {
-      state.notifyCounter = action.payload
     },
     fetchingFailure: (state, action) => {
       state.isFetching = false;
@@ -58,10 +64,11 @@ export const {
   addUsers,
   addProducts,
   addCategories,
-  updateNotify,
   fetchingFailure,
   resetError,
-  postDataSuccess
+  postDataSuccess,
+  setFocusedId,
+  getNotifications
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

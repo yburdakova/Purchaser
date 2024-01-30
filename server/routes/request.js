@@ -11,7 +11,6 @@ router.post("/send_request", async (req, res) => {
         email: req.body.email,
         phone: req.body.phone
     });
-
     try {
         const savedRequest = await newRequest.save();
         res.status(201).json(savedRequest);
