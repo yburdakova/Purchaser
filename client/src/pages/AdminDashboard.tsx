@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAdminData } from '../redux/apiCalls';
 import { RootState } from '../redux/store';
-import { CategoryData, CustomerRequest, NotificationData, ProductData, UserData } from '../data/types';
-import { addCategories, addCustomerRequests, addProducts, addUsers, getNotifications } from '../redux/adminRedux';
+import { CategoryData, CustomerData, CustomerRequest, NotificationData, ProductData, UserData } from '../data/types';
+import { addCategories, addCustomerRequests, addCustomers, addProducts, addUsers, getNotifications } from '../redux/adminRedux';
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,6 @@ const AdminDashboard = () => {
   const requests = useSelector((state: RootState) => state.admin.customerRequests);
   const users = useSelector((state: RootState) => state.admin.users);
   const products = useSelector((state: RootState) => state.admin.products);
-  const notifications = useSelector((state: RootState) => state.admin.notifications);
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken) {
@@ -20,6 +19,7 @@ const AdminDashboard = () => {
       getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
       getAdminData<CategoryData[]>(dispatch, '/categories', user?.accessToken, user?.isAdmin, addCategories)
       getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+      getAdminData<CustomerData[]>(dispatch, '/customers', user?.accessToken, user?.isAdmin, addCustomers)
     }
   }, [dispatch, user?.isAdmin, user?.accessToken]);
 

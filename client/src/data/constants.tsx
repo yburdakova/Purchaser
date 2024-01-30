@@ -1,7 +1,7 @@
 import { GrDocumentStore } from "react-icons/gr";
 import { BsCardChecklist, BsClipboardData } from "react-icons/bs";
 import { TbLockAccess, TbPigMoney, TbUsers } from "react-icons/tb";
-import { MenuItemProps } from "./types";
+import { MenuItemProps, NotificationTitleMap } from "./types";
 import { LiaClipboardListSolid } from "react-icons/lia";
 import { GiPowderBag } from "react-icons/gi";
 import { PiShieldWarningBold } from "react-icons/pi";
@@ -36,7 +36,7 @@ export const measures = [
   'л'
 ]
 
-export const notificationTitles = {
+export const notificationTitles: NotificationTitleMap = {
   customerRequest: {
     title: "Запрос доступа",
     icon: <TbLockAccess />

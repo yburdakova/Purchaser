@@ -9,15 +9,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { menuLinks } from '../../data/constants';
 import { RootState } from '../../redux/store';
 import { notificationTitles } from '../../data/constants';
-import { NotificationData } from '../../data/types';
+import { NotificationData, NotificationType } from '../../data/types';
 import { setFocusedId } from '../../redux/adminRedux';
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
-  
 
   const user = useSelector((state: RootState) => state.user.currentUser);
   const notifyQuantity = useSelector((state: RootState) => state.admin.notifyCounter);
@@ -26,7 +24,6 @@ const Header = () => {
   const [pageTitle, setPageTitle] = useState('Page Name');
   const [isNotify, setIsNotify] = useState(false);
   const [notifies, setNotifies] = useState <NotificationData[]>([])
-  const [notifyClass, setNotifyClass] = useState(styles.fadeInDown)
   
 
   useEffect(() => {
@@ -40,29 +37,33 @@ const Header = () => {
     setNotifies(filtredNotify)
   },[notifications])
 
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (isNotify && target && !target.closest('#notification')) {
+        setIsNotify(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleOutsideClick);
+  
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [isNotify]);
+
   const handleClickLogout = () => {
     dispatch(loginFinish());
     navigate('/');
   }
   const handleClickNotify = () => {
-    if (isNotify) {
-      setNotifyClass(styles.fadeOutUp)
-      setTimeout(() => {
-        setIsNotify(false);
-      }, 300); 
-    } else {
-      setNotifyClass(styles.fadeInDown)
-      setTimeout(() => {
-        setIsNotify(true)
-      }, 300); 
-    }
-  }
+    isNotify ? setIsNotify(false) : setIsNotify( true)
+  };
 
-  const toNotify = (id: string, type: string) => {
-    console.log (id)
+  const toNotify = (id: string, type: NotificationType) => {
+    console.log (id, type)
     dispatch(setFocusedId(id))
     user?.isAdmin ? (console.log('admin')) : (console.log('not admin'))
-    
   }
 
   return (
@@ -80,7 +81,7 @@ const Header = () => {
           
         </div>
         { isNotify &&
-          <div className={`${styles.notifyContainer} ${notifyClass}`}>
+          <div id="notification" className={`${styles.notifyContainer} ${styles.fadeInDown}`}>
           <div className={styles.notifyQuantity}>Новых уведомлений: {notifyQuantity}</div>
           {notifies.map(notification =>
             <div 

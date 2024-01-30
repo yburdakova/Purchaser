@@ -16,12 +16,11 @@ const CustomerSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        phone:{
+        contactPhone:{
           type: String,
           required: true,
-          unique: true
         },
-        notes:{
+        extraInfo:{
           type: String,
         },
     },

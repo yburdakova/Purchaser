@@ -19,7 +19,7 @@ const PasswordRequest = () => {
 
   const users = useSelector((state: RootState) => state.admin.users);
 
-  const sendNotification = async (email: string) => {
+  const sendNotification = async (email: string, requestId: string) => {
     const user = users.find(user => user.email === email);
     // const user = users.find(user => user.email === email || user.phone === phone);
 
@@ -31,6 +31,7 @@ const PasswordRequest = () => {
       await axios.post(`${BASE_URL}/notifications/add_notification`, {
         type: 'customerRequest',
         message: message,
+        data: { requestId }
       });
     } catch (error) {
       console.error('Failed to send notification', error);
@@ -47,8 +48,9 @@ const PasswordRequest = () => {
         name: username,
         phone: phone,
       });
-      console.log(response.status);
-      sendNotification(email);
+      const requestId = response.data._id; 
+      console.log(requestId)
+      sendNotification(email, requestId);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Failed to send request', error);

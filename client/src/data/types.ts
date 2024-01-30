@@ -1,3 +1,4 @@
+import { ReactElement } from "react";
 
 export interface UserData {
   _id?: string;
@@ -11,6 +12,17 @@ export interface UserData {
   accessToken?: string
 }
 
+export interface CustomerData {
+  _id?: string;
+  title?: string;
+  email: string;
+  contactName: string;
+  contactPhone: string;
+  extraInfo?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface CategoryData {
   _id?: string;
   title: string;
@@ -19,12 +31,12 @@ export interface CategoryData {
 }
 
 export interface NotificationData {
-  _id?: string;
+  _id: string;
   toUser: string;
   fromUser: string;
   message: string;
   isRead: boolean;
-  type: string;
+  type: NotificationType;
   data: object;
   createdAt: Date;
 }
@@ -72,6 +84,7 @@ export interface AdminState {
   products: ProductData[];
   categories: CategoryData[];
   notifications: NotificationData[];
+  customers: CustomerData[];
   notifyCounter: number;
   focusedId: string;
   isFetching: boolean;
@@ -100,3 +113,18 @@ export interface MenuItemProps{
 export interface TableRowProps {
   rowData: ProductData
 }
+
+export interface NotificationTitleMap {
+  [key: string]: {
+    title: string;
+    icon: ReactElement;
+  };
+}
+
+export type NotificationType = 
+  'customerRequest' | 
+  'newOrder' | 
+  'newProduct' | 
+  'priceChange' | 
+  'statusChange' | 
+  'orderStatusChange';
