@@ -40,34 +40,30 @@ const AdminProducts = () => {
   const [newCategoryTitle, setNewCategoryTitle] = useState('')
 
   useEffect(() => {
-    if (user?.isAdmin && user.accessToken) {
-      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
+    if (user?.isAdmin && user.accessToken && products.length === 0) {
+      getAdminData<ProductData[]>(dispatch, '/products', user.accessToken, user.isAdmin, addProducts);
     }
     setShowProducts(products);
-  }, [products]);
+  }, [dispatch, user?.isAdmin, user?.accessToken, products]);
 
   useEffect(() => {
-    if (user?.isAdmin && user.accessToken) {
-      getAdminData<CategoryData[]>(dispatch, '/categories', user?.accessToken, user?.isAdmin, addCategories)
+    if (user?.isAdmin && user.accessToken && categories.length === 0) {
+      getAdminData<CategoryData[]>(dispatch, '/categories', user.accessToken, user.isAdmin, addCategories);
     }
     setShowCategories(categories);
-  }, [categories]);
+  }, [dispatch, user?.isAdmin, user?.accessToken, categories]);
 
   useEffect(() => {
     let filteredProducts = products;
-  
-    if (selectedCategory && selectedCategory !== "all") {
-      filteredProducts = filteredProducts.filter(product =>
-        product.category === selectedCategory
-      );
+
+    if (selectedCategory && selectedCategory !== 'all') {
+      filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
     }
-  
+
     if (searchedProducts) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.title.toLowerCase().includes(searchedProducts.toLowerCase())
-      );
+      filteredProducts = filteredProducts.filter(product => product.title.toLowerCase().includes(searchedProducts.toLowerCase()));
     }
-  
+
     setShowProducts(filteredProducts);
   }, [selectedCategory, searchedProducts, products]);
 

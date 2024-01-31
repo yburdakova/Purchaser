@@ -44,7 +44,7 @@ router.get("/admin_notifications", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// UPDATE NOTIFICATION
+// SET NOTIFICATION IS READ
 router.patch("/update_notification/:notificationId", verifyTokenAndAuthorization, async (req, res) => {
   const notificationId = req.params.notificationId;
   try {

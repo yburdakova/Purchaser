@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { CustomerData, UserData } from "../data/types";
+import { CustomerData, CustomerRequest, NotificationData, UserData } from "../data/types";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegEye } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CustomInput } from "../components";
 import { PiWarningCircleBold } from "react-icons/pi";
-import { postDataSuccess } from "../redux/adminRedux";
-import { postAdminData } from "../redux/apiCalls";
+import { addCustomerRequests, getNotifications, postDataSuccess } from "../redux/adminRedux";
+import { getAdminData, postAdminData } from "../redux/apiCalls";
 
 const AdminCustomers = () => {
 
@@ -21,6 +21,13 @@ const AdminCustomers = () => {
   const [newCustomerName, setNewCustomerName] = useState('')
   const [newCustomerPassword, setNewCustomerPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    if (user?.isAdmin && user.accessToken) {
+      getAdminData<CustomerRequest[]>(dispatch, '/requests', user.accessToken, user.isAdmin, addCustomerRequests);
+      getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+    }
+  }, [dispatch, user?.isAdmin, user?.accessToken]);
 
   const addNewCustomer = (e: React.FormEvent) => {
     e.preventDefault()

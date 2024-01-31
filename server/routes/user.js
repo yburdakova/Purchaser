@@ -32,6 +32,27 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     }
 });
 
+// CHANGE PASSWORD
+router.put("/change-password/:userId", verifyTokenAndAuthorization, async (req, res) => {
+    console.log(req.body); 
+    const userId = req.params.userId;
+    const newPassword = CryptoJS.AES.encrypt(
+        req.body.password,
+        process.env.PASSWORD_SECRET
+    ).toString();
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: { password: newPassword } },
+            { new: true }
+        );
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
 //DELETE
 router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
     try {

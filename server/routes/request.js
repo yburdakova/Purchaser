@@ -33,6 +33,14 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
     }
 });
 
-
+//DELETE REQUEST
+router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
+    try {
+        await CustomerRequest.findByIdAndDelete(req.params.id);
+        res.status(200).json("Request has been deleted...");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 export default router;
