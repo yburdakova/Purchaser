@@ -25,8 +25,9 @@ const AdminRequests = () => {
   const [newCustomerPhone, setNewCustomerPhone] = useState('')
   const [newCustomerName, setNewCustomerName] = useState('')
   const [processingId, setProcessingId] = useState('')
-  const [editingId, setEditingId] = useState('')
-
+  const [isChangePassword, setIsChangePassword] = useState(false)
+  const [editingUserId, setEditingUserId] = useState('')
+  
   const { passwordChangeRequests, newCustomerRequests } = requests.reduce((acc, request) => {
     const isExistingCustomer = customers.some(customer => customer.email === request.email);
     if (isExistingCustomer) {
@@ -44,74 +45,88 @@ const AdminRequests = () => {
     
   }
 
-  const handleAddCustomer = ( id: string, name: string, phone: string, email: string) => {
-    setNewCustomerPhone(phone)
-    setNewCustomerName(name)
-    setNewCustomerEmail(email)
-    setProcessingId(id)
+  const handleAddCustomer = ( 
+    id: string, 
+    name: string, 
+    phone: string, 
+    email: string ) => {
+      setIsChangePassword(false);
+      setNewCustomerPhone(phone);
+      setNewCustomerName(name);
+      setNewCustomerEmail(email);
+      setProcessingId(id);
   }
 
-  const handleChangePassword = (idUser: string, processingId: string) => {
-    setProcessingId(processingId)
-    setEditingId(idUser)
-    console.log(`Меняем пароль клиента ${idUser}`)
+  const handleChangePassword = (
+    userId: string,
+    title: string, 
+    email: string, 
+    contactName: string, 
+    phone: string, 
+    processingId: string ) => {
+      setIsChangePassword(true);
+      setNewCustomerTitle(title);
+      setNewCustomerEmail(email);
+      setNewCustomerPhone(phone);
+      setNewCustomerName(contactName);
+      setProcessingId(processingId);
+      setEditingUserId(userId); 
   }
 
-  const addNewCustomer = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    const customerData = {
-      title: newCustomerTitle,
-      email: newCustomerEmail,
-      contactName: newCustomerName,
-      contactPhone: newCustomerPhone,
+  const addNewCustomer = async (e: React.FormEvent) => {
+    
+    e.preventDefault();
+    console.log(processingId)
+    if (isChangePassword) {
+      const userData = { password: newCustomerPassword };
+      const customerData = { contactName: newCustomerName, contactPhone: newCustomerPhone };
+      try {
+        await userRequest(user?.accessToken).put(`/users/change-password/${editingUserId}`, userData);
+        const existingCustomer = customers.find(customer => customer.email === newCustomerEmail);
+        if (existingCustomer && (existingCustomer.contactName !== newCustomerName || existingCustomer.contactPhone !== newCustomerPhone)) {
+          await userRequest(user?.accessToken).put(`/customers/${existingCustomer._id}`, customerData);
+        }
+      } catch (error) {
+        console.error('Failed to change password or update customer', error);
+      }
+    } else {
+      const customerData = { title: newCustomerTitle, email: newCustomerEmail, contactName: newCustomerName, contactPhone: newCustomerPhone };
+      const userData = { username: newCustomerTitle, email: newCustomerEmail, password: newCustomerPassword };
+      try {
+        if (user?.accessToken && user?.isAdmin){
+          await postAdminData<CustomerData[], CustomerData>(dispatch, '/customers/add_customer', customerData, user.accessToken, user.isAdmin, postDataSuccess);
+          await postAdminData<UserData[], UserData>(dispatch, '/auth/register', userData, user.accessToken, user.isAdmin, postDataSuccess);
+        }
+      } catch (error) {
+        console.error('Failed to add new customer or user', error);
+      }
     }
 
-    const userData ={
-      username: newCustomerTitle,
-      email: newCustomerEmail,
-      password: newCustomerPassword
-    }
-
-    if (user?.isAdmin && user.accessToken) {
-      postAdminData<CustomerData[], CustomerData>(dispatch, '/customers/add_customer', customerData, user?.accessToken, user?.isAdmin, postDataSuccess)
-      postAdminData<UserData[], UserData>(dispatch, '/auth/register', userData, user?.accessToken, user?.isAdmin, postDataSuccess)
-    }
     setNewCustomerTitle('');
     setNewCustomerEmail('');
     setNewCustomerPhone('');
     setNewCustomerName('');
-    setNewCustomerPassword(''); 
+    setNewCustomerPassword('');
     handleDelete(processingId);
     setProcessingId('');
   }
 
-  const changePassword = async (e: React.FormEvent) => {
-    e.preventDefault()
 
-    const userData = {
-        password: newCustomerPassword
-    };
-
-    if (user?.isAdmin && user.accessToken) {
-        try {
-            await userRequest(user.accessToken).put(`/users/change-password/${editingId}`, userData);
-        } catch (error) {
-            console.error('Failed to change password', error);
-        }
-    }
-    handleDelete(processingId)
-    setNewCustomerPassword('')
-    setProcessingId('')
+  if ( requests.length == 0 ) {
+    return (
+      <div className='infopage'>
+      <div className="">Запросов нет</div>
+  </div>
+    )
   }
 
   return (
     <div className='infopage'>
-      
       <div>Запросы от новых клиентов</div>
       <div className="flexList">
         {newCustomerRequests.map(request => (
           <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
+            <div>{request.email}</div>
             <div>{request.name}</div>
             <div>{request.phone}</div>
             <MdOutlineGroupAdd onClick={() => request._id && request.email && request.name && handleAddCustomer(request._id, request.name, request.phone, request.email)}/>
@@ -134,7 +149,14 @@ const AdminRequests = () => {
               <div>{request.phone}</div>
               <TbLockCog 
                 className="editPriceIcon" 
-                onClick={() => client && request._id && client._id && handleChangePassword(client._id, request._id)} 
+                onClick={() => client && client._id && client?.username && request.email && request.name && request._id && handleChangePassword(
+                  client._id,
+                  client?.username,
+                  request.email, 
+                  request.name,
+                  request.phone,
+                  request._id,
+                )} 
               />
             </div>
         )})}
@@ -190,18 +212,6 @@ const AdminRequests = () => {
         </form>
       </div>
       <div className="addForm">
-        <form onSubmit={e => changePassword(e)} className='newProductForm'>
-          <CustomInput 
-            type="password" 
-            label="Пароль" 
-            placeholder='Пароль' 
-            required 
-            dark
-            valueProps={newCustomerPassword} 
-            getValue={setNewCustomerPassword}
-          />
-          <button className='newDataButton'>Сменить</button>
-        </form>
       </div>
     </div>
   )

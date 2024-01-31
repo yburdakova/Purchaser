@@ -6,8 +6,6 @@ import styles from './PasswordRequest.module.css'
 import { useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../middleware/requestMethods';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../redux/store';
 
 const PasswordRequest = () => {
   
@@ -17,20 +15,12 @@ const PasswordRequest = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  const customers = useSelector((state: RootState) => state.admin.customers);
-
-  const sendNotification = async (email: string, requestId: string) => {
-    const oldCustomer = customers.find(customers => customers.email === email);
-    // const user = users.find(user => user.email === email || user.phone === phone);
-
-    const message = oldCustomer
-      ? `Клиент ${oldCustomer.title} запрашивает смену пароля`
-      : 'Поступил запрос на доступ к системе от нового клиента';
+  const sendNotification = async (requestId: string) => {
 
     try {
       await axios.post(`${BASE_URL}/notifications/add_notification`, {
         type: 'customerRequest',
-        message: message,
+        message: 'Поступил запрос на доступ к системе',
         data: { requestId }
       });
     } catch (error) {
@@ -50,7 +40,7 @@ const PasswordRequest = () => {
       });
       const requestId = response.data._id; 
       console.log(requestId)
-      sendNotification(email, requestId);
+      sendNotification(requestId);
       setIsSubmitted(true);
     } catch (error) {
       console.error('Failed to send request', error);
