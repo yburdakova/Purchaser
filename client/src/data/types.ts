@@ -93,6 +93,12 @@ export interface AdminState {
   error: string | null;
 }
 
+export interface OrderState {
+  products: ProductData[],
+  quantity: 0,
+  totalPrice: 0
+}
+
 export type SuccessAction<T> = (data: T) => { type: string; payload: T };
 
 export interface CustomInputProps {

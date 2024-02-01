@@ -36,6 +36,95 @@ th, td {
 .rowTable:hover{
   background-color: #253043;
 }
+.content{
+  width: 100%;
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  transition: all 0.3s ease 0s;
+}
+.orderContainer{
+  flex: 0 0 33%;
+  width: 400px;
+  border: 1px solid #777E8A;
+  border-radius: 10px;
+  animation: slideInFromRight 0.2s ease-out forwards; 
+  transition: all 0.3s ease-in-out 0s;
+}
+.orderItem{
+  display: flex;
+  gap: 10px;
+}
+
+/* Grids */
+
+.gridTable {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: auto auto auto auto auto auto auto; 
+  transition: all 1s ease-in-out  1s;
+}
+
+.gridHeader {
+  display: contents;
+}
+
+.gridBody {
+  max-height: 300px;
+  overflow-y: auto;
+  display: contents;
+}
+
+.iconColumn {
+  display: flex;
+  justify-content: space-around;
+}
+.iconColumn svg {
+  cursor: pointer;
+}
+.iconColumn svg:hover {
+  color: #4A7BD0;
+}
+
+.gridRow {
+  display: contents;
+}
+.centerCell {
+  display: flex;
+  justify-content: center;
+}
+.headerCell {
+  font-weight: 600;
+  text-align: left;
+  background-color: #4A7BD0;
+  color: #F8F9FC;
+}
+
+.headerCell, .gridCell {
+  padding: 10px;
+  text-align: left;
+  border-radius: 8px;
+}
+
+.gridCell{
+  border: 1px solid #777E8A;
+}
+
+.gridRow:hover > div{
+  background-color: #253043;
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%); /* Начните сдвиг справа за пределами экрана */
+    opacity: 0; /* Начните с полной прозрачности */
+  }
+  to {
+    transform: translateX(0); /* Закончите сдвиг на месте */
+    opacity: 1; /* Закончите с полной непрозрачностью */
+  }
+}
 
 @media (prefers-color-scheme: light) {
   .newPriceForm input{
@@ -48,6 +137,9 @@ th, td {
     background-color: #E1E8F5;
   }
   .rowTable:hover{
+    background-color: #E1E8F5;
+  }
+  .gridRow:hover > div{
     background-color: #E1E8F5;
   }
 }

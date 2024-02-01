@@ -6,6 +6,7 @@ import { CategoryData, ProductData } from '../data/types';
 import { addCategories, addProducts } from '../redux/adminRedux';
 import { getAdminData } from '../redux/apiCalls';
 import { IoSearch } from 'react-icons/io5';
+import { FaRegEye } from 'react-icons/fa6';
 
 const UserProducts = () => {
 
@@ -17,7 +18,9 @@ const UserProducts = () => {
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
   const[showCategories, setShowCategories] = useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [orderList, setSelectedOrderList] = useState<ProductData[]>([])
+  const quantity = 1
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken && products.length === 0) {
@@ -50,6 +53,10 @@ const UserProducts = () => {
     setShowProducts(filteredProducts);
   }, [selectedCategory, searchedProducts, products]);
 
+const addProductToOrder =(product: ProductData) => {
+  setSelectedOrderList([... orderList, product])
+}
+
   return (
     <div className='infopage'>
       <div className="tools">
@@ -75,54 +82,70 @@ const UserProducts = () => {
           </select>
         </div>
       </div>
-      <table className='purTable'>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Товар</th>
-            <th>Категория</th>
-            <th>Фасовка</th>
-            <th>Цена</th>
-            <th>Изменение цены</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody className='tableBody'>
+      <div className="content">
+      <div className="gridTable">
+        <div className="gridHeader">
+          <div className="headerCell">ID</div>
+          <div className="headerCell">Товар</div>
+          <div className="headerCell">Категория</div>
+          <div className="headerCell centerCell">Фасовка</div>
+          <div className="headerCell">Цена</div>
+          <div className="headerCell centerCell">Изменение цены</div>
+          <div className="headerCell iconColumn">Действия</div>
+        </div>
+        <div className="gridBody">
           {showProducts.map((product) => {
-            
             let priceDifference = null;
             if (product.priceHistory.length >= 2) {
-              const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
-              const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
-              priceDifference = latestPrice - previousPrice;
+            const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
+            const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
+            priceDifference = latestPrice - previousPrice;
             }
-            
+
             return (
-              <tr className='rowTable' key={product._id} id={product._id}>
-              <td>{product.customId}</td>
-              <td className='b'>{product.title}</td>
-              <td>{product.category}</td>
-              <td>{product.measure}</td>
-              <td>{product.price.toFixed(2)} ₽</td>
-              <td className='priceCell'>
-                {priceDifference !== null && 
-                  <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
-                    <div className="">{priceDifference.toFixed(2)} ₽</div>
-                  </div>
-                }
-              </td>
-              <td className='iconTableCell'>
-                <MdAssignmentAdd
-                  className="editPriceIcon" 
-                />
-              </td>
-          </tr>
+              <div className="gridRow" key={product._id} id={product._id}>
+                <div className="gridCell">{product.customId}</div>
+                <div className="gridCell b">{product.title}</div>
+                <div className="gridCell">{product.category}</div>
+                <div className="gridCell centerCell">{product.measure}</div>
+                <div className="gridCell b">{product.price.toFixed(2)} ₽</div>
+                <div className="gridCell">
+                  {priceDifference !== null && 
+                    <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
+                      <div className="">{priceDifference.toFixed(2)} ₽</div>
+                    </div>
+                  }
+                </div>
+                <div className="gridCell iconColumn">
+                  <MdAssignmentAdd size={24} onClick={() => product && addProductToOrder(product)}/>
+                  <FaRegEye size={24}/>
+                </div>
+              </div>
             )
           })
-        }
-        </tbody>
-      </table>
+          }
+        </div>
+      </div>
+      { orderList.length > 0 &&
+        <div className="orderContainer">
+          <div className="b">Заказ</div>
+          {orderList.map(orderListItem => 
+            <div className='orderItem'>
+              <div className="">{orderListItem.title}</div>
+              <div className="">{orderListItem.price}</div>
+              <div className="">{quantity}</div>
+              <div className="">{orderListItem.measure}</div>
+              <div className="">{orderListItem.price * quantity}</div>
+            </div>
+          )}
+          <button>Отправить заказ</button>
+        </div>
+      }
+
+      </div>
+      
     </div>
+
   )
 }
 
