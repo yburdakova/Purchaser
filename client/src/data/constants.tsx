@@ -6,6 +6,7 @@ import { LiaClipboardListSolid } from "react-icons/lia";
 import { GiPowderBag } from "react-icons/gi";
 import { PiShieldWarningBold } from "react-icons/pi";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
+import { MdOutlineAccountBox } from "react-icons/md";
 
 export const menuLinks: MenuItemProps[] = [
   {
@@ -34,7 +35,30 @@ export const menuLinks: MenuItemProps[] = [
     path: "requests"
   }
 ]
+export const userMenuLinks: MenuItemProps[] = [
+  {
+    title: "Рабочий стол",
+    icon: <BsClipboardData />,
+    path: "dashboard",
+  },
+  {
+    title: "Профиль",
+    icon: <MdOutlineAccountBox /> ,
+    path: "account"
+  },
+    {
+    title: "Продукты",
+    icon: <GrDocumentStore />,
+    path: "products"
+  },
+  {
+    title: "Заявки",
+    icon: <BsCardChecklist /> ,
+    path: "orders"
+  },
 
+
+]
 export const measures = [
   'кг',
   'шт',

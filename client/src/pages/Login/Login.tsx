@@ -53,6 +53,7 @@ const Login = () => {
             : <div className={`${styles.error} ${error ? styles.active : ''}`}>Нет ошибок</div>
           }
           <Link to='/reqest_password' className={styles.link}>Запросить изменение пароля</Link>
+          <Link to='/new_customer' className={styles.link}>Новый клиент? Подайте заявку</Link>
         </form> 
       </div>
     </div>

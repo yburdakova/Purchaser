@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { CustomerData, CustomerRequest, UserData } from '../data/types';
+import React, { useEffect, useState } from 'react'
+import { CustomerData, CustomerRequest, NotificationData, UserData } from '../data/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { TbLockCog } from 'react-icons/tb';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { MdOutlineGroupAdd } from 'react-icons/md';
-import { addCustomerRequests, postDataSuccess } from '../redux/adminRedux';
-import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
+import { addCustomerRequests, getNotifications, postDataSuccess } from '../redux/adminRedux';
+import { getAdminData, postAdminData } from '../redux/apiCalls';
 import { CustomInput } from '../components';
 import { userRequest } from '../middleware/requestMethods';
 
@@ -17,8 +17,11 @@ const AdminRequests = () => {
   const requests = useSelector((state: RootState) => state.admin.customerRequests);
   const customers = useSelector((state: RootState) => state.admin.customers);
   const users = useSelector((state: RootState) => state.admin.users);
+  const notifications = useSelector((state: RootState) => state.admin.notifications);
   const focusedId = useSelector((state: RootState) => state.admin.focusedId);
 
+  const [relevantReqests, setRelevantReqests] = useState<CustomerRequest[]>([])
+  const [irrelevantReqests, setIrrelevantlReqests] = useState<CustomerRequest[]>([])
   const [newCustomerTitle, setNewCustomerTitle] = useState('')
   const [newCustomerEmail, setNewCustomerEmail] = useState('')
   const [newCustomerPassword, setNewCustomerPassword] = useState('')
@@ -27,8 +30,19 @@ const AdminRequests = () => {
   const [processingId, setProcessingId] = useState('')
   const [isChangePassword, setIsChangePassword] = useState(false)
   const [editingUserId, setEditingUserId] = useState('')
+
+  useEffect(() => {
+    setRelevantReqests(requests.filter(request => !request.isProcessed))
+    setIrrelevantlReqests(requests.filter(request => request.isProcessed))
+  },[requests])
   
-  const { passwordChangeRequests, newCustomerRequests } = requests.reduce((acc, request) => {
+  const getNotificationIdByRequestId = (requestId:string) => {
+    const notification = notifications.find(notify => notify.data?.requestId === requestId);
+    return notification?._id;
+};
+
+  
+  const { passwordChangeRequests, newCustomerRequests } = relevantReqests.reduce((acc, request) => {
     const isExistingCustomer = customers.some(customer => customer.email === request.email);
     if (isExistingCustomer) {
       acc.passwordChangeRequests.push(request);
@@ -37,10 +51,13 @@ const AdminRequests = () => {
     } return acc;
   }, { passwordChangeRequests: [] as CustomerRequest[], newCustomerRequests: [] as CustomerRequest[] });
 
-  const handleDelete = (id:string) => {
+  const handleDelete = async (id:string) => {
+    const notifyId = getNotificationIdByRequestId(id);
     if (user?.isAdmin && user.accessToken) {
-      deleteAdminData<CustomerRequest[]>(dispatch, '/requests', id, user?.accessToken, user?.isAdmin, postDataSuccess)
+      await userRequest(user.accessToken).patch(`/requests/update_request/${id}`, {});
+      await userRequest(user.accessToken).patch(`/notifications/update_notification/${notifyId}`, {});
       getAdminData<CustomerRequest[]>(dispatch, '/requests', user.accessToken, user.isAdmin, addCustomerRequests);
+      getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
     }
     
   }
@@ -211,7 +228,16 @@ const AdminRequests = () => {
           <button className='newDataButton'>Добавить</button>
         </form>
       </div>
-      <div className="addForm">
+      <div className="">Обработанные запросы</div>
+      <div className="flexList">
+        {irrelevantReqests.map(request => (
+          <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
+            <div>{request.email}</div>
+            <div>{request.name}</div>
+            <div>{request.phone}</div>
+
+          </div>
+        ))}
       </div>
     </div>
   )

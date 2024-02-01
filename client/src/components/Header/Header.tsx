@@ -13,6 +13,7 @@ import { NotificationData, NotificationType } from '../../data/types';
 import { getNotifications, setFocusedId } from '../../redux/adminRedux';
 import { userRequest } from '../../middleware/requestMethods';
 import { getAdminData } from '../../redux/apiCalls';
+import { MdAssignment } from 'react-icons/md';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -49,7 +50,6 @@ const Header = () => {
   
   const toNotify = async (id: string, linkedId: string, type: NotificationType) => {
     dispatch(setFocusedId(linkedId))
-
     if (user && user?.accessToken && user?.isAdmin) {
       try {
         await userRequest(user.accessToken).patch(`/notifications/update_notification/${id}`, {});
@@ -79,6 +79,7 @@ const Header = () => {
     <header>
       <div className={styles.page_title}>{user&&user.isAdmin ? "Администратор" : "Клиент"} / {pageTitle}</div>
       <div className={styles.header_icons}>
+        <div className="headerIcon"><MdAssignment size={24}/></div>
         <div className="headerIcon bell" onClick={handleClickNotify}>
           < FaRegBell className='bell-icon'/>
           {notifyQuantity

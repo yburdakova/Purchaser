@@ -12,7 +12,12 @@ import {
   AdminOrders, 
   AdminCustomers, 
   AdminProducts, 
-  AdminRequests
+  AdminRequests,
+  NewClient,
+  UserDashboard,
+  UserOrders,
+  UserProducts,
+  Account
 } from './pages';
 
 function App() {
@@ -32,7 +37,16 @@ function App() {
             <Route path="products" element={<AdminProducts />} />
             <Route path="requests" element={<AdminRequests />} />
           </Route>
+          <Route path="/user" element={user&&!admin ?<Home /> : <Navigate to="/"/>} >
+            <Route path="" element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<UserDashboard />} />
+            <Route path="orders" element={<UserOrders />} />
+            <Route path="account" element={<Account />} />
+            <Route path="products" element={<UserProducts />} />
+            
+          </Route>
           <Route path="/reqest_password" element={<PasswordRequest />} />
+          <Route path="/new_customer" element={<NewClient />} />
         </Routes>
     </BrowserRouter>
   )

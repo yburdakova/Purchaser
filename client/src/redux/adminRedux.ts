@@ -11,6 +11,7 @@ const adminSlice = createSlice({
     notifications: [],
     customers: [],
     focusedId: '',
+    actualNotificationId: '',
     isFetching: false,
     error: null,
     notifyCounter: 0,
@@ -23,6 +24,9 @@ const adminSlice = createSlice({
       state.error = null
     },
     setFocusedId: (state, action) => {
+      state.focusedId = action.payload
+    },
+    setActualNotificationId: (state, action) => {
       state.focusedId = action.payload
     },
     fetchingSuccess: (state) => {
@@ -72,6 +76,7 @@ export const {
   resetError,
   postDataSuccess,
   setFocusedId,
+  setActualNotificationId,
   getNotifications,
   addCustomers
 } = adminSlice.actions;

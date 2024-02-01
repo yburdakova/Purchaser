@@ -43,4 +43,19 @@ router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
     }
 });
 
+// SET NOTIFICATION IS READ
+router.patch("/update_request/:id", verifyTokenAndAdmin, async (req, res) => {
+    const requestId = req.params.id; 
+    try {
+        const updatedRequest = await CustomerRequest.findByIdAndUpdate(
+            requestId,
+            { $set: { isProcessed: true } },
+            { new: true }
+        );
+        res.status(200).json(updatedRequest);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
 export default router;
