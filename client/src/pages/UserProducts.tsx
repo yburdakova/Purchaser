@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { IoIosArrowRoundDown, IoIosArrowRoundUp } from 'react-icons/io';
-import { MdAssignmentAdd, MdOutlinePriceChange } from 'react-icons/md';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { FaRegEye } from 'react-icons/fa6';
+import { MdAssignmentAdd } from 'react-icons/md';
 import { CategoryData, ProductData } from '../data/types';
 import { addCategories, addProducts } from '../redux/adminRedux';
 import { getAdminData } from '../redux/apiCalls';
