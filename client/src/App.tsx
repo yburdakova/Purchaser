@@ -27,7 +27,7 @@ function App() {
   return (
     <BrowserRouter>
         <Routes>
-          <Route path="/" element={ user&&admin ? <Navigate to="/admin"/> : user ? <Home /> : <Navigate to="/login"/> } />
+          <Route path="/" element={ admin ? <Navigate to="/admin"/> : user ? <Navigate to="/user"/> : <Navigate to="/login"/> } />
           <Route path="/login" element ={ <Login/>} />
           <Route path="/admin" element={user&&admin ?<AdminPanel /> : <Navigate to="/"/>} >
             <Route path="" element={<Navigate to="dashboard" replace />} />
@@ -37,7 +37,7 @@ function App() {
             <Route path="products" element={<AdminProducts />} />
             <Route path="requests" element={<AdminRequests />} />
           </Route>
-          <Route path="/user" element={user&&!admin ?<Home /> : <Navigate to="/"/>} >
+          <Route path="/user" element={!admin ? <Home /> : <Navigate to="/"/>} >
             <Route path="" element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<UserDashboard />} />
             <Route path="orders" element={<UserOrders />} />

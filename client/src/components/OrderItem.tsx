@@ -13,7 +13,7 @@ const OrderItem = ({product, index}: OrderItemProps) => {
 
 useEffect(() => {
   dispatch(updateProductQuantity({ productId: product._id, quantity: quantity }));
-}, [quantity])
+}, [product._id, quantity, dispatch])
 
   const handleClickIncrease = () => {
     if (quantity && quantity < max) {

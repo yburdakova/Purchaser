@@ -119,6 +119,9 @@ export interface OrderItemProps {
   index: number
 }
 
+export interface ProductItemProps {
+  product: ProductData;
+}
 export interface MenuItemProps{
   title: string;
   path: string;

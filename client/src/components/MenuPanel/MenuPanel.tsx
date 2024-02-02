@@ -15,7 +15,7 @@ const MenuPanel = () => {
   return (
     <div className={styles.menuContainer}>
       <div className={styles.logoBox}><img src={logo} alt="LOGO"/></div>
-      <div className={styles.title}>Меню администратора</div>
+      <div className={styles.title}>{`Меню ${user?.isAdmin ? 'администратора' : ' клиента'}`}</div>
       <nav className="menu">
         <ul>
           {menuItems.map((link:MenuItemProps) => 

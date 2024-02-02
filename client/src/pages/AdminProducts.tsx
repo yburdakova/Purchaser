@@ -1,16 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { CustomInput} from '../components';
-import { CategoryData, InputRefs, ProductData } from '../data/types';
+import { CustomInput, ProductItem} from '../components';
+import { CategoryData, ProductData } from '../data/types';
 import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
-import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
+import { getAdminData, postAdminData } from '../redux/apiCalls';
 import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux';
-import { MdOutlineAddTask, MdOutlineCancel, MdOutlinePriceChange } from 'react-icons/md';
-import { FaRegEye } from 'react-icons/fa6';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { IoIosArrowRoundDown, IoIosArrowRoundUp } from 'react-icons/io';
 import { PiWarningCircleBold } from 'react-icons/pi';
 
 const AdminProducts = () => {
@@ -19,14 +15,11 @@ const AdminProducts = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const products = useSelector((state: RootState) => state.admin.products);
   const categories = useSelector((state: RootState) => state.admin.categories);
-  const inputRefs = useRef<InputRefs>({});
   
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
   const[showCategories, setShowCategories] =useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [newPrice, setNewPrice] = useState('');
-  const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -134,40 +127,6 @@ const AdminProducts = () => {
     setErrorMessage('');
   }
 
-  const handeDeleteProduct = (id:string) => {
-    if (user?.isAdmin && user.accessToken) {
-      deleteAdminData<ProductData[]>(dispatch, '/products', id, user?.accessToken, user?.isAdmin, postDataSuccess)
-    }
-  }
-
-  const handleUpdatePrice = (productId: string, newPrice: number) => {
-    if (user?.isAdmin && user.accessToken) {
-      const bodyObj = { newPrice };
-      postAdminData<ProductData, { newPrice: number }>(
-        dispatch,
-        `/products/update-price/${productId}`,
-        bodyObj,
-        user.accessToken,
-        user.isAdmin,
-        postDataSuccess
-      );
-    }
-  };
-  
-  const handleUpdatePriceClick = (id:string) => {
-    setOpenPriceFormProductId(id)
-    setTimeout(() => {
-      inputRefs.current[id]?.focus?.();
-    }, 0);
-  }
-
-  const handleSubmitNewPrice = (e: React.FormEvent<HTMLFormElement>, id: string) => {
-    e.preventDefault()
-    handleUpdatePrice(id, Number(newPrice))
-    setNewPrice('')
-    setOpenPriceFormProductId('')
-  }
-  
   return (
     <div className='infopage'>
       <div className="addContainer">
@@ -261,79 +220,10 @@ const AdminProducts = () => {
           </div>
           <div className="gridBodyWrapperAdmin">
             <div className="gridBody">
-              {showProducts.map((product) => {
-                let priceDifference = null;
-                if (product.priceHistory.length >= 2) {
-                const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
-                const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
-                priceDifference = latestPrice - previousPrice;
-                }
-              return (
-                <div className="gridRow" key={product._id} id={product._id}>
-                <div className="gridCell">{product.customId}</div>
-                <div className="gridCell b">{product.title}</div>
-                <div className="gridCell">{product.category}</div>
-                <div className="gridCell centerCell">{product.measure}</div>
-                <div className="gridCell b">{product.price.toFixed(2)} ₽</div>
-                <div className="gridCell priceCell">
-                  {priceDifference !== null && 
-                    <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
-                      <div className="">{priceDifference.toFixed(2)} ₽</div>
-                      <div className="iconContainer">
-                        {priceDifference > 0 ? <IoIosArrowRoundUp size={22} /> : <IoIosArrowRoundDown size={22} />}
-                      </div>
-                    </div>
-                  }
-                  { product._id === openPriceFormProductId &&
-                    <form
-                      className='newPriceForm'
-                      onSubmit={(e) => product._id && handleSubmitNewPrice(e, product._id)}
-                    >
-                      <input
-                        className='newPriceInput'
-                        type="number"
-                        value={newPrice}
-                        onChange={(e) => setNewPrice(e.target.value)}
-                        required
-                        step="0.01"
-                        ref={(el) => {
-                          if (product._id) inputRefs.current[product._id] = el;
-                        }}
-                      />
-                      <div className="newPriceFormButtons">
-                        <button type="submit"> <MdOutlineAddTask /></button>
-                        <button onClick={() => (setOpenPriceFormProductId(''), setNewPrice(''))}> <MdOutlineCancel /></button>
-                      </div>
-                      
-                    </form>
-                  }
-                </div>
-                <div className="gridCell iconColumn">
-                <div data-tooltip="Изменить цену" className="icon-button" >
-                  <MdOutlinePriceChange
-                      size={27}
-                      className="editPriceIcon" 
-                      onClick={() => product._id && handleUpdatePriceClick(product._id)} 
-                    />
-                </div>
-                <div data-tooltip="Посмотреть детали" className="inactiveIcon" >
-                  <FaRegEye size={24}/>
-                </div>
-                <div data-tooltip="Удалить продукт" className="icon-button" >
-                  <RiDeleteBin6Line 
-                      size={24}
-                      className="deletePriceIcon" 
-                      onClick={() => product._id && handeDeleteProduct(product._id)}
-                  />
-                </div>
-                  
-                </div>
-            </div>
+              {showProducts.map((product) => 
+                <ProductItem product={product}/>
               )
-
-            })
           }
-
             </div>
           </div>
       </div>

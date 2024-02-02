@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { MdAssignmentAdd } from 'react-icons/md';
 import { CategoryData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
-import { FaRegEye } from 'react-icons/fa6';
-import { addProduct, openOrder } from '../redux/orderRedux';
+import {  openOrder } from '../redux/orderRedux';
 import { getUsersData } from '../redux/apiCalls';
-import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
-import { OrderItem } from '../components';
+import { OrderItem, ProductItem } from '../components';
 
 const UserProducts = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
   const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
-  const { products, quantity, totalPrice } = useSelector((state: RootState) => state.order);
+  const { products, totalPrice } = useSelector((state: RootState) => state.order);
   
   const [dbProducts, setDbProducts] = useState<ProductData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
@@ -23,7 +20,6 @@ const UserProducts = () => {
   const [showCategories, setShowCategories] = useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
-  const [value, setValue] = useState (1)
 
 
   useEffect(()=>{
@@ -54,29 +50,8 @@ const UserProducts = () => {
   }, [selectedCategory, searchedProducts, dbProducts]);
 
 
-  const handleClickCartButton = (product: ProductData) => {
-    const productToAdd = {
-      ...product,
-      quantity: 1, 
-      totalPrice: product.price 
-    };
-    
-    dispatch(addProduct(productToAdd));
-    dispatch(openOrder(true))
-  }
-
   const hadleCloseOrder = () => {
     dispatch(openOrder(false))
-  }
-
-  const increaseQuantity = () => {
-  quantity > 0 && 
-    setQuantity(quantity + 1);
-  }
-
-  const decreaseQuantity = () => {
-    quantity > 1 && 
-    setQuantity(quantity - 1);
   }
 
   return (
@@ -118,40 +93,9 @@ const UserProducts = () => {
           </div>
         <div className="gridBodyWrapperUser">
         <div className="gridBody">
-            {showProducts.map((product) => {
-              let priceDifference = null;
-              if (product.priceHistory.length >= 2) {
-              const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
-              const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
-              priceDifference = latestPrice - previousPrice;
-              }
-
-              return (
-                <div className="gridRow" key={product._id} id={product._id}>
-                  <div className="gridCell">{product.customId}</div>
-                  <div className="gridCell b">{product.title}</div>
-                  <div className="gridCell">{product.category}</div>
-                  <div className="gridCell centerCell">{product.measure}</div>
-                  <div className="gridCell b">{product.price.toFixed(2)} ₽</div>
-                  <div className="gridCell">
-                    {priceDifference !== null && 
-                      <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
-                        <div className="">{priceDifference.toFixed(2)} ₽</div>
-                      </div>
-                    }
-                  </div>
-                  <div className="gridCell iconColumn">
-                    <div data-tooltip="Добавить в заказ" className="icon-button" >
-                      <MdAssignmentAdd size={24} onClick={() => product && handleClickCartButton(product)}/>
-                    </div>
-                    <div className="inactiveIcon" data-tooltip="Посмотреть детали" >
-                      <FaRegEye size={24} />
-                    </div>
-                  </div>
-                </div>
-              )
-            })
-            }
+            {showProducts.map((product) => 
+              <ProductItem product={product}/>
+            )}
           </div>
         </div>
         </div>
