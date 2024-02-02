@@ -3,6 +3,7 @@ import Header from "./Header/Header";
 import CustomInput from "./CustomInput/CustomInput";
 import MenuPanel from "./MenuPanel/MenuPanel";
 import MenuItem from "./MenuItem/MenuItem";
+import OrderItem from "./OrderItem";
 
 
 export {
@@ -10,5 +11,6 @@ export {
   Footer,
   CustomInput,
   MenuPanel,
-  MenuItem
+  MenuItem,
+  OrderItem
 }

@@ -1,23 +1,4 @@
 
-/* orderTable */
-.orderTable {
-  width: 100%; 
-  border-collapse: collapse; 
-}
-
-.orderTable th, .orderTable td {
-  width: auto;
-  padding: 0 4px;
-  text-align: left; 
-}
-
-.orderTable th {
-  font-weight: bold; 
-}
-
-.orderNumber {
-  text-align: center;
-}
 
 /* ================================================ */
 .outletContainer{
@@ -67,11 +48,12 @@
   margin-bottom: 10px;
 }
 
+/* ====================== ORDER ==================== */
+
 .orderContainer{
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
-  width: 350px;
+  width: 500px;
   border: 1px solid #777E8A;
   border-radius: 10px;
   transition: all 0.3s ease-in-out 0s;
@@ -79,6 +61,14 @@
   position: relative;
 }
 
+.orderList {
+  flex-grow: 1; /* Заставляет .orderList занять всё доступное пространство */
+  overflow-y: auto; /* Добавляет прокрутку, если содержимое превышает доступную высоту */
+}
+
+th, td{
+  text-align: left;
+}
 .closeIcon{
   position: absolute;
   right: 10px;
@@ -98,13 +88,50 @@
   display: flex;
   gap: 10px;
 }
+.costBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.quantityBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.priceButtons{
+  display: flex;
+  flex-direction: column;
+  color: #57606E;
+}
 
+.quantityBox > input{
+  width: 32px;
+  text-align: center;
+  background-color:#253043;
+  border: 1px solid #57606E;
+  padding: 6px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0 4px;
+}
 .orderButtons{
   display: flex;
   gap: 10px;
   justify-content: center;
 }
+.priceButtonsIcon {
+  display: flex;
+  cursor: pointer;
+}
+.priceButtonsIcon:hover {
+  color: #4A7BD0;
+}
 
+.amount {
+  margin-top: 20px;
+  font-weight: 600;
+}
 
 /* Grids */
 
@@ -238,5 +265,8 @@
   }
   .gridRow:hover > div{
     background-color: #E1E8F5;
+  }
+  .quantityBox > input{
+    background-color: #F8F9FC;
   }
 }

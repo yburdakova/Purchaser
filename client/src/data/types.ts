@@ -114,6 +114,11 @@ export interface CustomInputProps {
   dark?: boolean;
 }
 
+export interface OrderItemProps {
+  product: ProductData, 
+  index: number
+}
+
 export interface MenuItemProps{
   title: string;
   path: string;

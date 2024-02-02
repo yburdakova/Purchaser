@@ -330,20 +330,6 @@ footer {
 .addButton2{
   width: 240px;
 }
-th{
-  color: #5182D4;
-}
-
-.tableSpace{
-  margin-top: 10px;
-}
-.iconTableCell{
-  display: flex;
-  width:fit-content;
-  gap: 20px;
-  font-size: 26px;
-}
-
 
 @media (prefers-color-scheme: light) {
   .headerIcon:hover{

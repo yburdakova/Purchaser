@@ -5,36 +5,31 @@ import { MdAssignmentAdd } from 'react-icons/md';
 import { CategoryData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import { FaRegEye } from 'react-icons/fa6';
-import axios from 'axios';
 import { addProduct, openOrder } from '../redux/orderRedux';
+import { getUsersData } from '../redux/apiCalls';
+import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti';
+import { OrderItem } from '../components';
 
 const UserProducts = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
   const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
+  const { products, quantity, totalPrice } = useSelector((state: RootState) => state.order);
   
-
-  const categories = useSelector((state: RootState) => state.admin.categories);
-
-  const [products, setProducts] = useState<ProductData[]>([]);
+  const [dbProducts, setDbProducts] = useState<ProductData[]>([]);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
   const [showCategories, setShowCategories] = useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('')
+  const [value, setValue] = useState (1)
 
 
   useEffect(()=>{
-    const getProducts = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/products");
-        setProducts(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getProducts();
-  }, []);
+    getUsersData("products", setDbProducts)
+    getUsersData("categories", setCategories)
+  }, [user]);
 
   useEffect(() => {
     setShowCategories(categories);
@@ -45,7 +40,7 @@ const UserProducts = () => {
   };
 
   useEffect(() => {
-    let filteredProducts = products;
+    let filteredProducts = dbProducts;
 
     if (selectedCategory && selectedCategory !== 'all') {
       filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
@@ -56,7 +51,7 @@ const UserProducts = () => {
     }
 
     setShowProducts(filteredProducts);
-  }, [selectedCategory, searchedProducts, products]);
+  }, [selectedCategory, searchedProducts, dbProducts]);
 
 
   const handleClickCartButton = (product: ProductData) => {
@@ -74,6 +69,15 @@ const UserProducts = () => {
     dispatch(openOrder(false))
   }
 
+  const increaseQuantity = () => {
+  quantity > 0 && 
+    setQuantity(quantity + 1);
+  }
+
+  const decreaseQuantity = () => {
+    quantity > 1 && 
+    setQuantity(quantity - 1);
+  }
 
   return (
     <div className='outletContainer'>
@@ -154,33 +158,31 @@ const UserProducts = () => {
       </div>
       { isOpenOrder &&
         <div className={`orderContainer slideInFromRight`}>
-          <div className="orderTitle">сформировать заказ</div>
+          <div className="orderTitle">заказ</div>
           <div className="closeIcon">
             <IoClose size={20} onClick={hadleCloseOrder}/>
           </div>
-          <table className='orderTable'>
+          <div className="orderList">
+          <table>
             <thead>
               <tr>
-                <th className='orderNumber'>#</th>
-                <th className='orderProduct'>Продукт</th>
-                <th className='orderPrice'>Цена</th>
-                <th className='orderTotal'>Сумма</th>
+                <th>#</th>
+                <th>Продукт</th>
+                <th>Цена</th>
+                <th></th>
+                <th>Кол-во</th>
+                <th></th>
+                <th>Сумма</th>
               </tr>
             </thead>
-            <tbody className='orderTbody'>
-              <div className="tbodyWrapper">
-              {/* {orderList.map((orderListItem, index) => 
-                <tr>
-                  <td className='orderNumber'>{index+1}.</td>
-                  <td className='orderProduct'>{orderListItem.title}</td>
-                  <td className='orderPrice'>{orderListItem.price} ₽ * {quantity} {orderListItem.measure}</td>
-                  <td className='orderTotal'>{orderListItem.price * quantity}  ₽</td>
-                </tr>
-              )} */}
-              </div>
+            <tbody>
+              { products.map ((product, index) => (
+                  <OrderItem product={product} index={index} key={product._id}/>
+              ))}
             </tbody>
           </table>
-          <div className="">ОБЩАЯ СУММА ЗАКАЗА:</div>
+          <div className="amount">ОБЩАЯ СУММА ЗАКАЗА: {totalPrice} ₽</div>
+          </div>
           <div className="orderButtons">
             <button>Очистить заказ</button>
             <button>Отправить заказ</button>
