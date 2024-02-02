@@ -6,7 +6,8 @@ const orderSlice = createSlice({
   initialState: {
     products: [] as ProductData[],
     quantity: 0,
-    totalPrice: 0
+    totalPrice: 0,
+    isOpen: false,
   } as OrderState,
   
   reducers: {
@@ -20,7 +21,9 @@ const orderSlice = createSlice({
       state.quantity = state.products.reduce((total, product) => total + product.quantity, 0);
       state.totalPrice = state.products.reduce((total, product) => total + product.price * product.quantity, 0);
     },
-
+    openOrder: (state, action) => {
+        state.isOpen = action.payload;
+    },
     updateProductQuantity: (state, action) => {
       const { productId, quantity } = action.payload;
       const existingProductIndex = state.products.findIndex(product => product._id === productId);
@@ -55,6 +58,7 @@ export const {
   updateProductQuantity, 
   deleteProduct, 
   cleanCart,
+  openOrder
 } = orderSlice.actions;
 
 export default orderSlice.reducer;

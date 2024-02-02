@@ -28,6 +28,10 @@ const ProductSchema = new mongoose.Schema(
         category: { 
             type: String,
         },
+        quantity: { 
+            type: Number,
+            default: 1
+        },
         measure: {
             type: String,
             default: "кг"

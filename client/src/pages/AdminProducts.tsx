@@ -100,6 +100,7 @@ const AdminProducts = () => {
       title: newProductTitle,
       category: newProductCategory,
       measure: newProductMeasure,
+      quantity: 1,
       price: Number(newProductPrice),
       priceHistory: [
         { price:  Number(newProductPrice)}
@@ -225,109 +226,117 @@ const AdminProducts = () => {
         
       </div>
       {errorMessage ? <div className="error-message"> <PiWarningCircleBold />{errorMessage}</div> : ' '}
-      <div className="tools">
-        <div className="block">
-          <div className="">Выбрать категорию</div>
-          <select 
-            name="categoryFilter" 
-            id="categoryFilter" 
-            className='customSelect' 
-            onChange={handleCategoryFilterChange}
-          >
-          <option value="all">Все категории</option>
-            {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
-          </select>
+      <div className="toolBox">
+          <div className="toolBlock">
+            <div className="toolBlockTitle">Быстрый поиск по названию продукта</div>
+            <input 
+              value={searchedProducts}
+              onChange={(e) => setSelectedProducts(e.target.value)}  
+              className='searchInput'
+            />
+            <IoSearch className='searchIcon'/>
+          </div>
+          <div className="toolBlock">
+            <div className="toolBlockTitle">Выбрать категорию</div>
+            <select 
+              name="categoryFilter" 
+              id="categoryFilter" 
+              className='customSelect' 
+              onChange={handleCategoryFilterChange}
+            >
+            <option value="all">Все категории</option>
+              {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
+            </select>
+          </div>
         </div>
-        <div className="block">
-          <div className="">Быстрый поиск по названию продукта</div>
-          <input 
-            value={searchedProducts}
-            onChange={(e) => setSelectedProducts(e.target.value)}  
-            className='prodInput'
-          />
-          <IoSearch className='seachIcon'/>
-        </div>
-      </div>
-      <table className='purTable'>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Товар</th>
-            <th>Категория</th>
-            <th>Фасовка</th>
-            <th>Цена</th>
-            <th>Изменение цены</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody className='tableBody'>
-          {showProducts.map((product) => {
-            
-            let priceDifference = null;
-            if (product.priceHistory.length >= 2) {
-              const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
-              const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
-              priceDifference = latestPrice - previousPrice;
-            }
-            
-            return (
-              <tr className='rowTable' key={product._id}>
-              <td>{product.customId}</td>
-              <td className='b'>{product.title}</td>
-              <td>{product.category}</td>
-              <td>{product.measure}</td>
-              <td>{product.price.toFixed(2)} ₽</td>
-              <td className='priceCell'>
-                {priceDifference !== null && 
-                  <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
-                    <div className="">{priceDifference.toFixed(2)} ₽</div>
-                    <div className="iconContainer">
-                      {priceDifference > 0 ? <IoIosArrowRoundUp size={22} /> : <IoIosArrowRoundDown size={22} />}
-                    </div>
-                  </div>
+      <div className="gridTable">
+          <div className="gridHeader">
+            <div className="headerCell">ID</div>
+            <div className="headerCell">Товар</div>
+            <div className="headerCell">Категория</div>
+            <div className="headerCell centerCell">Фасовка</div>
+            <div className="headerCell">Цена</div>
+            <div className="headerCell centerCell">Изменение цены</div>
+            <div className="headerCell iconColumn">Действия</div>
+          </div>
+          <div className="gridBodyWrapperAdmin">
+            <div className="gridBody">
+              {showProducts.map((product) => {
+                let priceDifference = null;
+                if (product.priceHistory.length >= 2) {
+                const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
+                const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
+                priceDifference = latestPrice - previousPrice;
                 }
-                { product._id === openPriceFormProductId &&
-                  <form
-                    className='newPriceForm'
-                    onSubmit={(e) => product._id && handleSubmitNewPrice(e, product._id)}
-                  >
-                    <input
-                      className='newPriceInput'
-                      type="number"
-                      value={newPrice}
-                      onChange={(e) => setNewPrice(e.target.value)}
-                      required
-                      step="0.01"
-                      ref={(el) => {
-                        if (product._id) inputRefs.current[product._id] = el;
-                      }}
+              return (
+                <div className="gridRow" key={product._id} id={product._id}>
+                <div className="gridCell">{product.customId}</div>
+                <div className="gridCell b">{product.title}</div>
+                <div className="gridCell">{product.category}</div>
+                <div className="gridCell centerCell">{product.measure}</div>
+                <div className="gridCell b">{product.price.toFixed(2)} ₽</div>
+                <div className="gridCell priceCell">
+                  {priceDifference !== null && 
+                    <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
+                      <div className="">{priceDifference.toFixed(2)} ₽</div>
+                      <div className="iconContainer">
+                        {priceDifference > 0 ? <IoIosArrowRoundUp size={22} /> : <IoIosArrowRoundDown size={22} />}
+                      </div>
+                    </div>
+                  }
+                  { product._id === openPriceFormProductId &&
+                    <form
+                      className='newPriceForm'
+                      onSubmit={(e) => product._id && handleSubmitNewPrice(e, product._id)}
+                    >
+                      <input
+                        className='newPriceInput'
+                        type="number"
+                        value={newPrice}
+                        onChange={(e) => setNewPrice(e.target.value)}
+                        required
+                        step="0.01"
+                        ref={(el) => {
+                          if (product._id) inputRefs.current[product._id] = el;
+                        }}
+                      />
+                      <div className="newPriceFormButtons">
+                        <button type="submit"> <MdOutlineAddTask /></button>
+                        <button onClick={() => (setOpenPriceFormProductId(''), setNewPrice(''))}> <MdOutlineCancel /></button>
+                      </div>
+                      
+                    </form>
+                  }
+                </div>
+                <div className="gridCell iconColumn">
+                <div data-tooltip="Изменить цену" className="icon-button" >
+                  <MdOutlinePriceChange
+                      size={27}
+                      className="editPriceIcon" 
+                      onClick={() => product._id && handleUpdatePriceClick(product._id)} 
                     />
-                    <div className="newPriceFormButtons">
-                      <button type="submit"> <MdOutlineAddTask /></button>
-                      <button onClick={() => (setOpenPriceFormProductId(''), setNewPrice(''))}> <MdOutlineCancel /></button>
-                    </div>
-                    
-                  </form>
-                }
-              </td>
-              <td className='iconTableCell'>
-                <MdOutlinePriceChange 
-                  className="editPriceIcon" 
-                  onClick={() => product._id && handleUpdatePriceClick(product._id)} 
-                />
-                <FaRegEye />
-                <RiDeleteBin6Line 
-                  className="deletePriceIcon" 
-                  onClick={() => product._id && handeDeleteProduct(product._id)}/>
-              </td>
-          </tr>
-            )
+                </div>
+                <div data-tooltip="Посмотреть детали" className="inactiveIcon" >
+                  <FaRegEye size={24}/>
+                </div>
+                <div data-tooltip="Удалить продукт" className="icon-button" >
+                  <RiDeleteBin6Line 
+                      size={24}
+                      className="deletePriceIcon" 
+                      onClick={() => product._id && handeDeleteProduct(product._id)}
+                  />
+                </div>
+                  
+                </div>
+            </div>
+              )
 
-          })
-        }
+            })
+          }
 
-        </tbody>
-      </table>
+            </div>
+          </div>
+      </div>
     </div>
   )
 }

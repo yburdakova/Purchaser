@@ -1,25 +1,25 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { getAdminData } from '../redux/apiCalls';
-import { addProducts } from '../redux/adminRedux';
-import { ProductData } from '../data/types';
+import { CategoryData, ProductData } from '../data/types';
+import { getUsersData } from '../redux/apiCalls';
 
 const UserDashboard = () => {
-  const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const products = useSelector((state: RootState) => state.admin.products);
+  
+  const [productList, setProductList] = useState<ProductData[]>([]);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
 
-  useEffect(() => {
-    if (user?.isAdmin && user.accessToken) {
-      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
-    }
-  }, [dispatch, user?.isAdmin, user?.accessToken]);
+  useEffect(()=>{
+    getUsersData("products", setProductList)
+    getUsersData("categories", setCategories)
+  }, [user]);
 
   return (
     <div className='infopage'>
       UserDashboard
-      <div className="">{products.length}</div>
+      <div className="">{productList.length}</div>
+      <div className="">{categories.length}</div>
     </div>
   )
 }

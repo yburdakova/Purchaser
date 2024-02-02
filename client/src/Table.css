@@ -1,90 +1,166 @@
-table thead, table tbody tr {
-  display: table;
-  width: 98%;
-  table-layout: fixed; 
-  margin: 10px 0;
+
+/* orderTable */
+.orderTable {
+  width: 100%; 
+  border-collapse: collapse; 
 }
 
-tr{
-  border: 1px solid #777E8A;
-  border-radius: 8px;
-  padding: 10px;
+.orderTable th, .orderTable td {
+  width: auto;
+  padding: 0 4px;
+  text-align: left; 
 }
 
-.tableBody{
-  display: block;
-  max-height: 560px; 
-  overflow-y: auto;
-}
-th:nth-child(1), td:nth-child(1) { 
-  width: 8%; 
-}
-th:nth-child(2), td:nth-child(2) { 
-  width: 24%; 
-}
-th:nth-child(3), td:nth-child(3) { 
-  width: 15%; 
-}
-.b{
-  font-weight: 600;
+.orderTable th {
+  font-weight: bold; 
 }
 
-th, td {
-  text-align: left;
+.orderNumber {
+  text-align: center;
 }
 
-.rowTable:hover{
-  background-color: #253043;
+/* ================================================ */
+.outletContainer{
+  margin: 0 40px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+}
+
+.test{
+  display: flex;
+  gap: 20px;
+  width: 100%;
 }
 .content{
-  width: 100%;
-  margin: 20px 0;
+  flex: 1 1 auto;
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 20px;
   transition: all 0.3s ease 0s;
 }
+.toolBox{
+  display: flex;
+  width: 100%;
+  gap: 40px;
+}
+.toolBlock{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.searchInput{
+  background-color:#1D2634;
+  border: 1px solid #57606E;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.searchIcon{
+  position: absolute;
+  bottom: 14px;
+  right: 10px;
+}
+
+.toolBlockTitle{
+  margin-bottom: 10px;
+}
+
 .orderContainer{
-  flex: 0 0 33%;
-  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
+  width: 350px;
   border: 1px solid #777E8A;
   border-radius: 10px;
-  animation: slideInFromRight 0.2s ease-out forwards; 
   transition: all 0.3s ease-in-out 0s;
+  padding: 10px;
+  position: relative;
+}
+
+.closeIcon{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.orderTitle{
+  color: #4A7BD0;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px;
+  text-align: center;
 }
 .orderItem{
   display: flex;
   gap: 10px;
 }
 
+.orderButtons{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+
 /* Grids */
 
 .gridTable {
-  flex: 1 1 auto;
   display: grid;
   gap: 4px;
-  grid-template-columns: auto auto auto auto auto auto auto; 
   transition: all 1s ease-in-out  1s;
 }
-
-.gridHeader {
-  display: contents;
+.gridHeader, .gridBody {
+  display: grid;
+  grid-template-columns: 10% 25% 15% 10% 10% 15% 10%; 
+  gap: 4px;
 }
 
-.gridBody {
-  max-height: 300px;
+.gridBodyWrapperAdmin{
+  max-height: 520px;
   overflow-y: auto;
-  display: contents;
+}
+.gridBodyWrapperUser{
+  max-height: 612px;
+  overflow-y: auto;
 }
 
 .iconColumn {
   display: flex;
   justify-content: space-around;
 }
-.iconColumn svg {
+
+.icon-button:hover {
+  color: #4A7BD0;
+  position: relative;
   cursor: pointer;
 }
-.iconColumn svg:hover {
-  color: #4A7BD0;
+
+.icon-button::after {
+  content: attr(data-tooltip); 
+  position: absolute;
+  bottom: -100%; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  white-space: nowrap; 
+  background-color: #253043; 
+  color: #fff; 
+  padding: 5px 10px; 
+  border-radius: 4px; 
+  font-size: 10px; 
+  opacity: 0; 
+  visibility: hidden; 
+  transition: all 0.3s, visibility 0.3s; 
+  z-index: 1000; 
+  pointer-events: none; 
+}
+
+.icon-button:hover::after {
+  opacity: 1;
+  visibility: visible; 
 }
 
 .gridRow {
@@ -103,8 +179,9 @@ th, td {
 
 .headerCell, .gridCell {
   padding: 10px;
-  text-align: left;
   border-radius: 8px;
+  text-align: left;
+
 }
 
 .gridCell{
@@ -115,18 +192,38 @@ th, td {
   background-color: #253043;
 }
 
+.slideInFromRight {
+  animation: slideInFromRight 0.2s ease-out forwards;
+}
+
+
 @keyframes slideInFromRight {
   from {
-    transform: translateX(100%); /* Начните сдвиг справа за пределами экрана */
-    opacity: 0; /* Начните с полной прозрачности */
+    transform: translateX(100%);
+    opacity: 0; 
   }
   to {
-    transform: translateX(0); /* Закончите сдвиг на месте */
-    opacity: 1; /* Закончите с полной непрозрачностью */
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+    
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0; 
   }
 }
 
 @media (prefers-color-scheme: light) {
+  .searchInput{
+    background-color: #F8F9FC;
+  }
   .newPriceForm input{
     background-color: #F8F9FC;
   }

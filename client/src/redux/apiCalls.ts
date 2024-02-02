@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { SuccessAction, UserData } from "../data/types.ts";
 import { publicRequest, userRequest } from "../middleware/requestMethods";
 import { adminAccess, loginFailure, loginStart, loginSuccess } from "./userRedux"
@@ -91,5 +91,21 @@ export const deleteAdminData = async <T>(
         dispatch(fetchingFailure(status));
         }
     }
+  }
+};
+
+export const getUsersData = async <T>(
+  path: string, 
+  setData: (value: T | ((prevState: T) => T)) => void
+) => {
+  try {
+    const res = await axios.get<T>(`http://localhost:5000/api/${path}`);
+    setData(res.data);
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (error) {
+      const status = axiosError.response ? axiosError.response.status : 500; 
+      console.log(status)
+      }
   }
 };

@@ -54,6 +54,7 @@ export interface ProductData {
   category: string;
   measure: string;
   price: number;
+  quantity: number;
   priceHistory: HisoryPrice[]
   createdAt?: Date;
   updatedAt?: Date;
@@ -95,8 +96,9 @@ export interface AdminState {
 
 export interface OrderState {
   products: ProductData[],
-  quantity: 0,
-  totalPrice: 0
+  quantity: number,
+  totalPrice: number,
+  isOpen: boolean
 }
 
 export type SuccessAction<T> = (data: T) => { type: string; payload: T };

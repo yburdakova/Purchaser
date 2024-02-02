@@ -22,7 +22,7 @@ router.post("/add_category", verifyTokenAndAdmin, async (req, res) => {
 
 //GET ALL CATEGORIES
 
-router.get("/", verifyTokenAndAdmin, async (req, res) => {
+router.get("/", async (req, res) => {
   const query = req.query.new;
   try {
   const categories = query

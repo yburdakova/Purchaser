@@ -14,6 +14,7 @@ router.post("/add_product", verifyTokenAndAdmin, async (req, res) => {
         description: req.body.description,
         category: req.body.category,
         measure: req.body.measure,
+        quantity: req.body.quantity,
         price: req.body.price,
         priceHistory: [{ price: req.body.price, date: new Date() }]
     });

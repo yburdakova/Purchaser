@@ -14,6 +14,7 @@ import { getNotifications, setFocusedId } from '../../redux/adminRedux';
 import { userRequest } from '../../middleware/requestMethods';
 import { getAdminData } from '../../redux/apiCalls';
 import { MdAssignment } from 'react-icons/md';
+import { openOrder } from '../../redux/orderRedux';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,9 @@ const Header = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const notifyQuantity = useSelector((state: RootState) => state.admin.notifyCounter);
   const notifications = useSelector((state: RootState) => state.admin.notifications);
-  
+  const quantity = useSelector( ( state: RootState ) => state.order.quantity);  
+  const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
+
   const [pageTitle, setPageTitle] = useState('Page Name');
   const [isNotify, setIsNotify] = useState(false);
   const [notifies, setNotifies] = useState <NotificationData[]>([])
@@ -39,6 +42,9 @@ const Header = () => {
     setNotifies(filtredNotify)
   },[notifications])
   
+  const toggleOrder = () => {
+    isOpenOrder ? dispatch(openOrder(false)) : dispatch(openOrder(true))
+  }
 
   const handleClickLogout = () => {
     dispatch(loginFinish());
@@ -79,7 +85,17 @@ const Header = () => {
     <header>
       <div className={styles.page_title}>{user&&user.isAdmin ? "Администратор" : "Клиент"} / {pageTitle}</div>
       <div className={styles.header_icons}>
-        <div className="headerIcon"><MdAssignment size={24}/></div>
+        {!user?.isAdmin &&
+          <div className="headerIcon" onClick={toggleOrder}>
+            <MdAssignment size={26}/>
+            {quantity
+            ? <div className={styles.notification}>
+              {quantity}
+            </div>
+            : <div className=""></div>
+          }
+          </div>
+        }
         <div className="headerIcon bell" onClick={handleClickNotify}>
           < FaRegBell className='bell-icon'/>
           {notifyQuantity
@@ -112,7 +128,7 @@ const Header = () => {
         }
         
         
-        <div className="headerIcon" onClick={handleClickLogout}>
+        <div className="headerIcon" onClick={handleClickLogout} >
           <FaPowerOff />
         </div>
       </div>
