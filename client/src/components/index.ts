@@ -5,6 +5,8 @@ import MenuPanel from "./MenuPanel/MenuPanel";
 import MenuItem from "./MenuItem/MenuItem";
 import OrderListItem from "./OrderListItem";
 import ProductItem from "./ProductItem";
+import OrderItem from "./OrderItem";
+
 
 
 export {
@@ -14,5 +16,6 @@ export {
   MenuPanel,
   MenuItem,
   OrderListItem,
-  ProductItem
+  ProductItem,
+  OrderItem
 }

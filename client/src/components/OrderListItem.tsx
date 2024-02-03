@@ -1,12 +1,12 @@
 import  { useEffect, useState } from 'react'
 import { TiArrowSortedDown, TiArrowSortedUp } from 'react-icons/ti'
-import { OrderItemProps } from '../data/types'
+import { OrderListItemProps } from '../data/types'
 import { useDispatch } from 'react-redux';
 import { deleteProduct, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { formatPrice } from '../middleware/formatPrice';
 
-const OrderListItem = ({product, index, createdOrder}: OrderItemProps) => {
+const OrderListItem = ({product, index, createdOrder}: OrderListItemProps) => {
   
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);

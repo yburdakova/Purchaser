@@ -25,7 +25,6 @@ const Header = () => {
   const notifyQuantity = useSelector((state: RootState) => state.admin.notifyCounter);
   const notifications = useSelector((state: RootState) => state.admin.notifications);
   const quantity = useSelector( ( state: RootState ) => state.order.quantity);  
-  const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
 
   const [pageTitle, setPageTitle] = useState('Page Name');
   const [isNotify, setIsNotify] = useState(false);
@@ -42,10 +41,6 @@ const Header = () => {
     setNotifies(filtredNotify)
   },[notifications])
   
-  const toggleOrder = () => {
-    isOpenOrder ? dispatch(openOrder(false)) : dispatch(openOrder(true))
-  }
-
   const handleClickLogout = () => {
     dispatch(loginFinish());
     navigate('/');
@@ -53,6 +48,13 @@ const Header = () => {
   const handleClickNotify = () => {
     setIsNotify(!isNotify)
   };
+
+  const toOrderList = () => {
+    if (quantity > 0) {
+      dispatch(openOrder(true))
+      navigate('/user/products');
+    }
+  }
   
   const toNotify = async (id: string, linkedId: string, type: NotificationType) => {
     dispatch(setFocusedId(linkedId))
@@ -86,7 +88,7 @@ const Header = () => {
       <div className={styles.page_title}>{user&&user.isAdmin ? "Администратор" : "Клиент"} / {pageTitle}</div>
       <div className={styles.header_icons}>
         {!user?.isAdmin &&
-          <div className="headerIcon" onClick={toggleOrder}>
+          <div className="headerIcon" onClick={toOrderList}>
             <MdAssignment size={26}/>
             {quantity
             ? <div className={styles.notification}>
@@ -106,7 +108,7 @@ const Header = () => {
           }
           
         </div>
-        { isNotify &&
+        { isNotify && notifyQuantity>0 &&
           <div id="notification" className={`${styles.notifyContainer} ${styles.fadeInDown}`}>
           <div className={styles.notifyQuantity}>Новых уведомлений: {notifyQuantity}</div>
           <div className={styles.notifyList}>

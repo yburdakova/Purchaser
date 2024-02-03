@@ -124,7 +124,7 @@ export interface CustomInputProps {
   dark?: boolean;
 }
 
-export interface OrderItemProps {
+export interface OrderListItemProps {
   product: ProductData, 
   index: number;
   createdOrder?: boolean;
@@ -141,6 +141,10 @@ export interface MenuItemProps{
 
 export interface TableRowProps {
   rowData: ProductData
+}
+
+export interface OrderItemProps {
+  order: OrderData;
 }
 
 export interface NotificationTitleMap {

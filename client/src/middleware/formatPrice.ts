@@ -1,3 +1,3 @@
-export function formatPrice (price:number) {
+export function formatPrice (price: number) {
   return price.toFixed(2);
 }
