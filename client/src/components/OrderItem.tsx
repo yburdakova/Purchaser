@@ -4,6 +4,7 @@ import { OrderItemProps } from '../data/types'
 import { useDispatch } from 'react-redux';
 import { deleteProduct, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { formatPrice } from '../middleware/formatPrice';
 
 const OrderItem = ({product, index}: OrderItemProps) => {
   
@@ -35,7 +36,7 @@ useEffect(() => {
     <tr key={product._id}>
       <td>{index + 1}.</td>
       <td>{product.title}</td>
-      <td>{product.price} ₽</td>
+      <td>{formatPrice(product.price)} ₽</td>
       <td>x</td>
       <td className='costBox'>
         <div className="quantityBox">
@@ -53,10 +54,12 @@ useEffect(() => {
         
       </td>
       <td> = </td>
-      <td>  {product.price * quantity} ₽</td>
-      <div className="priceButtonsIcon">
-        <RiDeleteBin6Line size={20} onClick={handleDelete}/>
-      </div>
+      <td> {formatPrice(product.price * quantity)} ₽</td>
+      <td>
+        <div className="orderItemDel">
+          <RiDeleteBin6Line size={24} onClick={handleDelete}/>
+        </div>
+      </td>
   </tr>
   )
 }

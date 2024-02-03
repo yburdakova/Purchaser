@@ -45,7 +45,7 @@ const orderSlice = createSlice({
       } 
     },
 
-    cleanCart: (state) => {
+    cleanOrder: (state) => {
       state.products = [];
       state.quantity = 0;
       state.totalPrice = 0;
@@ -57,7 +57,7 @@ export const {
   addProduct, 
   updateProductQuantity, 
   deleteProduct, 
-  cleanCart,
+  cleanOrder,
   openOrder
 } = orderSlice.actions;
 

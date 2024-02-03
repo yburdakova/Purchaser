@@ -88,6 +88,16 @@ th, td{
   display: flex;
   gap: 10px;
 }
+.orderItemDel{
+  display: flex;
+  margin: 0 10px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.orderItemDel:hover{
+  color: #4A7BD0;
+}
 .costBox{
   display: flex;
   justify-content: center;

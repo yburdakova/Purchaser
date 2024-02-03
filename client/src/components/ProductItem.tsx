@@ -3,7 +3,7 @@ import { MdAssignmentAdd, MdOutlineAddTask, MdOutlineCancel, MdOutlinePriceChang
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { InputRefs, ProductData, ProductItemProps } from '../data/types';
-import { addProduct, openOrder } from '../redux/orderRedux';
+import { addProduct, openOrder, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useRef, useState } from 'react';
 import { deleteAdminData, postAdminData } from '../redux/apiCalls';
@@ -13,6 +13,7 @@ const ProductItem = ({product}: ProductItemProps) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
+  const orderProducts = useSelector((state: RootState) => state.order.products)
   const inputRefs = useRef<InputRefs>({});
   
   const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
@@ -50,15 +51,26 @@ const ProductItem = ({product}: ProductItemProps) => {
     setOpenPriceFormProductId('')
   }
 
-  const handleClickCartButton = (product: ProductData) => {
+  const handleClickOrderButton = (product: ProductData) => {
+  const existingProductIndex = orderProducts.findIndex(p => p._id === product._id);
+  
+  if (existingProductIndex >= 0) {
+    const updatedProduct = {
+      ...orderProducts[existingProductIndex],
+      quantity: orderProducts[existingProductIndex].quantity + 1,
+      totalPrice: (orderProducts[existingProductIndex].quantity + 1) * orderProducts[existingProductIndex].price,
+    };
+    dispatch(updateProductQuantity({ productId: product._id, quantity: updatedProduct.quantity }));
+  } else {
     const productToAdd = {
       ...product,
-      quantity: 1, 
-      totalPrice: product.price 
+      quantity: 1,
+      totalPrice: product.price,
     };
-    
     dispatch(addProduct(productToAdd));
-    dispatch(openOrder(true))
+  }
+
+  dispatch(openOrder(true));
   }
 
   const handeDeleteProduct = () => {
@@ -133,7 +145,7 @@ const ProductItem = ({product}: ProductItemProps) => {
         </div>
         :  <div className="gridCell iconColumn">
             <div data-tooltip="Добавить в заказ" className="icon-button" >
-              <MdAssignmentAdd size={24} onClick={() => product && handleClickCartButton(product)}/>
+              <MdAssignmentAdd size={24} onClick={() => product && handleClickOrderButton(product)}/>
             </div>
             <div className="inactiveIcon" data-tooltip="Посмотреть детали" >
               <FaRegEye size={24} />

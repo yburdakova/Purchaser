@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { CategoryData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
-import {  openOrder } from '../redux/orderRedux';
+import {  cleanOrder, openOrder } from '../redux/orderRedux';
 import { getUsersData } from '../redux/apiCalls';
 import { OrderItem, ProductItem } from '../components';
+import { formatPrice } from '../middleware/formatPrice';
 
 const UserProducts = () => {
 
@@ -51,6 +52,11 @@ const UserProducts = () => {
 
 
   const hadleCloseOrder = () => {
+    dispatch(openOrder(false))
+  }
+
+  const handleEmptyOrder = () => {
+    dispatch(cleanOrder())
     dispatch(openOrder(false))
   }
 
@@ -117,18 +123,19 @@ const UserProducts = () => {
                 <th>Кол-во</th>
                 <th></th>
                 <th>Сумма</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              { products.map ((product, index) => (
-                  <OrderItem product={product} index={index} key={product._id}/>
-              ))}
+            {products.map((product, index) => (
+              <OrderItem product={product} index={index} key={`${product._id}_${product.quantity}`} />
+            ))}
             </tbody>
           </table>
-          <div className="amount">ОБЩАЯ СУММА ЗАКАЗА: {totalPrice} ₽</div>
+          <div className="amount">ОБЩАЯ СУММА ЗАКАЗА: {formatPrice(totalPrice)} ₽</div>
           </div>
           <div className="orderButtons">
-            <button>Очистить заказ</button>
+            <button onClick={handleEmptyOrder}>Очистить заказ</button>
             <button>Отправить заказ</button>
           </div>
           
