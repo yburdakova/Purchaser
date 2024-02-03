@@ -12,45 +12,48 @@ const orderSlice = createSlice({
   
   reducers: {
     addProduct: (state, action) => {
-      const existingProductIndex = state.products.findIndex(product => product._id === action.payload._id);
+      const productToAdd: ProductData = action.payload;
+      const existingProductIndex = state.products.findIndex(product => product._id === productToAdd._id);
       if (existingProductIndex >= 0) {
-        state.products[existingProductIndex].quantity += action.payload.quantity;
+        state.products[existingProductIndex].quantity += productToAdd.quantity;
       } else {
-        state.products.push({ ...action.payload, quantity: action.payload.quantity });
+        state.products.push(productToAdd);
       }
-      state.quantity = state.products.reduce((total, product) => total + product.quantity, 0);
+      state.quantity = state.products.length;
       state.totalPrice = state.products.reduce((total, product) => total + product.price * product.quantity, 0);
     },
-    openOrder: (state, action) => {
-        state.isOpen = action.payload;
-    },
+
     updateProductQuantity: (state, action) => {
       const { productId, quantity } = action.payload;
-      const existingProductIndex = state.products.findIndex(product => product._id === productId);
-      if (existingProductIndex >= 0 && quantity >= 0) {
-        state.products[existingProductIndex].quantity = quantity;
+      const productIndex = state.products.findIndex(product => product._id === productId);
+      if (productIndex >= 0) {
+        state.products[productIndex].quantity = quantity;
+        state.totalPrice = state.products.reduce((total, product) => total + product.price * product.quantity, 0);
       }
-      state.quantity = state.products.reduce((total, product) => total + product.quantity, 0);
-      state.totalPrice = state.products.reduce((total, product) => total + product.price * product.quantity, 0);
     },
 
     deleteProduct: (state, action) => {
-      const { productId } = action.payload;
+      const productId = action.payload;
       state.products = state.products.filter(product => product._id !== productId);
-      state.quantity = state.products.reduce((total, product) => total + product.quantity, 0);
+      state.quantity = state.products.length;
       state.totalPrice = state.products.reduce((total, product) => total + product.price * product.quantity, 0);
-
-      if (state.products.length === 0) {
-        state.totalPrice = 0;
-      } 
     },
 
     cleanOrder: (state) => {
       state.products = [];
       state.quantity = 0;
       state.totalPrice = 0;
+      state.isOpen = false;
     },
-  }
+
+    openOrder: (state, action) => {
+      state.isOpen = action.payload;
+    },
+
+    closeOrder: (state) => {
+      state.isOpen = false;
+    },
+  },
 });
 
 export const { 

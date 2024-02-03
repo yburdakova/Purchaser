@@ -218,6 +218,9 @@ footer {
 .inactiveIcon:hover{
   cursor: not-allowed;
 }
+.newPriceAnchor{
+  position: relative;
+}
 
 .newPriceForm{
   position: absolute;
@@ -227,7 +230,7 @@ footer {
   flex-direction: row;
   width:fit-content;
   top: 6px;
-  left: 2px;
+  left: 6px;
 }
 .newPriceForm input{
   background-color:#253043;
@@ -283,7 +286,11 @@ footer {
   border-radius: 8px;
   font-size: 16px;
 }
-
+.alignBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .seachIcon{
   position: absolute;
   right: 10px;

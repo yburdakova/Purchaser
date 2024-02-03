@@ -22,15 +22,12 @@ const AdminProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-    setSelectedCategory(e.target.value);
-  };
-
   const [newProductTitle, setNewProductTitle] = useState('')
   const [newProductPrice, setNewProductPrice] = useState('')
   const [newProductCategory, setNewProductCategory] = useState(categories[0]?.title || '')
   const [newProductMeasure, setNewProductMeasure] = useState(measures[0] || '')
   const [newCategoryTitle, setNewCategoryTitle] = useState('')
+
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken && products.length === 0) {
@@ -48,17 +45,18 @@ const AdminProducts = () => {
 
   useEffect(() => {
     let filteredProducts = products;
-
     if (selectedCategory && selectedCategory !== 'all') {
       filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
     }
-
     if (searchedProducts) {
       filteredProducts = filteredProducts.filter(product => product.title.toLowerCase().includes(searchedProducts.toLowerCase()));
     }
-
     setShowProducts(filteredProducts);
   }, [selectedCategory, searchedProducts, products]);
+
+  const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSelectedCategory(e.target.value);
+  };
 
   const handleProductTitleChange = (value: string) => {
     setNewProductTitle(value);
@@ -102,6 +100,7 @@ const AdminProducts = () => {
 
     if (user?.isAdmin && user.accessToken) {
       postAdminData<ProductData[], ProductData>(dispatch, '/products/add_product', data, user?.accessToken, user?.isAdmin, postDataSuccess)
+      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
     }
     setNewProductTitle('')
     setNewProductPrice('')
@@ -215,13 +214,13 @@ const AdminProducts = () => {
             <div className="headerCell">Категория</div>
             <div className="headerCell centerCell">Фасовка</div>
             <div className="headerCell">Цена</div>
-            <div className="headerCell centerCell">Изменение цены</div>
+            <div className="headerCell centerCell newPriceAnchor">Изменение цены</div>
             <div className="headerCell iconColumn">Действия</div>
           </div>
           <div className="gridBodyWrapperAdmin">
             <div className="gridBody">
               {showProducts.map((product) => 
-                <ProductItem product={product}/>
+                <ProductItem product={product} key={product._id}/>
               )
           }
             </div>

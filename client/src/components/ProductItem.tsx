@@ -8,6 +8,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useRef, useState } from 'react';
 import { deleteAdminData, postAdminData } from '../redux/apiCalls';
 import { postDataSuccess } from '../redux/adminRedux';
+import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
 const ProductItem = ({product}: ProductItemProps) => {
 
@@ -93,10 +94,16 @@ const ProductItem = ({product}: ProductItemProps) => {
       <div className="gridCell">{product.category}</div>
       <div className="gridCell centerCell">{product.measure}</div>
       <div className="gridCell b">{product.price.toFixed(2)} ₽</div>
-      <div className="gridCell">
+      <div className="gridCell newPriceAnchor">
         {priceDifference !== null && 
-          <div className={priceDifference > 0 ?'green pp' : 'red pp'}>
+          <div className={priceDifference > 0 ?'red pp' : 'green pp'}>
             <div className="">{priceDifference.toFixed(2)} ₽</div>
+            {priceDifference > 0
+            ? <div className="alignBox"><HiArrowLongUp/></div>
+            : <div className="alignBox"><HiArrowLongDown/></div>
+            }
+            
+            
           </div>
         }
         { product._id === openPriceFormProductId &&
