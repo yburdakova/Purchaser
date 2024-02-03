@@ -63,6 +63,16 @@ export interface InputRefs {
   [key: string]: HTMLInputElement | null;
 }
 
+export interface OrderData {
+  _id?: string;
+  userId? : string;
+  products: ProductData[];
+  amount: number;
+  status: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface CustomerRequest {
   _id?: string;
   name?: string;
@@ -116,7 +126,8 @@ export interface CustomInputProps {
 
 export interface OrderItemProps {
   product: ProductData, 
-  index: number
+  index: number;
+  createdOrder?: boolean;
 }
 
 export interface ProductItemProps {

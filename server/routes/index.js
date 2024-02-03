@@ -5,6 +5,7 @@ import productRouter from './product.js'
 import requestRouter from './request.js'
 import notifyRouter from './notify.js'
 import customerRouter from './customer.js'
+import orderRouter from './order.js'
 
 
 export {
@@ -14,5 +15,6 @@ export {
   productRouter,
   requestRouter,
   notifyRouter,
-  customerRouter
+  customerRouter,
+  orderRouter
 }

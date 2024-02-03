@@ -166,6 +166,18 @@ footer {
   background-color:  #4A7BD0; 
   transition: width 0.3s ease-in-out; 
 }
+/* ======================== ORDER PAGE ============================= */
+
+.orderPageItem{
+  display: flex;
+  flex-direction: column;
+  margin: 20px  0;
+}
+
+.orderSummary{
+  display: flex;
+  gap: 10px;
+}
 
 .widgetBox{
   margin: 10px;
@@ -265,13 +277,7 @@ footer {
 .extra-space-top{
   margin-top: 10px;
 }
-.tools{
-  display: flex;
-  padding-top: 10px;
-  justify-content: flex-start;
-  align-items:center;
-  gap: 40px;
-}
+
 .block{
   display: flex;
   gap: 10px;

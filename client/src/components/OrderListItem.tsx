@@ -6,7 +6,7 @@ import { deleteProduct, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { formatPrice } from '../middleware/formatPrice';
 
-const OrderItem = ({product, index}: OrderItemProps) => {
+const OrderListItem = ({product, index, createdOrder}: OrderItemProps) => {
   
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(product.quantity);
@@ -39,29 +39,33 @@ useEffect(() => {
       <td>{formatPrice(product.price)} ₽</td>
       <td>x</td>
       <td className='costBox'>
-        <div className="quantityBox">
-          <input type="text" className="quantity" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}/>
-          <div className="priceButtons">
-            <div className="priceButtonsIcon">
-              <TiArrowSortedUp size={20} onClick={handleClickIncrease}/>
+        {createdOrder
+        ? <div className="">{product.quantity} {product.measure}</div>
+        : <div className="quantityBox">
+            <input type="text" className="quantity" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}/>
+            <div className="priceButtons">
+              <div className="priceButtonsIcon">
+                <TiArrowSortedUp size={20} onClick={handleClickIncrease}/>
+              </div>
+              <div className="priceButtonsIcon">
+                <TiArrowSortedDown size={20} onClick={handleClickDecrease}/>
+              </div>
+              
             </div>
-            <div className="priceButtonsIcon">
-              <TiArrowSortedDown size={20} onClick={handleClickDecrease}/>
-            </div>
-            
           </div>
-        </div>
-        
+        }
       </td>
       <td> = </td>
       <td> {formatPrice(product.price * quantity)} ₽</td>
       <td>
-        <div className="orderItemDel">
+        {createdOrder 
+        ? " "
+        :<div className="orderItemDel">
           <RiDeleteBin6Line size={24} onClick={handleDelete}/>
-        </div>
+        </div>}
       </td>
   </tr>
   )
 }
 
-export default OrderItem
+export default OrderListItem

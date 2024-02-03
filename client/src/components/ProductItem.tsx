@@ -6,8 +6,8 @@ import { InputRefs, ProductData, ProductItemProps } from '../data/types';
 import { addProduct, openOrder, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useRef, useState } from 'react';
-import { deleteAdminData, postAdminData } from '../redux/apiCalls';
-import { postDataSuccess } from '../redux/adminRedux';
+import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
+import { addProducts, postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
 const ProductItem = ({product}: ProductItemProps) => {
@@ -77,6 +77,7 @@ const ProductItem = ({product}: ProductItemProps) => {
   const handeDeleteProduct = () => {
     if (user?.isAdmin && user.accessToken && product._id) {
       deleteAdminData<ProductData[]>(dispatch, '/products', product._id, user?.accessToken, user?.isAdmin, postDataSuccess)
+      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
     }
   }
 

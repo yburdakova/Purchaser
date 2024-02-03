@@ -9,7 +9,8 @@ import {
     productRouter,
     requestRouter,
     notifyRouter,
-    customerRouter
+    customerRouter,
+    orderRouter
 } from './routes/index.js';
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use("/api/products", productRouter)
 app.use("/api/requests", requestRouter)
 app.use("/api/notifications", notifyRouter)
 app.use("/api/customers", customerRouter)
+app.use("/api/orders", orderRouter)
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

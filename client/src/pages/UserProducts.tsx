@@ -4,17 +4,19 @@ import { RootState } from '../redux/store';
 import { CategoryData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import {  cleanOrder, openOrder } from '../redux/orderRedux';
-import { getUsersData } from '../redux/apiCalls';
-import { OrderItem, ProductItem } from '../components';
+import { getAllUsersData } from '../redux/apiCalls';
+import { OrderListItem, ProductItem } from '../components';
 import { formatPrice } from '../middleware/formatPrice';
+import { userRequest } from '../middleware/requestMethods';
 
 const UserProducts = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
+  const order = useSelector((state: RootState) => state.order);
   const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
   const { products, totalPrice } = useSelector((state: RootState) => state.order);
-  
+
   const [dbProducts, setDbProducts] = useState<ProductData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
@@ -24,8 +26,8 @@ const UserProducts = () => {
 
 
   useEffect(()=>{
-    getUsersData("products", setDbProducts)
-    getUsersData("categories", setCategories)
+    getAllUsersData("products", setDbProducts)
+    getAllUsersData("categories", setCategories)
   }, [user]);
 
   useEffect(() => {
@@ -60,10 +62,42 @@ const UserProducts = () => {
     dispatch(openOrder(false))
   }
 
+  const createOrder = async () => {
+    console.log("create order ...")
+    if (user) {
+      const currentOrder = {
+        userId: user._id,
+        products: order.products.map((item: ProductData) => ({
+          productId: item._id,
+          quantity: item.quantity,
+          title: item.title,
+          price: item.price,
+          measure: item.measure
+        })),
+        amount: order.totalPrice,
+      };
+
+      try {
+        console.log(currentOrder);
+        const res = await userRequest(user.accessToken).post("/orders", currentOrder);
+        console.log(res.data);
+        dispatch(cleanOrder());
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    console.log("finish created order ...")
+  };
+
+  const addOrder = () => {
+    console.log("Clicked ADD ORDER")
+    createOrder();
+  }
+
   return (
     <div className='outletContainer'>
       <div className="test">
-      <div className="content">
+      <div className="pageContent">
         <div className="toolBox">
           <div className="toolBlock">
             <div className="toolBlockTitle">Быстрый поиск по названию продукта</div>
@@ -100,7 +134,7 @@ const UserProducts = () => {
         <div className="gridBodyWrapperUser">
         <div className="gridBody">
             {showProducts.map((product) => 
-              <ProductItem product={product}/>
+              <ProductItem product={product} key={product._id}/>
             )}
           </div>
         </div>
@@ -128,7 +162,7 @@ const UserProducts = () => {
             </thead>
             <tbody>
             {products.map((product, index) => (
-              <OrderItem product={product} index={index} key={`${product._id}_${product.quantity}`} />
+              <OrderListItem product={product} index={index} key={`${product._id}_${product.quantity}`} />
             ))}
             </tbody>
           </table>
@@ -136,7 +170,7 @@ const UserProducts = () => {
           </div>
           <div className="orderButtons">
             <button onClick={handleEmptyOrder}>Очистить заказ</button>
-            <button>Отправить заказ</button>
+            <button onClick={addOrder}>Отправить заказ</button>
           </div>
           
         </div>

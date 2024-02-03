@@ -8,12 +8,14 @@ const MenuItem = ({title, path, icon}: MenuItemProps) => {
   const isActive = location.pathname === path;
   
   return (
-    <li className={isActive? `${styles.itemContainer} ${styles.active}` : styles.itemContainer}>
+    
       <Link to={path} className={styles.link}>
-        <div className={styles.icon}>{icon}</div>
-        <div className={styles.title}>{title}</div>
+        <li className={isActive? `${styles.itemContainer} ${styles.active}` : styles.itemContainer}>
+          <div className={styles.icon}>{icon}</div>
+          <div className={styles.title}>{title}</div>
+        </li>
       </Link>
-    </li>
+    
   )
 }
 

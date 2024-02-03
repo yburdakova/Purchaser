@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { CategoryData, ProductData } from '../data/types';
-import { getUsersData } from '../redux/apiCalls';
+import { getAllUsersData } from '../redux/apiCalls';
 
 const UserDashboard = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -12,8 +12,8 @@ const UserDashboard = () => {
   const [categories, setCategories] = useState<CategoryData[]>([]);
 
   useEffect(()=>{
-    getUsersData("products", setProductList)
-    getUsersData("categories", setCategories)
+    getAllUsersData("products", setProductList)
+    getAllUsersData("categories", setCategories)
   }, [user]);
 
   return (

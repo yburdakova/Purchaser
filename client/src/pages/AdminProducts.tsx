@@ -28,6 +28,13 @@ const AdminProducts = () => {
   const [newProductMeasure, setNewProductMeasure] = useState(measures[0] || '')
   const [newCategoryTitle, setNewCategoryTitle] = useState('')
 
+  useEffect(() => {
+    setShowProducts(products);
+  }, [products]);
+  
+  useEffect(() => {
+    setShowCategories(categories);
+  }, [categories]);
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken && products.length === 0) {
@@ -221,8 +228,7 @@ const AdminProducts = () => {
             <div className="gridBody">
               {showProducts.map((product) => 
                 <ProductItem product={product} key={product._id}/>
-              )
-          }
+              )}
             </div>
           </div>
       </div>
