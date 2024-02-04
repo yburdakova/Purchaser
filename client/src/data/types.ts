@@ -7,11 +7,11 @@ interface ContactData {
 
 export interface UserData {
   _id?: string;
-  title: string;
-  email: string;
+  title?: string;
+  email?: string;
   password: string;
-  isAdmin: boolean;
-  isActive: boolean;
+  isAdmin?: boolean;
+  isActive?: boolean;
   contacts?: ContactData[];
   extraInfo?: string;
   createdAt?: Date;
@@ -87,8 +87,10 @@ export interface CustomerRequest {
   email: string;
   contactName: string;
   contactPhone: string;
-  type: 'newUser' | 'newPassword';
-  status: boolean;
+  type: 'newUser' | 'newPassword' | 'completed' | 'rejected';
+  data?:{
+    relatedId: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }

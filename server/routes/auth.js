@@ -8,7 +8,6 @@ const router = express.Router();
 
 //REGISTER
 router.post("/register", async (req, res) => {
-    console.log(req.body); 
     const newUser = new User({
         title: req.body.title,
         username: req.body.username,

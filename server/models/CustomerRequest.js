@@ -20,13 +20,10 @@ const CustomerRequestSchema = new mongoose.Schema(
         },
         type: {
             type: String,
-            enum: ['newUser', 'newPassword'],
+            enum: ['newUser', 'newPassword', 'completed', 'rejected'],
             required: true,
         },
-        status: {
-            type: Boolean,
-            default: false
-        }
+        data: mongoose.Schema.Types.Mixed
     },
     {
         timestamps: true

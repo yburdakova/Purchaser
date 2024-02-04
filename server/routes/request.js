@@ -46,7 +46,8 @@ router.post("/password_request", async (req, res) => {
         email: req.body.email,
         contactName: req.body.contactName,
         contactPhone: req.body.contactPhone,
-        type: "newPassword"
+        type: "newPassword",
+        data: { relatedId: existingUser._id }
     });
 
     try {
@@ -58,6 +59,22 @@ router.post("/password_request", async (req, res) => {
     } catch (err) {
         console.error("Error in send_request:", err);
         res.status(500).json(err);
+    }
+});
+
+// SET NEW REQUEST TYPE
+router.patch("/update-request/:id", verifyTokenAndAdmin, async (req, res) => {
+    try {
+        const request = await CustomerRequest.findById(req.params.id);
+        if (request) {
+            request.type = req.body.type; 
+            await request.save();
+            res.status(200).json(request);
+        } else {
+            res.status(404).json({ message: "Request not found" });
+        }
+    } catch (error) {
+        res.status(500).json(error); 
     }
 });
 

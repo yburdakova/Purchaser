@@ -10,48 +10,38 @@ import {
 const router = express.Router();
 
 //UPDATE
-router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
+router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
     if (req.body.password) {
-    req.body.password = CryptoJS.AES.encrypt(
-        req.body.password,
-        process.env.PASS_SEC
-    ).toString();
+        req.body.password = CryptoJS.AES.encrypt(req.body.password, process.env.PASSWORD_SECRET).toString();
     }
 
-    try {
-    const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-        $set: req.body,
-        },
-        { new: true }
-    );
-    res.status(200).json(updatedUser);
-    } catch (err) {
-    res.status(500).json(err);
+    let update = {
+        ...req.body,
+    };
+
+    if (req.body.contacts) {
+        delete update.contacts;
     }
-});
-
-// CHANGE PASSWORD
-router.put("/change-password/:userId", verifyTokenAndAuthorization, async (req, res) => {
-    console.log(req.body); 
-    const userId = req.params.userId;
-    const newPassword = CryptoJS.AES.encrypt(
-        req.body.password,
-        process.env.PASSWORD_SECRET
-    ).toString();
-
     try {
-        const updatedUser = await User.findByIdAndUpdate(
-            userId,
-            { $set: { password: newPassword } },
-            { new: true }
-        );
+        const updatedUser = await User.findById(req.params.id);
+        if (req.body.contacts && updatedUser) {
+            await User.findByIdAndUpdate(req.params.id, {
+                $set: update,
+                $push: { contacts: { $each: req.body.contacts } }
+            }, { new: true });
+        } else {
+            await User.findByIdAndUpdate(req.params.id, {
+                $set: update
+            }, { new: true });
+        }
+
         res.status(200).json(updatedUser);
     } catch (err) {
+        console.error("Error updating user:", err);
         res.status(500).json(err);
     }
 });
+
 
 //DELETE
 router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {

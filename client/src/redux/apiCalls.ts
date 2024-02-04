@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 import { SuccessAction, UserData } from "../data/types.ts";
 import { publicRequest, userRequest } from "../middleware/requestMethods";
 import { adminAccess, loginFailure, loginStart, loginSuccess } from "./userRedux"
@@ -36,6 +36,37 @@ export const getAdminData = async <T>(
       const response = await userRequest(token).get(path);
       dispatch(successAction(response.data));
       dispatch(fetchingSuccess())
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (error) {
+        const status = axiosError.response ? axiosError.response.status : 500; 
+        dispatch(fetchingFailure(status));
+        }
+    }
+  }
+};
+
+export const adminRequest = async <T, U = undefined>(
+  dispatch: Dispatch, 
+  method: Method,
+  path: string, 
+  token: string, 
+  admin: boolean,
+  successAction: SuccessAction<T>,
+  bodyObj?: U
+  ) => {
+  dispatch(fetchingStart())
+  if (admin && token) {
+    try {
+      const config: AxiosRequestConfig = {
+        method: method,
+        url: path,
+        data: bodyObj,
+      };
+      const axiosInstance = userRequest(token);
+      const response = await axiosInstance.request<T>(config);
+      dispatch(successAction(response.data));
+      dispatch(fetchingSuccess());
     } catch (error) {
       const axiosError = error as AxiosError;
       if (error) {

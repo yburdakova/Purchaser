@@ -2,26 +2,23 @@ import React, { useEffect, useState } from 'react'
 import { CustomerRequest, NotificationData, UserData } from '../data/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { TbLockCog } from 'react-icons/tb';
-import { RiDeleteBin6Line } from 'react-icons/ri';
-import { MdOutlineGroupAdd } from 'react-icons/md';
-import { postDataSuccess } from '../redux/adminRedux';
-import { getAdminData, postAdminData } from '../redux/apiCalls';
+import { RiLockPasswordLine } from 'react-icons/ri';
+import { MdOutlineDoNotDisturbOn, MdOutlineGroupAdd } from 'react-icons/md';
+import { addCustomerRequests, postDataSuccess } from '../redux/adminRedux';
+import { adminRequest } from '../redux/apiCalls';
 import { CustomInput } from '../components';
-import { userRequest } from '../middleware/requestMethods';
-import { getNotifications } from '../redux/notificationRedux';
+import { getNotifications, setFocusedId } from '../redux/notificationRedux';
 
 const AdminRequests = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
   const requests = useSelector((state: RootState) => state.admin.customerRequests);
-  const users = useSelector((state: RootState) => state.admin.users);
-  const notifications = useSelector((state: RootState) => state.notifications.notifications);
   const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
 
   const [newUserRequests, setNewUserRequests] = useState<CustomerRequest[]>([])
   const [newPasswordRequests, setNewPasswordRequests] = useState<CustomerRequest[]>([])
+  const [closedRequests, setClosedRequests] = useState<CustomerRequest[]>([])
 
   const [newCustomerTitle, setNewCustomerTitle] = useState('')
   const [newCustomerEmail, setNewCustomerEmail] = useState('')
@@ -29,94 +26,116 @@ const AdminRequests = () => {
   const [newCustomerPhone, setNewCustomerPhone] = useState('')
   const [newCustomerName, setNewCustomerName] = useState('')
   const [processingId, setProcessingId] = useState('')
-  const [isChangePassword, setIsChangePassword] = useState(false)
-  const [editingUserId, setEditingUserId] = useState('')
+  const [relatedId, setRelatedId] = useState('')
+
+
+  const refreshData = () => {
+    if (user?.isAdmin && user.accessToken) {
+      adminRequest<CustomerRequest[]>(dispatch, 'get','/requests', user.accessToken, user.isAdmin, addCustomerRequests);
+      adminRequest<NotificationData[]>(dispatch, 'get','/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+    }
+  }
 
   useEffect(() => {
     const filteredNewUserRequests = requests.filter(request => request.type === 'newUser');
     setNewUserRequests(filteredNewUserRequests);
     const filteredNewPasswordRequests = requests.filter(request => request.type === 'newPassword');
     setNewPasswordRequests(filteredNewPasswordRequests);
+    const filteredClosedRequests = requests.filter(request => request.type === 'completed' || request.type === 'rejected' );
+    setClosedRequests(filteredClosedRequests)
   }, [requests]);
 
-  const getNotificationIdByRequestId = (requestId: string) => {
-    const notification = notifications.find(notify => notify.data?.requestId === requestId);
-    console.log(notification)
-    return notification?._id;
-};
+  const handleReject = async (id: string) => {
+    console.log(id)
 
-  const handleDelete = async (id:string) => {
-    const notificationId = getNotificationIdByRequestId(id);
     if (user?.isAdmin && user.accessToken) {
-      await userRequest(user.accessToken).patch(`/requests/update_request/${id}`, {});
-      await userRequest(user.accessToken).patch(`/notifications/update_notification/${notificationId}`, {});
-      getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+      await adminRequest<CustomerRequest, { type: string }>(
+        dispatch,
+        'patch',
+        `/requests/update-request/${id}`,
+        user.accessToken,
+        user.isAdmin,
+        postDataSuccess,
+        { type: 'rejected' }
+      );
     }
-    
+    dispatch(setFocusedId(''))
+    refreshData()
   }
 
-  const handleAddCustomer = ( 
-    id: string, 
+  const cleanContacts = (e: React.FormEvent) =>{
+    e.preventDefault();
+    setNewCustomerPhone("");
+    setNewCustomerName("");
+  }
+  
+  const handleProcessing = ( 
     title: string,
     name: string, 
     phone: string, 
-    email: string ) => {
-      setIsChangePassword(false);
+    email: string,
+    id: string,
+    relatedId?: string
+    ) => {
+      if (relatedId) {
+        setRelatedId(relatedId)
+      }
+      setProcessingId(id)
       setNewCustomerTitle(title);
       setNewCustomerPhone(phone);
       setNewCustomerName(name);
       setNewCustomerEmail(email);
-      setProcessingId(id);
+      dispatch(setFocusedId(''))
   }
 
-  // const handleChangePassword = (
-  //   userId: string,
-  //   title: string, 
-  //   email: string, 
-  //   contactName: string, 
-  //   phone: string, 
-  //   processingId: string ) => {
-  //     setIsChangePassword(true);
-  //     setNewCustomerTitle(title);
-  //     setNewCustomerEmail(email);
-  //     setNewCustomerPhone(phone);
-  //     setNewCustomerName(contactName);
-  //     setProcessingId(processingId);
-  //     setEditingUserId(userId); 
-  // }
 
-  const addNewCustomer = async (e: React.FormEvent) => {
-    
+  const requetProcessing = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(processingId)
-      const userData = { 
-        title: newCustomerTitle, 
-        email: newCustomerEmail, 
-        contacts: [
-          {
-            contactName: newCustomerName, 
-            contactPhone: newCustomerPhone, 
-          }
-        ],
+    const newUser =  requests.find(request => request._id === processingId)?.type === "newUser"
+
+    const newUserData = { 
+      title: newCustomerTitle, 
+      email: newCustomerEmail, 
+      contacts: [{
+        contactName: newCustomerName, 
+        contactPhone: newCustomerPhone, 
+      }],
+      password: newCustomerPassword, 
+    };
+
+    const updateUserData = newCustomerName && newCustomerPhone
+    ? {
+        contacts: [{
+          contactName: newCustomerName, 
+          contactPhone: newCustomerPhone, 
+        }],
         password: newCustomerPassword, 
-        isActive: true,
-        isAdmin: false
-      };
-      try {
-        if (user?.accessToken && user?.isAdmin){
-          await postAdminData<UserData[], UserData>(dispatch, '/auth/register', userData, user.accessToken, user.isAdmin, postDataSuccess);
-        }
-      } catch (error) {
-        console.error('Failed to add new customer or user', error);
       }
+    : {
+        password: newCustomerPassword, 
+      };
+
+    try {
+      if (user?.accessToken && user?.isAdmin) {
+        newUser
+        ? await adminRequest<UserData[], UserData>(dispatch,  "post", '/auth/register', user.accessToken, user.isAdmin, postDataSuccess, newUserData)
+        : await adminRequest<UserData[], UserData>(dispatch,  "put", `/users/${relatedId}`, user.accessToken, user.isAdmin, postDataSuccess, updateUserData);
+        await adminRequest<CustomerRequest, { type: string }>(dispatch, 'patch', `/requests/update-request/${processingId}`, user.accessToken, user.isAdmin, postDataSuccess, { type: 'completed' });
+      }
+      
+    } catch (error) {
+      console.error('Failed to add new customer or user', error);
+    }
     
     setNewCustomerTitle('');
     setNewCustomerEmail('');
     setNewCustomerPhone('');
     setNewCustomerName('');
     setNewCustomerPassword('');
-    handleDelete(processingId);
-    setProcessingId('');
+    setRelatedId("");
+    setProcessingId("");
+    dispatch(setFocusedId(''))
+    refreshData()
   }
 
 
@@ -138,11 +157,20 @@ const AdminRequests = () => {
             <div>{request.email}</div>
             <div>{request.contactName}</div>
             <div>{request.contactPhone}</div>
-            <MdOutlineGroupAdd onClick={() => handleAddCustomer(request._id, request.title, request.contactName, request.contactPhone, request.email)}/>
-            <RiDeleteBin6Line 
-                  className="deletePriceIcon" 
-                  onClick={() => handleDelete(request._id)}
-            />
+            <div data-tooltip="Добавить клиента" className="icon-button" >
+              <MdOutlineGroupAdd 
+                onClick={() => handleProcessing(request.title, request.contactName, request.contactPhone, request.email, request._id)}
+                size={22}
+              />
+            </div>
+            <div data-tooltip="Отклонить запрос" className="icon-button" >
+              <MdOutlineDoNotDisturbOn 
+                className="deletePriceIcon" 
+                size={22}
+                onClick={() => handleReject(request._id)}
+              />
+            </div>
+            
           </div>
         ))}
       </div>
@@ -154,16 +182,24 @@ const AdminRequests = () => {
               <div>{request.email}</div>
               <div>{request.contactName}</div>
               <div>{request.contactPhone}</div>
-              <MdOutlineGroupAdd onClick={() => handleAddCustomer(request._id, request.title, request.contactName, request.contactPhone, request.email)}/>
-              <RiDeleteBin6Line 
-                    className="deletePriceIcon" 
-                    onClick={() => handleDelete(request._id)}
-              />
+              <div data-tooltip="Обновить данные" className="icon-button" >
+                <RiLockPasswordLine 
+                  onClick={() => handleProcessing(request.title, request.contactName, request.contactPhone, request.email, request._id, request.data?.relatedId)}
+                  size={22}
+                />
+              </div>
+              <div data-tooltip="Отклонить запрос" className="icon-button" >
+                <MdOutlineDoNotDisturbOn 
+                  className="deletePriceIcon" 
+                  size={22}
+                  onClick={() => handleReject(request._id)}
+                />
+              </div>
             </div>
           ))}
       </div>
       <div className="addForm">
-        <form onSubmit={e => addNewCustomer(e)} className='newProductForm'>
+        <form onSubmit={e => requetProcessing(e)} className='newProductForm'>
           <CustomInput 
             label='Название клиента' 
             placeholder='Название клиента' 
@@ -204,17 +240,25 @@ const AdminRequests = () => {
             label="Номер телефона" 
             placeholder="Номер телефона" 
             isMask 
-            required 
             dark
             valueProps={newCustomerPhone}
             getValue={setNewCustomerPhone}
           />
+          <button className="newDataButton" onClick={(e) =>cleanContacts(e)}>Очистить контактные данные</button>
           <button className='newDataButton'>Добавить</button>
         </form>
       </div>
       <div className="">Обработанные запросы</div>
       <div className="flexList">
-        
+        {closedRequests.map(request => (
+            <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
+              <div>{request.title}</div>
+              <div>{request.email}</div>
+              <div>{request.contactName}</div>
+              <div>{request.contactPhone}</div>
+              <div className="">{request.type == 'rejected' ? "Отклонён" : "Обработан"}</div>
+            </div>
+          ))}
         
       </div>
     </div>
