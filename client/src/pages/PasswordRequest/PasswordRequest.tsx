@@ -6,6 +6,8 @@ import styles from './PasswordRequest.module.css'
 import { useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../middleware/requestMethods';
+import { postNotification } from '../../redux/apiCalls';
+import { BiMessageRoundedError } from 'react-icons/bi';
 
 const PasswordRequest = () => {
   
@@ -14,34 +16,35 @@ const PasswordRequest = () => {
   const [phone, setPhone] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
-
-  const sendNotification = async (requestId: string) => {
-
-    try {
-      await axios.post(`${BASE_URL}/notifications/add_notification`, {
-        type: 'customerRequest',
-        message: 'Поступил запрос на доступ к системе',
-        data: { requestId }
-      });
-    } catch (error) {
-      console.error('Failed to send notification', error);
-    }
-  };
+  const [errorWindow, setErrorWindow] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSending(true);
 
     try {
-      const response = await axios.post(`${BASE_URL}/requests/send_request`, {
+      const response = await axios.post(`${BASE_URL}/requests/password_request`, {
         email: email,
-        name: username,
-        phone: phone,
+        contactName: username,
+        contactPhone: phone,
       });
-      const requestId = response.data._id; 
-      console.log(requestId)
-      sendNotification(requestId);
-      setIsSubmitted(true);
+
+      if (response.data.existingUser) { 
+        if(response.data.request) {
+          const requestId = response.data.request._id;
+          console.log(requestId);
+          postNotification({
+            type: 'customerRequest',
+            forAdmin: true,
+            message: `От клиента ${response.data.request.title} поступил запрос на изменение пароля`,
+            data: { requestId }
+          });
+          setIsSubmitted(true);
+          setErrorWindow(false);
+        }
+      } else {
+        setErrorWindow(true); 
+      }
     } catch (error) {
       console.error('Failed to send request', error);
     }
@@ -89,9 +92,18 @@ const PasswordRequest = () => {
         <p className={styles.text}> Запрос успешно отправлен. </p>
         <p className={styles.text}>Администратор системы свяжется с вами в ближайшее время.</p>
         <IoCheckmarkDoneSharp className={styles.icon}/>
+        <Link to='/' className={styles.link}>Вернуться на страницу авторизации</Link>
     </div>
     }
-    
+    {errorWindow &&
+      <div className={styles.successMessage}>
+        <BiMessageRoundedError className={styles.icon}/>
+        <p className={styles.text}>Клиентa с таким email не существует!</p>
+        <p className={styles.textLink} onClick={()=> {setErrorWindow(false)}}>Повторить попытку</p>
+        <Link to='/new_customer' className={styles.link}>Подать заявку как новый клиент</Link>
+        <Link to='/' className={styles.link}>Вернуться на страницу авторизации</Link>
+      </div>
+    }
   </div>
 </div>
   )

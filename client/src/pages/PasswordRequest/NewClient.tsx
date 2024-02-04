@@ -5,7 +5,8 @@ import { BASE_URL } from '../../middleware/requestMethods';
 import { CustomInput } from '../../components';
 import { IoCheckmarkDoneSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
-import { postNotificaton } from '../../redux/apiCalls';
+import { postNotification } from '../../redux/apiCalls';
+import { BiMessageRoundedError } from 'react-icons/bi';
 
 const NewClient = () => {
 
@@ -15,27 +16,33 @@ const NewClient = () => {
   const [phone, setPhone] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [isExist, setIsExist] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSending(true);
 
     try {
-      const response = await axios.post(`${BASE_URL}/requests/send_request`, {
+      const response = await axios.post(`${BASE_URL}/requests/new_request`, {
         title: title,
         email: email,
         contactName: username,
         contactPhone: phone,
       });
-      const requestId = response.data._id; 
-      console.log(requestId)
-      postNotificaton ({
-        type: 'customerRequest',
-        forAdmin: true,
-        message: `Поступил запрос на добавление нового клиента`,
-        data: { requestId }
-      })
-      setIsSubmitted(true);
+
+      if (response.data.existingUser) {
+        setIsExist(true);
+      } else if (response.data._id) {
+        const requestId = response.data._id;
+        console.log(requestId);
+        postNotification({
+          type: 'customerRequest',
+          forAdmin: true,
+          message: `Поступил запрос на добавление нового клиента`,
+          data: { requestId }
+        });
+        setIsSubmitted(true);
+      }
     } catch (error) {
       console.error('Failed to send request', error);
     }
@@ -90,9 +97,19 @@ const NewClient = () => {
         <p className={styles.text}> Запрос успешно отправлен. </p>
         <p className={styles.text}>Администратор системы свяжется с вами в ближайшее время.</p>
         <IoCheckmarkDoneSharp className={styles.icon}/>
+        <Link to='/' className={styles.link}>Вернуться на страницу авторизации</Link>
     </div>
     }
-    
+    {isExist &&
+      <div className={styles.successMessage}>
+        <BiMessageRoundedError className={styles.icon}/>
+        <p className={styles.text}>Клиент с таким email уже существует!</p>
+        <p className={styles.textLink} onClick={()=> {setIsExist(false)}}>Продолжить заявку с другим email</p>
+        <Link to='/reqest_password' className={styles.link}>Запросить изменение пароля</Link>
+        <Link to='/' className={styles.link}>Вернуться на страницу авторизации</Link>
+        
+      </div>
+    }
   </div>
 </div>
   )

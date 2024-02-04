@@ -5,22 +5,25 @@ const CustomerRequestSchema = new mongoose.Schema(
         title: {
             type: String,
             required: true,
-            unique: true,
-            default: "Клиент"
+        },
+        contactName: {
+            type: String,
+            required: true,
         },
         email:{
             type: String,
             required: true,
-            unique: true
-        },
-        contactName:{
-            type: String,
         },
         contactPhone:{
             type: String,
             required: true,
         },
-        isProcessed: {
+        type: {
+            type: String,
+            enum: ['newUser', 'newPassword'],
+            required: true,
+        },
+        status: {
             type: Boolean,
             default: false
         }

@@ -6,7 +6,6 @@ const UserSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            default: "Клиент"
         },
         email:{
             type: String,
@@ -27,13 +26,17 @@ const UserSchema = new mongoose.Schema(
             required: true,
             default: true
         },
-        contactName:{
-            type: String,
-        },
-        contactPhone:{
-            type: String,
-            required: true,
-        },
+        contacts: [
+            {
+                contactName: {
+                    type: String,
+                },
+                contactPhone:{
+                    type: String,
+                    required: true,
+                },
+            }
+        ],
         extraInfo:{
             type: String,
         },

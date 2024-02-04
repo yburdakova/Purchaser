@@ -1,20 +1,60 @@
 import express from "express";
+import { User } from '../models/User.js';
 import { CustomerRequest } from "../models/CustomerRequest.js";
 import { verifyTokenAndAdmin } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
-// CUSTOMER REQUEST
-router.post("/send_request", async (req, res) => {
+// NEW CUSTOMER REQUEST
+router.post("/new_request", async (req, res) => {
+    const existingUser = await User.findOne({ email: req.body.email });
+    if (existingUser) {
+        return res.status(200).json({ 
+            existingUser: true, 
+            message: "User already exists" 
+        });
+    }
     const newRequest = new CustomerRequest({
         title: req.body.title,
         email: req.body.email,
         contactName: req.body.contactName,
-        contactPhone: req.body.contactPhone
+        contactPhone: req.body.contactPhone,
+        type: "newUser"
     });
     try {
         const savedRequest = await newRequest.save();
         res.status(201).json(savedRequest);
+    } catch (err) {
+        console.error("Error in send_request:", err);
+        res.status(500).json(err);
+    }
+});
+
+// PASSWORD REQUEST
+router.post("/password_request", async (req, res) => {
+    const existingUser = await User.findOne({ email: req.body.email });
+
+    if (!existingUser) {
+        return res.status(200).json({ 
+            existingUser: false, 
+            message: "User does not exist" 
+        });
+    } 
+
+    const newRequest = new CustomerRequest({
+        title: existingUser.title,
+        email: req.body.email,
+        contactName: req.body.contactName,
+        contactPhone: req.body.contactPhone,
+        type: "newPassword"
+    });
+
+    try {
+        const savedRequest = await newRequest.save();
+        res.status(201).json({
+            existingUser: true,
+            request: savedRequest
+        });
     } catch (err) {
         console.error("Error in send_request:", err);
         res.status(500).json(err);

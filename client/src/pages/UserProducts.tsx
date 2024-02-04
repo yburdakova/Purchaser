@@ -4,7 +4,7 @@ import { RootState } from '../redux/store';
 import { CategoryData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import {  cleanOrder, openOrder } from '../redux/orderRedux';
-import { getAllUsersData, postNotificaton } from '../redux/apiCalls';
+import { getAllUsersData, postNotification } from '../redux/apiCalls';
 import { OrderListItem, ProductItem } from '../components';
 import { formatPrice } from '../middleware/formatPrice';
 import { userRequest } from '../middleware/requestMethods';
@@ -82,7 +82,7 @@ const UserProducts = () => {
         const res = await userRequest(user.accessToken).post("/orders", currentOrder);
         console.log(res.data);
         dispatch(cleanOrder());
-        postNotificaton ({
+        postNotification ({
           fromUser: user?._id,
           type: 'newOrder',
           forAdmin: true,

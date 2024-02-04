@@ -1,5 +1,10 @@
 import { ReactElement } from "react";
 
+interface ContactData {
+  contactName?: string;
+  contactPhone?: string;
+}
+
 export interface UserData {
   _id?: string;
   title: string;
@@ -7,8 +12,7 @@ export interface UserData {
   password: string;
   isAdmin: boolean;
   isActive: boolean;
-  contactName?: string;
-  contactPhone?: string;
+  contacts?: ContactData[];
   extraInfo?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -83,7 +87,8 @@ export interface CustomerRequest {
   email: string;
   contactName: string;
   contactPhone: string;
-  isProcessed: boolean;
+  type: 'newUser' | 'newPassword';
+  status: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

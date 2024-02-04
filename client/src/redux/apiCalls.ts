@@ -127,7 +127,7 @@ export const getAuthUsersData = async <T>(
   }
 };
 
-export const postNotificaton = async < U>(
+export const postNotification = async < U>(
   bodyObj: U,
 ) => {
   console.log(bodyObj)
