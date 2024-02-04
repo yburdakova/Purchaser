@@ -5,6 +5,7 @@ import { BASE_URL } from '../../middleware/requestMethods';
 import { CustomInput } from '../../components';
 import { IoCheckmarkDoneSharp } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { postNotificaton } from '../../redux/apiCalls';
 
 const NewClient = () => {
 
@@ -15,19 +16,6 @@ const NewClient = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
-  const sendNotification = async (requestId: string) => {
-
-    try {
-      await axios.post(`${BASE_URL}/notifications/add_notification`, {
-        type: 'customerRequest',
-        message: 'Поступил запрос на доступ к системе',
-        data: { requestId }
-      });
-    } catch (error) {
-      console.error('Failed to send notification', error);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSending(true);
@@ -36,12 +24,17 @@ const NewClient = () => {
       const response = await axios.post(`${BASE_URL}/requests/send_request`, {
         title: title,
         email: email,
-        name: username,
-        phone: phone,
+        contactName: username,
+        contactPhone: phone,
       });
       const requestId = response.data._id; 
       console.log(requestId)
-      sendNotification(requestId);
+      postNotificaton ({
+        type: 'customerRequest',
+        forAdmin: true,
+        message: `Поступил запрос на добавление нового клиента`,
+        data: { requestId }
+      })
       setIsSubmitted(true);
     } catch (error) {
       console.error('Failed to send request', error);

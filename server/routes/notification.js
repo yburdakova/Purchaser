@@ -1,43 +1,31 @@
 import express from 'express';
 import { Notification } from '../models/Notification.js';
 import { verifyTokenAndAuthorization, verifyTokenAndAdmin } from '../middleware/verifyToken.js';
-import { User } from '../models/User.js'; 
 
 const router = express.Router();
 
-// ADD NOTIFICATION
 router.post("/add_notification", async (req, res) => {
-  const { toUser, fromUser, title, message, type, data } = req.body;
-  try {
-    if (toUser) {
-      const newNotification = new Notification({ toUser, fromUser, title, message, type, data });
-      await newNotification.save();
-    } else {
-      const isAdminNotification = type === 'customerRequest' || type === 'newOrder';
-      const targetUsers = await User.find({ isAdmin: isAdminNotification });
 
-      for (const user of targetUsers) {
-        const newNotification = new Notification({  
-          toUser,
-          fromUser,
-          message,
-          type,
-          data
-        });
-        await newNotification.save();
-      }
-    }
-    res.status(201).json({ message: "Notification added successfully" });
+  const newNotification = new Notification({
+      toUser: req.body.toUser,
+      fromUser: req.body.fromUser,
+      type: req.body.type,
+      forAdmin: req.body.forAdmin,
+      message: req.body.message,
+      data: req.body.data
+  });
+  try {
+      const savedNotification = await newNotification.save();
+      res.status(201).json(savedNotification);
   } catch (err) {
-    console.error("Error adding notification:", err);
-    res.status(500).json({ message: err.message || 'Error adding notification' });
+      res.status(500).json(err);
   }
 });
 
 // GET ADMIN'S NOTIFICATIONS
 router.get("/admin_notifications", verifyTokenAndAdmin, async (req, res) => {
   try {
-    const notifications = await Notification.find({ toUser: null }).sort({ createdAt: -1 });
+    const notifications = await Notification.find({ forAdmin: true }).sort({ createdAt: -1 });
     res.status(200).json(notifications);
   } catch (err) {
     res.status(500).json(err);

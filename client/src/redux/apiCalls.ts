@@ -126,3 +126,18 @@ export const getAuthUsersData = async <T>(
       }
   }
 };
+
+export const postNotificaton = async < U>(
+  bodyObj: U,
+) => {
+  console.log(bodyObj)
+  try {
+    const response = await axios.post(`http://localhost:5000/api/notifications/add_notification`, bodyObj);
+    console.log(response.data)
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    if (error) {
+      console.log(axiosError.response?.data)
+      }
+  }
+};

@@ -8,7 +8,7 @@ import {
     userRouter,
     productRouter,
     requestRouter,
-    notifyRouter,
+    notificationRouter,
     customerRouter,
     orderRouter
 } from './routes/index.js';
@@ -37,7 +37,7 @@ app.use("/api/users", userRouter)
 app.use("/api/auth", authRouter)
 app.use("/api/products", productRouter)
 app.use("/api/requests", requestRouter)
-app.use("/api/notifications", notifyRouter)
+app.use("/api/notifications", notificationRouter)
 app.use("/api/customers", customerRouter)
 app.use("/api/orders", orderRouter)
 

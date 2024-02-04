@@ -10,11 +10,11 @@ import { menuLinks } from '../../data/constants';
 import { RootState } from '../../redux/store';
 import { notificationTitles } from '../../data/constants';
 import { NotificationData, NotificationType } from '../../data/types';
-import { getNotifications, setFocusedId } from '../../redux/adminRedux';
 import { userRequest } from '../../middleware/requestMethods';
 import { getAdminData } from '../../redux/apiCalls';
 import { MdAssignment } from 'react-icons/md';
 import { openOrder } from '../../redux/orderRedux';
+import { getNotifications, setFocusedId } from '../../redux/notificationRedux';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -22,8 +22,8 @@ const Header = () => {
   const location = useLocation();
 
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const notifyQuantity = useSelector((state: RootState) => state.admin.notifyCounter);
-  const notifications = useSelector((state: RootState) => state.admin.notifications);
+  const notifyQuantity = useSelector((state: RootState) => state.notifications.notifyCounter);
+  const notifications = useSelector((state: RootState) => state.notifications.notifications);
   const quantity = useSelector( ( state: RootState ) => state.order.quantity);  
 
   const [pageTitle, setPageTitle] = useState('Page Name');

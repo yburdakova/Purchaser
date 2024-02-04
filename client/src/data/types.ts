@@ -2,11 +2,14 @@ import { ReactElement } from "react";
 
 export interface UserData {
   _id?: string;
-  username?: string;
+  title: string;
   email: string;
   password: string;
-  isAdmin?: boolean;
-  isActive?: boolean;
+  isAdmin: boolean;
+  isActive: boolean;
+  contactName?: string;
+  contactPhone?: string;
+  extraInfo?: string;
   createdAt?: Date;
   updatedAt?: Date;
   accessToken?: string
@@ -37,6 +40,7 @@ export interface NotificationData {
   message: string;
   isRead: boolean;
   type: NotificationType;
+  forAdmin: boolean;
   data: {
     requestId: string;
   };
@@ -74,13 +78,14 @@ export interface OrderData {
 }
 
 export interface CustomerRequest {
-  _id?: string;
-  name?: string;
+  _id: string;
+  title: string;
   email: string;
-  phone: string;
-  isProcessed?: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
+  contactName: string;
+  contactPhone: string;
+  isProcessed: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface UserState {
@@ -96,11 +101,16 @@ export interface AdminState {
   users: UserData[];
   products: ProductData[];
   categories: CategoryData[];
-  notifications: NotificationData[];
-  customers: CustomerData[];
-  notifyCounter: number;
-  focusedId: string;
   isFetching: boolean;
+  error: string | null;
+}
+
+export interface NotificationsState {
+  notifyCounter: number,
+  notifications: NotificationData[];
+  focusedId: string;
+  actualNotificationId: string;
+  isFetching: boolean,
   error: string | null;
 }
 

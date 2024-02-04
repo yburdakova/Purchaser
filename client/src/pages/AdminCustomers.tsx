@@ -6,14 +6,15 @@ import { FaRegEye } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { CustomInput } from "../components";
 import { PiWarningCircleBold } from "react-icons/pi";
-import { addCustomerRequests, getNotifications, postDataSuccess } from "../redux/adminRedux";
+import { addCustomerRequests, postDataSuccess } from "../redux/adminRedux";
 import { getAdminData, postAdminData } from "../redux/apiCalls";
+import { getNotifications } from "../redux/notificationRedux";
 
 const AdminCustomers = () => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const customers = useSelector((state: RootState) => state.admin.customers);
+  const users = useSelector((state: RootState) => state.admin.users);
 
   const [newCustomerTitle, setNewCustomerTitle] = useState('')
   const [newCustomerEmail, setNewCustomerEmail] = useState('')
@@ -31,7 +32,7 @@ const AdminCustomers = () => {
 
   const addNewCustomer = (e: React.FormEvent) => {
     e.preventDefault()
-    const existingProduct = customers.find(customer => customer.email === newCustomerEmail);
+    const existingProduct = users.find(users => users.email === newCustomerEmail);
     if (existingProduct) {
       setErrorMessage('Такой клиент уже существует');
       return;
@@ -127,20 +128,20 @@ const AdminCustomers = () => {
             </tr>
           </thead>
           <tbody className='tableBody'>
-            {customers.map((customer) => {
+            {users.map((users) => {
               
               return (
-                <tr className='rowTable' key={customer._id}>
-                <td>{customer.title}</td>
-                <td className='b'>{customer.email}</td>
-                <td>{customer.contactName}</td>
-                <td>{customer.contactPhone}</td>
+                <tr className='rowTable' key={users._id}>
+                <td>{users.title}</td>
+                <td className='b'>{users.email}</td>
+                <td>{users.contactName}</td>
+                <td>{users.contactPhone}</td>
                 <td className='iconTableCell'>
                   
                   <FaRegEye />
                   <RiDeleteBin6Line 
                     className="deletePriceIcon" 
-                    onClick={() => customer._id && handeDeleteProduct(customer._id)}/>
+                    onClick={() => users._id && handeDeleteProduct(users._id)}/>
                 </td>
             </tr>
               )

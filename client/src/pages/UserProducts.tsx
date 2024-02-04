@@ -4,7 +4,7 @@ import { RootState } from '../redux/store';
 import { CategoryData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import {  cleanOrder, openOrder } from '../redux/orderRedux';
-import { getAllUsersData } from '../redux/apiCalls';
+import { getAllUsersData, postNotificaton } from '../redux/apiCalls';
 import { OrderListItem, ProductItem } from '../components';
 import { formatPrice } from '../middleware/formatPrice';
 import { userRequest } from '../middleware/requestMethods';
@@ -82,6 +82,12 @@ const UserProducts = () => {
         const res = await userRequest(user.accessToken).post("/orders", currentOrder);
         console.log(res.data);
         dispatch(cleanOrder());
+        postNotificaton ({
+          fromUser: user?._id,
+          type: 'newOrder',
+          forAdmin: true,
+          message: `Поступила новая заявка от клиента ${user?.title} на сумму ${order.totalPrice} ₽`,
+        })
       } catch (error) {
         console.log(error);
       }
@@ -92,6 +98,7 @@ const UserProducts = () => {
   const addOrder = () => {
     console.log("Clicked ADD ORDER")
     createOrder();
+    
   }
 
   return (

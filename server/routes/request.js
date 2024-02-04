@@ -7,9 +7,10 @@ const router = express.Router();
 // CUSTOMER REQUEST
 router.post("/send_request", async (req, res) => {
     const newRequest = new CustomerRequest({
-        name: req.body.name,
+        title: req.body.title,
         email: req.body.email,
-        phone: req.body.phone
+        contactName: req.body.contactName,
+        contactPhone: req.body.contactPhone
     });
     try {
         const savedRequest = await newRequest.save();

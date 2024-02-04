@@ -2,15 +2,21 @@ import mongoose from 'mongoose';
 
 const CustomerRequestSchema = new mongoose.Schema(
     {
-        name: {
+        title: {
             type: String,
             required: true,
+            unique: true,
+            default: "Клиент"
         },
         email:{
             type: String,
             required: true,
+            unique: true
         },
-        phone:{
+        contactName:{
+            type: String,
+        },
+        contactPhone:{
             type: String,
             required: true,
         },
