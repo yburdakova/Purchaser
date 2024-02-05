@@ -25,8 +25,12 @@ useEffect(() => {
   }
 },[customer])
 
-const handeDelete = () => {
-
+const handeDelete = (id: string) => {
+  if (user?.isAdmin && user.accessToken) {
+    adminRequest<UserData[], ToggleStatusData>(dispatch, 'delete', `/users/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess)
+    .then(() => {reloadCustomers()})
+  }
+  
 }
 
 const inactivate = (id: string) => {
@@ -76,11 +80,11 @@ const activate = (id: string) => {
         <div data-tooltip="Детали" className="inactiveIcon" >
           <FaRegEye size={24}/>
         </div>
-        <div data-tooltip="Удалить продукт" className="icon-button" >
+        <div data-tooltip="Удалить клиента" className="icon-button" >
           <RiDeleteBin6Line 
               size={24}
               className="deletePriceIcon" 
-              onClick={handeDelete}
+              onClick={() => customer._id && handeDelete(customer._id)}
           />
         </div>
       </div>

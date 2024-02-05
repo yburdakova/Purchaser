@@ -36,7 +36,7 @@ const AdminCustomers = () => {
     }
   };
 
-  const addNewCustomer = (e: React.FormEvent) => {
+  const addNewCustomer = async (e: React.FormEvent) => {
     e.preventDefault()
     const existingProduct = users.find(users => users.email === newCustomerEmail);
     if (existingProduct) {
@@ -44,22 +44,26 @@ const AdminCustomers = () => {
       return;
     }
 
-    const userData = {
-      title: newCustomerTitle,
-      email: newCustomerEmail,
-      password: newCustomerPassword,
-      contactName: newCustomerName,
-      contactPhone: newCustomerPhone,
-    }
-
+    const newUserData = { 
+      title: newCustomerTitle, 
+      email: newCustomerEmail, 
+      contacts: [{
+        contactName: newCustomerName, 
+        contactPhone: newCustomerPhone, 
+      }],
+      password: newCustomerPassword, 
+    };
+    console.log ('Отправляемые данные:', newUserData)
     if (user?.isAdmin && user.accessToken) {
-      adminRequest<UserData[], UserData>(dispatch, 'post', '/auth/register', user?.accessToken, user?.isAdmin, postDataSuccess, userData)
+      await adminRequest<UserData[], UserData>(dispatch,  "post", '/auth/register', user.accessToken, user.isAdmin, postDataSuccess, newUserData)
+        .then (()=> {loadCustomers()})
     }
     setNewCustomerTitle('')
     setNewCustomerEmail('')
     setNewCustomerPhone('')
     setNewCustomerName('')
-
+    setNewCustomerPassword('')
+    
   }
 
   return (

@@ -9,8 +9,7 @@ const router = express.Router();
 //REGISTER
 router.post("/register", async (req, res) => {
     const newUser = new User({
-        title: req.body.title,
-        username: req.body.username,
+        title: req.body.title, 
         email: req.body.email,
         contacts: req.body.contacts,
         password: CryptoJS.AES.encrypt(
