@@ -30,8 +30,9 @@ const handeDelete = () => {
 }
 
 const inactivate = (id: string) => {
+  
   if (user?.isAdmin && user.accessToken) {
-    adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: false })
+    adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/users/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: false })
   }
   postNotification({
     toUser: id,
@@ -43,7 +44,7 @@ const inactivate = (id: string) => {
 
 const activate = (id: string) => {
   if (user?.isAdmin && user.accessToken) {
-    adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: true })
+    adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/users/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: true })
   }
   postNotification({
     toUser: id,
@@ -64,10 +65,10 @@ const activate = (id: string) => {
       <div className="gridCell iconColumn">
         { !customer.isActive
           ? <div data-tooltip="Подключить клиента" className="icon-button">
-              <BiToggleLeft size={30} onClick={() => customer._id && inactivate(customer._id)}/>
+              <BiToggleLeft size={30} onClick={() => customer._id && activate(customer._id)}/>
             </div>
           : <div data-tooltip="Отключить клиента" className="icon-button" >
-              <BiToggleRight size={30} onClick={() => customer._id && activate(customer._id)}/>
+              <BiToggleRight size={30} onClick={() => customer._id && inactivate(customer._id)}/>
             </div>
         }
         <div data-tooltip="Детали" className="inactiveIcon" >

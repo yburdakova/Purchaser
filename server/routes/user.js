@@ -50,6 +50,8 @@ router.patch("/switch-status/:id", verifyTokenAndAdmin, async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+
+
         
         const updatedUser = await User.findByIdAndUpdate(req.params.id, {
             $set: { isActive: req.body.isActive },

@@ -11,7 +11,7 @@ import { RootState } from '../../redux/store';
 import { notificationTitles } from '../../data/constants';
 import { NotificationData, NotificationType } from '../../data/types';
 import { userRequest } from '../../middleware/requestMethods';
-import { getAdminData } from '../../redux/apiCalls';
+import { adminRequest } from '../../redux/apiCalls';
 import { MdAssignment } from 'react-icons/md';
 import { openOrder } from '../../redux/orderRedux';
 import { getNotifications, setFocusedId } from '../../redux/notificationRedux';
@@ -74,7 +74,7 @@ const Header = () => {
           default:
             console.log('Unknown notification type');
         }
-        getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+        adminRequest<NotificationData[]>(dispatch, 'get','/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
         setIsNotify(false)
       } catch (error) {
         console.error('Failed to update notification', error);
