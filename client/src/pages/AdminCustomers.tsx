@@ -1,14 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { CustomerData, CustomerRequest, NotificationData, UserData } from "../data/types";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import { FaRegEye } from "react-icons/fa6";
+import { UserData } from "../data/types";
 import { useEffect, useState } from "react";
-import { CustomInput } from "../components";
+import { CustomInput, CustomerItem } from "../components";
 import { PiWarningCircleBold } from "react-icons/pi";
-import { addCustomerRequests, postDataSuccess } from "../redux/adminRedux";
-import { getAdminData, postAdminData } from "../redux/apiCalls";
-import { getNotifications } from "../redux/notificationRedux";
+import { postDataSuccess } from "../redux/adminRedux";
+import { adminRequest } from "../redux/apiCalls";
 
 const AdminCustomers = () => {
 
@@ -16,6 +13,7 @@ const AdminCustomers = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const users = useSelector((state: RootState) => state.admin.users);
 
+  const [customers, setCustomers] = useState<UserData[]>([])
   const [newCustomerTitle, setNewCustomerTitle] = useState('')
   const [newCustomerEmail, setNewCustomerEmail] = useState('')
   const [newCustomerPhone, setNewCustomerPhone] = useState('')
@@ -24,11 +22,9 @@ const AdminCustomers = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    if (user?.isAdmin && user.accessToken) {
-      getAdminData<CustomerRequest[]>(dispatch, '/requests', user.accessToken, user.isAdmin, addCustomerRequests);
-      getAdminData<NotificationData[]>(dispatch, '/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
-    }
-  }, [dispatch, user?.isAdmin, user?.accessToken]);
+    const filteredUsers = users.filter(user => !user.isAdmin);
+    setCustomers(filteredUsers);
+  }, [users]);
 
   const addNewCustomer = (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,32 +34,22 @@ const AdminCustomers = () => {
       return;
     }
 
-    const customerData = {
+    const userData = {
       title: newCustomerTitle,
       email: newCustomerEmail,
+      password: newCustomerPassword,
       contactName: newCustomerName,
       contactPhone: newCustomerPhone,
     }
 
-    const userData ={
-      username: newCustomerTitle,
-      email: newCustomerEmail,
-      password: newCustomerPassword
-    }
-
     if (user?.isAdmin && user.accessToken) {
-      postAdminData<CustomerData[], CustomerData>(dispatch, '/customers/add_customer', customerData, user?.accessToken, user?.isAdmin, postDataSuccess)
-      postAdminData<UserData[], UserData>(dispatch, '/auth/register', userData, user?.accessToken, user?.isAdmin, postDataSuccess)
+      adminRequest<UserData[], UserData>(dispatch, 'post', '/auth/register', user?.accessToken, user?.isAdmin, postDataSuccess, userData)
     }
     setNewCustomerTitle('')
     setNewCustomerEmail('')
     setNewCustomerPhone('')
     setNewCustomerName('')
 
-  }
-
-  const handeDeleteProduct = (id: string) => {
-    console.log(id)
   }
 
   return (
@@ -117,40 +103,24 @@ const AdminCustomers = () => {
           </form>
           {errorMessage ? <div className="error-message"> <PiWarningCircleBold />{errorMessage}</div> : ' '}
         </div>
-        <table className='purTable'>
-          <thead>
-            <tr>
-              <th>Название</th>
-              <th>Email</th>
-              <th>Контактное лицо</th>
-              <th>Телефон</th>
-              <th>Действия</th>
-            </tr>
-          </thead>
-          <tbody className='tableBody'>
-            {users.map((users) => {
-              
-              return (
-                <tr className='rowTable' key={users._id}>
-                <td>{users.title}</td>
-                <td className='b'>{users.email}</td>
-                <td>{users.contactName}</td>
-                <td>{users.contactPhone}</td>
-                <td className='iconTableCell'>
-                  
-                  <FaRegEye />
-                  <RiDeleteBin6Line 
-                    className="deletePriceIcon" 
-                    onClick={() => users._id && handeDeleteProduct(users._id)}/>
-                </td>
-            </tr>
-              )
-
-            })
-          }
-
-          </tbody>
-      </table>
+        <div className="gridTable">
+          <div className="gridHeader tableCustomer">
+            <div className="headerCell">Дата регистрации</div>
+            <div className="headerCell">Название</div>
+            <div className="headerCell">Email</div>
+            <div className="headerCell">Контактное имя</div>
+            <div className="headerCell">Контактный телефон</div>
+            <div className="headerCell centerCell newPriceAnchor">Статус</div>
+            <div className="headerCell iconColumn">Действия</div>
+          </div>
+          <div className="gridBodyWrapperAdmin">
+            <div className="gridBody tableCustomer">
+              {customers.map((customer) => 
+                <CustomerItem customer={customer} key={customer._id}/>
+              )}
+            </div>
+          </div>
+      </div>
     </div>
   );
 };

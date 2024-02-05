@@ -6,6 +6,7 @@ import MenuItem from "./MenuItem/MenuItem";
 import OrderListItem from "./OrderListItem";
 import ProductItem from "./ProductItem";
 import OrderItem from "./OrderItem";
+import CustomerItem from "./CustomerItem";
 
 
 
@@ -17,5 +18,6 @@ export {
   MenuItem,
   OrderListItem,
   ProductItem,
-  OrderItem
+  OrderItem,
+  CustomerItem
 }

@@ -6,7 +6,7 @@ import { InputRefs, ProductData, ProductItemProps } from '../data/types';
 import { addProduct, openOrder, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useRef, useState } from 'react';
-import { deleteAdminData, getAdminData, postAdminData } from '../redux/apiCalls';
+import { adminRequest} from '../redux/apiCalls'; 
 import { addProducts, postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
@@ -23,13 +23,13 @@ const ProductItem = ({product}: ProductItemProps) => {
   const handleUpdatePrice = (productId: string, newPrice: number) => {
     if (user?.isAdmin && user.accessToken) {
       const bodyObj = { newPrice };
-      postAdminData<ProductData, { newPrice: number }>(
-        dispatch,
+      adminRequest<ProductData, { newPrice: number }>(
+        dispatch, 'post',
         `/products/update-price/${productId}`,
-        bodyObj,
         user.accessToken,
         user.isAdmin,
-        postDataSuccess
+        postDataSuccess,
+        bodyObj
       );
     }
   };
@@ -76,8 +76,8 @@ const ProductItem = ({product}: ProductItemProps) => {
 
   const handeDeleteProduct = () => {
     if (user?.isAdmin && user.accessToken && product._id) {
-      deleteAdminData<ProductData[]>(dispatch, '/products', product._id, user?.accessToken, user?.isAdmin, postDataSuccess)
-      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
+      adminRequest<ProductData[]>(dispatch, 'delete',`/products/${product._id}`, user?.accessToken, user?.isAdmin, postDataSuccess)
+      adminRequest<ProductData[]>(dispatch, 'get',  '/products', user?.accessToken, user?.isAdmin, addProducts)
     }
   }
 
@@ -160,7 +160,7 @@ const ProductItem = ({product}: ProductItemProps) => {
             </div>
           </div>
       }
-  </div>
+    </div>
   )
 }
 

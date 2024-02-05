@@ -23,29 +23,6 @@ export const login = async (dispatch: Dispatch, user: UserData) => {
   }
 }
 
-export const getAdminData = async <T>(
-  dispatch: Dispatch, 
-  path: string, 
-  token: string, 
-  admin: boolean,
-  successAction: SuccessAction<T>
-  ) => {
-  dispatch(fetchingStart())
-  if (admin && token) {
-    try {
-      const response = await userRequest(token).get(path);
-      dispatch(successAction(response.data));
-      dispatch(fetchingSuccess())
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      if (error) {
-        const status = axiosError.response ? axiosError.response.status : 500; 
-        dispatch(fetchingFailure(status));
-        }
-    }
-  }
-};
-
 export const adminRequest = async <T, U = undefined>(
   dispatch: Dispatch, 
   method: Method,
@@ -67,54 +44,6 @@ export const adminRequest = async <T, U = undefined>(
       const response = await axiosInstance.request<T>(config);
       dispatch(successAction(response.data));
       dispatch(fetchingSuccess());
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      if (error) {
-        const status = axiosError.response ? axiosError.response.status : 500; 
-        dispatch(fetchingFailure(status));
-        }
-    }
-  }
-};
-
-export const postAdminData = async <T, U>(
-  dispatch: Dispatch, 
-  path: string,
-  bodyObj: U,
-  token: string, 
-  admin: boolean,
-  successAction: SuccessAction<T>
-  ) => {
-  dispatch(fetchingStart())
-  if (admin && token) {
-    try {
-      const response = await userRequest(token).post(path, bodyObj);
-      dispatch(successAction(response.data));
-      dispatch(fetchingSuccess())
-    } catch (error) {
-      const axiosError = error as AxiosError;
-      if (error) {
-        const status = axiosError.response ? axiosError.response.status : 500; 
-        dispatch(fetchingFailure(status));
-        }
-    }
-  }
-};
-
-export const deleteAdminData = async <T>(
-  dispatch: Dispatch, 
-  path: string,
-  id: string,
-  token: string, 
-  admin: boolean,
-  successAction: SuccessAction<T>
-  ) => {
-  dispatch(fetchingStart())
-  if (admin && token) {
-    try {
-      const response = await userRequest(token).delete(`${path}/${id}`);
-      dispatch(successAction(response.data));
-      dispatch(fetchingSuccess())
     } catch (error) {
       const axiosError = error as AxiosError;
       if (error) {

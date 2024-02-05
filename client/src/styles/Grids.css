@@ -160,8 +160,17 @@ th, td{
 }
 .gridHeader, .gridBody {
   display: grid;
-  grid-template-columns: 10% 25% 15% 10% 10% 15% 10%; 
   gap: 4px;
+}
+.gridBody{
+  margin-bottom: 20px;
+}
+.tableProduct {
+  grid-template-columns: 10% 25% 15% 10% 10% 15% auto; 
+}
+
+.tableCustomer {
+  grid-template-columns: 12% 15% 15% 16% 16% 10% auto;
 }
 
 .gridBodyWrapperAdmin{

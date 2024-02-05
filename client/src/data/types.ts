@@ -1,15 +1,15 @@
 import { ReactElement } from "react";
 
 interface ContactData {
-  contactName?: string;
-  contactPhone?: string;
+  contactName: string;
+  contactPhone: string;
 }
 
 export interface UserData {
   _id?: string;
   title?: string;
   email?: string;
-  password: string;
+  password?: string;
   isAdmin?: boolean;
   isActive?: boolean;
   contacts?: ContactData[];
@@ -17,17 +17,6 @@ export interface UserData {
   createdAt?: Date;
   updatedAt?: Date;
   accessToken?: string
-}
-
-export interface CustomerData {
-  _id?: string;
-  title?: string;
-  email: string;
-  contactName?: string;
-  contactPhone: string;
-  extraInfo?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export interface CategoryData {
@@ -130,6 +119,10 @@ export interface OrderState {
 
 export type SuccessAction<T> = (data: T) => { type: string; payload: T };
 
+export interface ToggleStatusData {
+  isActive: boolean;
+}
+
 export interface CustomInputProps {
   label: string;
   placeholder: string;
@@ -142,11 +135,14 @@ export interface CustomInputProps {
 }
 
 export interface OrderListItemProps {
-  product: ProductData, 
+  product: ProductData; 
   index: number;
   createdOrder?: boolean;
 }
 
+export interface CustomerItemProps{
+  customer: UserData
+}
 export interface ProductItemProps {
   product: ProductData;
 }

@@ -43,6 +43,26 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
 });
 
 
+//SWITCH STATUS
+router.patch("/switch-status/:id", verifyTokenAndAdmin, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, {
+            $set: { isActive: req.body.isActive },
+        }, { new: true });
+        
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        console.error("Error toggling user status:", err);
+        res.status(500).json(err);
+    }
+});
+
+
 //DELETE
 router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
     try {

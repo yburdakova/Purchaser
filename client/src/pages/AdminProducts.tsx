@@ -5,7 +5,7 @@ import { CustomInput, ProductItem} from '../components';
 import { CategoryData, ProductData } from '../data/types';
 import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
-import { getAdminData, postAdminData } from '../redux/apiCalls';
+import { adminRequest } from '../redux/apiCalls';
 import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux';
 import { PiWarningCircleBold } from 'react-icons/pi';
 
@@ -38,14 +38,14 @@ const AdminProducts = () => {
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken && products.length === 0) {
-      getAdminData<ProductData[]>(dispatch, '/products', user.accessToken, user.isAdmin, addProducts);
+      adminRequest<ProductData[]>(dispatch, 'get', '/products', user.accessToken, user.isAdmin, addProducts);
     }
     setShowProducts(products);
   }, [dispatch, user?.isAdmin, user?.accessToken, products]);
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken && categories.length === 0) {
-      getAdminData<CategoryData[]>(dispatch, '/categories', user.accessToken, user.isAdmin, addCategories);
+      adminRequest<CategoryData[]>(dispatch, 'get',  '/categories', user.accessToken, user.isAdmin, addCategories);
     }
     setShowCategories(categories);
   }, [dispatch, user?.isAdmin, user?.accessToken, categories]);
@@ -106,8 +106,8 @@ const AdminProducts = () => {
     }
 
     if (user?.isAdmin && user.accessToken) {
-      postAdminData<ProductData[], ProductData>(dispatch, '/products/add_product', data, user?.accessToken, user?.isAdmin, postDataSuccess)
-      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
+      adminRequest<ProductData[], ProductData>(dispatch, 'post','/products/add_product', user?.accessToken, user?.isAdmin, postDataSuccess, data)
+      adminRequest<ProductData[]>(dispatch, 'get', '/products', user?.accessToken, user?.isAdmin, addProducts)
     }
     setNewProductTitle('')
     setNewProductPrice('')
@@ -127,7 +127,7 @@ const AdminProducts = () => {
     }
 
     if (user?.isAdmin && user.accessToken) {
-      postAdminData<CategoryData[], CategoryData>(dispatch, '/categories/add_category', data, user?.accessToken, user?.isAdmin, postDataSuccess)
+      adminRequest<CategoryData[], CategoryData>(dispatch, 'get', '/categories/add_category', user?.accessToken, user?.isAdmin, postDataSuccess, data)
     }
     setNewCategoryTitle('')
     setErrorMessage('');
@@ -215,7 +215,7 @@ const AdminProducts = () => {
           </div>
         </div>
       <div className="gridTable">
-          <div className="gridHeader">
+          <div className="gridHeader tableProduct">
             <div className="headerCell">ID</div>
             <div className="headerCell">Товар</div>
             <div className="headerCell">Категория</div>
@@ -225,7 +225,7 @@ const AdminProducts = () => {
             <div className="headerCell iconColumn">Действия</div>
           </div>
           <div className="gridBodyWrapperAdmin">
-            <div className="gridBody">
+            <div className="gridBody tableProduct">
               {showProducts.map((product) => 
                 <ProductItem product={product} key={product._id}/>
               )}

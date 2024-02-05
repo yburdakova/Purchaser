@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { adminRequest, getAdminData } from '../redux/apiCalls';
+import { adminRequest } from '../redux/apiCalls';
 import { RootState } from '../redux/store';
 import { CategoryData, CustomerRequest, NotificationData, ProductData, UserData } from '../data/types';
 import { addCategories, addCustomerRequests, addProducts, addUsers} from '../redux/adminRedux';
@@ -16,9 +16,9 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (user?.isAdmin && user.accessToken) {
       adminRequest<CustomerRequest[]>(dispatch, 'get','/requests', user.accessToken, user.isAdmin, addCustomerRequests);
-      getAdminData<UserData[]>(dispatch, '/users', user?.accessToken, user?.isAdmin, addUsers)
-      getAdminData<ProductData[]>(dispatch, '/products', user?.accessToken, user?.isAdmin, addProducts)
-      getAdminData<CategoryData[]>(dispatch, '/categories', user?.accessToken, user?.isAdmin, addCategories)
+      adminRequest<UserData[]>(dispatch, 'get','/users', user?.accessToken, user?.isAdmin, addUsers)
+      adminRequest<ProductData[]>(dispatch, 'get','/products', user?.accessToken, user?.isAdmin, addProducts)
+      adminRequest<CategoryData[]>(dispatch, 'get', '/categories', user?.accessToken, user?.isAdmin, addCategories)
       adminRequest<NotificationData[]>(dispatch, 'get','/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
     }
   }, [dispatch, user?.isAdmin, user?.accessToken]);

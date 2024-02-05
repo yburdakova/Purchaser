@@ -8,6 +8,7 @@ import { addCustomerRequests, postDataSuccess } from '../redux/adminRedux';
 import { adminRequest } from '../redux/apiCalls';
 import { CustomInput } from '../components';
 import { getNotifications, setFocusedId } from '../redux/notificationRedux';
+import { formatDate } from '../middleware/formatDate';
 
 const AdminRequests = () => {
 
@@ -149,42 +150,19 @@ const AdminRequests = () => {
 
   return (
     <div className='infopage'>
-      <div>Запросы от новых клиентов</div>
-      <div className="flexList">
-        {newUserRequests.map(request => (
-          <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
-            <div>{request.title}</div>
-            <div>{request.email}</div>
-            <div>{request.contactName}</div>
-            <div>{request.contactPhone}</div>
-            <div data-tooltip="Добавить клиента" className="icon-button" >
-              <MdOutlineGroupAdd 
-                onClick={() => handleProcessing(request.title, request.contactName, request.contactPhone, request.email, request._id)}
-                size={22}
-              />
-            </div>
-            <div data-tooltip="Отклонить запрос" className="icon-button" >
-              <MdOutlineDoNotDisturbOn 
-                className="deletePriceIcon" 
-                size={22}
-                onClick={() => handleReject(request._id)}
-              />
-            </div>
-            
-          </div>
-        ))}
-      </div>
-      <div>Запросы на смену пароля</div>
-      <div className="flexList">
-        {newPasswordRequests.map(request => (
+      {newUserRequests.length > 0 &&
+        <>
+        <div>Запросы от новых клиентов</div>
+        <div className="flexList">
+          {newUserRequests.map(request => (
             <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
               <div>{request.title}</div>
               <div>{request.email}</div>
               <div>{request.contactName}</div>
               <div>{request.contactPhone}</div>
-              <div data-tooltip="Обновить данные" className="icon-button" >
-                <RiLockPasswordLine 
-                  onClick={() => handleProcessing(request.title, request.contactName, request.contactPhone, request.email, request._id, request.data?.relatedId)}
+              <div data-tooltip="Добавить клиента" className="icon-button" >
+                <MdOutlineGroupAdd 
+                  onClick={() => handleProcessing(request.title, request.contactName, request.contactPhone, request.email, request._id)}
                   size={22}
                 />
               </div>
@@ -195,9 +173,41 @@ const AdminRequests = () => {
                   onClick={() => handleReject(request._id)}
                 />
               </div>
+              
             </div>
           ))}
-      </div>
+        </div>
+        </>
+      }
+      {newUserRequests.length > 0 &&
+        <>
+        <div>Запросы на смену пароля</div>
+        <div className="flexList">
+          {newPasswordRequests.map(request => (
+              <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
+                <div>{request.title}</div>
+                <div>{request.email}</div>
+                <div>{request.contactName}</div>
+                <div>{request.contactPhone}</div>
+                <div data-tooltip="Обновить данные" className="icon-button" >
+                  <RiLockPasswordLine 
+                    onClick={() => handleProcessing(request.title, request.contactName, request.contactPhone, request.email, request._id, request.data?.relatedId)}
+                    size={22}
+                  />
+                </div>
+                <div data-tooltip="Отклонить запрос" className="icon-button" >
+                  <MdOutlineDoNotDisturbOn 
+                    className="deletePriceIcon" 
+                    size={22}
+                    onClick={() => handleReject(request._id)}
+                  />
+                </div>
+              </div>
+            ))}
+        </div>
+        </>
+      }
+
       <div className="addForm">
         <form onSubmit={e => requetProcessing(e)} className='newProductForm'>
           <CustomInput 
@@ -252,11 +262,12 @@ const AdminRequests = () => {
       <div className="flexList">
         {closedRequests.map(request => (
             <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
+              <div className="">{formatDate(request.createdAt.toString())}</div>
               <div>{request.title}</div>
               <div>{request.email}</div>
               <div>{request.contactName}</div>
               <div>{request.contactPhone}</div>
-              <div className="">{request.type == 'rejected' ? "Отклонён" : "Обработан"}</div>
+              <div className={request.type == 'rejected' ? "red" : "green"}>{request.type == 'rejected' ? "Отклонён" : "Обработан"}</div>
             </div>
           ))}
         
