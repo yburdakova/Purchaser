@@ -9,7 +9,7 @@ import { postDataSuccess } from '../redux/adminRedux';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 
-const CustomerItem = ({customer}: CustomerItemProps) => {
+const CustomerItem = ({customer, reloadCustomers}: CustomerItemProps & { reloadCustomers: () => void }) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -33,6 +33,7 @@ const inactivate = (id: string) => {
   
   if (user?.isAdmin && user.accessToken) {
     adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/users/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: false })
+    .then(() => {reloadCustomers()})
   }
   postNotification({
     toUser: id,
@@ -45,6 +46,7 @@ const inactivate = (id: string) => {
 const activate = (id: string) => {
   if (user?.isAdmin && user.accessToken) {
     adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/users/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: true })
+    .then(() => {reloadCustomers()})
   }
   postNotification({
     toUser: id,

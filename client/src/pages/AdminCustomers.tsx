@@ -4,7 +4,7 @@ import { UserData } from "../data/types";
 import { useEffect, useState } from "react";
 import { CustomInput, CustomerItem } from "../components";
 import { PiWarningCircleBold } from "react-icons/pi";
-import { postDataSuccess } from "../redux/adminRedux";
+import { addUsers, postDataSuccess } from "../redux/adminRedux";
 import { adminRequest } from "../redux/apiCalls";
 
 const AdminCustomers = () => {
@@ -22,9 +22,19 @@ const AdminCustomers = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    loadCustomers();
+  }, []);
+
+  useEffect(() => {
     const filteredUsers = users.filter(user => !user.isAdmin);
     setCustomers(filteredUsers);
   }, [users]);
+
+  const loadCustomers = async () => {
+    if (user?.isAdmin && user.accessToken) {
+      adminRequest<UserData[]>(dispatch, 'get','/users', user?.accessToken, user?.isAdmin, addUsers)
+    }
+  };
 
   const addNewCustomer = (e: React.FormEvent) => {
     e.preventDefault()
@@ -109,14 +119,14 @@ const AdminCustomers = () => {
             <div className="headerCell">Название</div>
             <div className="headerCell">Email</div>
             <div className="headerCell">Контактное имя</div>
-            <div className="headerCell">Контактный телефон</div>
+            <div className="headerCell">Телефон</div>
             <div className="headerCell centerCell newPriceAnchor">Статус</div>
             <div className="headerCell iconColumn">Действия</div>
           </div>
           <div className="gridBodyWrapperAdmin">
             <div className="gridBody tableCustomer">
               {customers.map((customer) => 
-                <CustomerItem customer={customer} key={customer._id}/>
+                <CustomerItem customer={customer} key={customer._id} reloadCustomers={loadCustomers}/>
               )}
             </div>
           </div>

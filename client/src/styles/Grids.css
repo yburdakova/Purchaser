@@ -170,7 +170,7 @@ th, td{
 }
 
 .tableCustomer {
-  grid-template-columns: 12% 15% 15% 16% 16% 10% auto;
+  grid-template-columns: 15% 20% 15% 15% 12% 8% 8%;
 }
 
 .gridBodyWrapperAdmin{
