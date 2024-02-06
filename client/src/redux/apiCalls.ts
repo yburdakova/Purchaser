@@ -90,7 +90,6 @@ export const getAuthUsersData = async <T>(
 export const postNotification = async < U>(
   bodyObj: U,
 ) => {
-  console.log(bodyObj)
   try {
     const response = await axios.post(`http://localhost:5000/api/notifications/add_notification`, bodyObj);
     console.log(response.data)

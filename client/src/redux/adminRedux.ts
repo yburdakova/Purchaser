@@ -10,6 +10,7 @@ const adminSlice = createSlice({
     categories: [],
     isFetching: false,
     error: null,
+    response: null
   } as AdminState,
   
   reducers: {
@@ -35,7 +36,8 @@ const adminSlice = createSlice({
       state.categories = action.payload
     },
     postDataSuccess: (state, action)=>{
-        console.log(action.payload)
+      state.response = action.payload;
+      console.log("Записались данные в стейт:",state.response)
     },
     fetchingFailure: (state, action) => {
       state.isFetching = false;

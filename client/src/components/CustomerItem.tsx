@@ -38,26 +38,31 @@ const inactivate = (id: string) => {
   if (user?.isAdmin && user.accessToken) {
     adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/users/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: false })
     .then(() => {reloadCustomers()})
+
+    postNotification({
+      toUser: id,
+      fromUser: user._id,
+      type: 'statusChange',
+      forAdmin: false,
+      message: `Ваш статус клиента был изменен на "Отключен". Вы не можете формировать заявки.`,
+    });
   }
-  postNotification({
-    toUser: id,
-    type: 'statusChange',
-    forAdmin: false,
-    message: `Ваш статус клиента был изменен на "Отключен". Вы не можете формировать заявки.`,
-  });
+  
 }
 
 const activate = (id: string) => {
   if (user?.isAdmin && user.accessToken) {
     adminRequest<UserData[], ToggleStatusData>(dispatch, 'patch', `/users/switch-status/${id}`, user?.accessToken, user?.isAdmin, postDataSuccess, { isActive: true })
     .then(() => {reloadCustomers()})
+
+    postNotification({
+      toUser: id,
+      fromUser: user._id,
+      type: 'statusChange',
+      forAdmin: false,
+      message: `Ваш статус клиента был изменен на "Подключен". Вы можете формировать заявки.`,
+    });
   }
-  postNotification({
-    toUser: id,
-    type: 'statusChange',
-    forAdmin: false,
-    message: `Ваш статус клиента был изменен на "Подключен". Вы можете формировать заявки.`,
-  });
 }
 
   return (

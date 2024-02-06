@@ -99,6 +99,7 @@ export interface AdminState {
   categories: CategoryData[];
   isFetching: boolean;
   error: string | null;
+  response: UserData | ProductData | null;
 }
 
 export interface NotificationsState {

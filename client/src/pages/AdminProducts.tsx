@@ -5,7 +5,7 @@ import { CustomInput, ProductItem} from '../components';
 import { CategoryData, ProductData } from '../data/types';
 import { IoSearch } from "react-icons/io5";
 import { measures } from '../data/constants';
-import { adminRequest } from '../redux/apiCalls';
+import { adminRequest, postNotification } from '../redux/apiCalls';
 import { addCategories, addProducts, postDataSuccess } from '../redux/adminRedux';
 import { PiWarningCircleBold } from 'react-icons/pi';
 
@@ -15,9 +15,9 @@ const AdminProducts = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const products = useSelector((state: RootState) => state.admin.products);
   const categories = useSelector((state: RootState) => state.admin.categories);
+  const response = useSelector((state: RootState) => state.admin.response);
   
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
-  const[showCategories, setShowCategories] =useState<CategoryData[]>(categories)
   const [searchedProducts, setSelectedProducts] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -27,28 +27,35 @@ const AdminProducts = () => {
   const [newProductCategory, setNewProductCategory] = useState(categories[0]?.title || '')
   const [newProductMeasure, setNewProductMeasure] = useState(measures[0] || '')
   const [newCategoryTitle, setNewCategoryTitle] = useState('')
+  const [readyNotify, setReadyNotify] = useState(false)
 
   useEffect(() => {
-    setShowProducts(products);
-  }, [products]);
-  
-  useEffect(() => {
-    setShowCategories(categories);
-  }, [categories]);
+    loadProducts();
+    loadCategories();
+  }, []);
 
-  useEffect(() => {
-    if (user?.isAdmin && user.accessToken && products.length === 0) {
+  useEffect(()=> {
+    if (user?.isAdmin && user.accessToken && response && readyNotify) {
+      postNotification({
+        type: 'newProduct',
+        fromUser: user._id,
+        forAdmin: false,
+        message: `Новый продукт "${response.title}" добавлен в базу и доступен для заказа.`,
+        data: { relatedId: response._id }
+    })}
+  },[readyNotify])
+
+  const loadProducts = async () => {
+    if (user?.isAdmin && user.accessToken) {
       adminRequest<ProductData[]>(dispatch, 'get', '/products', user.accessToken, user.isAdmin, addProducts);
     }
-    setShowProducts(products);
-  }, [dispatch, user?.isAdmin, user?.accessToken, products]);
+  };
 
-  useEffect(() => {
-    if (user?.isAdmin && user.accessToken && categories.length === 0) {
+  const loadCategories = async () => {
+    if (user?.isAdmin && user.accessToken) {
       adminRequest<CategoryData[]>(dispatch, 'get',  '/categories', user.accessToken, user.isAdmin, addCategories);
     }
-    setShowCategories(categories);
-  }, [dispatch, user?.isAdmin, user?.accessToken, categories]);
+    };
 
   useEffect(() => {
     let filteredProducts = products;
@@ -76,42 +83,38 @@ const AdminProducts = () => {
   };
 
   const handleCategoryChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-    console.log("Selected category:", e.target.value);
     setNewProductCategory(e.target.value);
   };
   
   const handleMeasureChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
-    console.log("Selected measure:", e.target.value);
     setNewProductMeasure(e.target.value);
   };
 
-  const addNewProduct = (e: React.FormEvent) => {
+  const addNewProduct = async (e: React.FormEvent) => {
     e.preventDefault()
-
     const existingProduct = products.find(product => product.title === newProductTitle);
     if (existingProduct) {
       setErrorMessage('Такой продукт уже существует');
       return;
     }
-
     const data = {
       title: newProductTitle,
       category: newProductCategory,
       measure: newProductMeasure,
       quantity: 1,
       price: Number(newProductPrice),
-      priceHistory: [
-        { price:  Number(newProductPrice)}
-      ]
+      priceHistory: [{ price:  Number(newProductPrice)}]
     }
-
     if (user?.isAdmin && user.accessToken) {
       adminRequest<ProductData[], ProductData>(dispatch, 'post','/products/add_product', user?.accessToken, user?.isAdmin, postDataSuccess, data)
-      adminRequest<ProductData[]>(dispatch, 'get', '/products', user?.accessToken, user?.isAdmin, addProducts)
-    }
+      .then(() => {
+        loadProducts(); 
+        setReadyNotify(true)
+      })}
     setNewProductTitle('')
     setNewProductPrice('')
-    setErrorMessage('');
+    setErrorMessage('')
+    setReadyNotify(false)
   }
 
   const addNewCategory = (e: React.FormEvent) => {
@@ -121,16 +124,15 @@ const AdminProducts = () => {
       setErrorMessage('Такая категория уже существует');
       return;
     }
-
-    const data = {
-      title: newCategoryTitle,
-    }
+    const data = { title: newCategoryTitle }
 
     if (user?.isAdmin && user.accessToken) {
-      adminRequest<CategoryData[], CategoryData>(dispatch, 'get', '/categories/add_category', user?.accessToken, user?.isAdmin, postDataSuccess, data)
+      adminRequest<CategoryData[], CategoryData>(dispatch, 'post', '/categories/add_category', user?.accessToken, user?.isAdmin, postDataSuccess, data)
+      .then (() => loadCategories())
     }
+
     setNewCategoryTitle('')
-    setErrorMessage('');
+    setErrorMessage('')
   }
 
   return (
@@ -161,7 +163,7 @@ const AdminProducts = () => {
                   className='customSelect extra-space-top' 
                   onChange={handleCategoryChange}
                 >
-                  {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
+                  {categories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
                 </select>
                 <select 
                   name="measure" 
@@ -210,7 +212,7 @@ const AdminProducts = () => {
               onChange={handleCategoryFilterChange}
             >
             <option value="all">Все категории</option>
-              {showCategories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
+              {categories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
             </select>
           </div>
         </div>
@@ -227,7 +229,7 @@ const AdminProducts = () => {
           <div className="gridBodyWrapperAdmin">
             <div className="gridBody tableProduct">
               {showProducts.map((product) => 
-                <ProductItem product={product} key={product._id}/>
+                <ProductItem product={product} key={product._id} reloadProducts={loadProducts}/>
               )}
             </div>
           </div>

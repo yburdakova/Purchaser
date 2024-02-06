@@ -5,12 +5,12 @@ import { RootState } from '../redux/store';
 import { InputRefs, ProductData, ProductItemProps } from '../data/types';
 import { addProduct, openOrder, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
-import { useRef, useState } from 'react';
-import { adminRequest} from '../redux/apiCalls'; 
-import { addProducts, postDataSuccess } from '../redux/adminRedux';
+import { useEffect, useRef, useState } from 'react';
+import { adminRequest, postNotification} from '../redux/apiCalls'; 
+import { postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
-const ProductItem = ({product}: ProductItemProps) => {
+const ProductItem = ({product, reloadProducts}: ProductItemProps & { reloadProducts: () => void }) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -19,20 +19,43 @@ const ProductItem = ({product}: ProductItemProps) => {
   
   const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
   const [newPrice, setNewPrice] = useState('');
+  const [priceDifference, setPriceDifference] = useState<number>(0);
 
-  const handleUpdatePrice = (productId: string, newPrice: number) => {
+  useEffect(() => {
+    if (product.priceHistory.length >= 2) {
+      const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
+      const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
+      setPriceDifference(latestPrice - previousPrice);
+    }
+  }, [product.priceHistory]);
+
+  const handleUpdatePrice = async (productId: string, newPrice: number) => {
     if (user?.isAdmin && user.accessToken) {
       const bodyObj = { newPrice };
-      adminRequest<ProductData, { newPrice: number }>(
-        dispatch, 'post',
-        `/products/update-price/${productId}`,
-        user.accessToken,
-        user.isAdmin,
-        postDataSuccess,
-        bodyObj
-      );
+      try {
+        await adminRequest<ProductData, { newPrice: number }>(
+          dispatch, 'post',
+          `/products/update-price/${productId}`,
+          user.accessToken,
+          user.isAdmin,
+          postDataSuccess,
+          bodyObj
+        );
+        const previousPrice = product.price;
+        const priceDifference = newPrice - previousPrice;
+        reloadProducts();
+        postNotification({
+          type: 'priceChange',
+          fromUser: user._id,
+          forAdmin: false,
+          message: `У продукта "${product.title}" изменилась цена. Теперь он на ${Math.abs(priceDifference).toFixed(2)} ₽ ${priceDifference < 0 ? "дешевле" : "дороже"}.`,
+        });
+      } catch (error) {
+        console.error("Ошибка при обновлении цены продукта", error);
+      }
     }
   };
+  
   
   const handleUpdatePriceClick = () => {
     const id = product._id as string;
@@ -53,39 +76,37 @@ const ProductItem = ({product}: ProductItemProps) => {
   }
 
   const handleClickOrderButton = (product: ProductData) => {
-  const existingProductIndex = orderProducts.findIndex(p => p._id === product._id);
-  
-  if (existingProductIndex >= 0) {
-    const updatedProduct = {
-      ...orderProducts[existingProductIndex],
-      quantity: orderProducts[existingProductIndex].quantity + 1,
-      totalPrice: (orderProducts[existingProductIndex].quantity + 1) * orderProducts[existingProductIndex].price,
-    };
-    dispatch(updateProductQuantity({ productId: product._id, quantity: updatedProduct.quantity }));
-  } else {
-    const productToAdd = {
-      ...product,
-      quantity: 1,
-      totalPrice: product.price,
-    };
-    dispatch(addProduct(productToAdd));
-  }
-
-  dispatch(openOrder(true));
+    const existingProductIndex = orderProducts.findIndex(p => p._id === product._id);
+    
+    if (existingProductIndex >= 0) {
+      const updatedProduct = {
+        ...orderProducts[existingProductIndex],
+        quantity: orderProducts[existingProductIndex].quantity + 1,
+        totalPrice: (orderProducts[existingProductIndex].quantity + 1) * orderProducts[existingProductIndex].price,
+      };
+      dispatch(updateProductQuantity({ productId: product._id, quantity: updatedProduct.quantity }));
+    } else {
+      const productToAdd = {
+        ...product,
+        quantity: 1,
+        totalPrice: product.price,
+      };
+      dispatch(addProduct(productToAdd));
+    }
+    dispatch(openOrder(true));
   }
 
   const handeDeleteProduct = () => {
     if (user?.isAdmin && user.accessToken && product._id) {
       adminRequest<ProductData[]>(dispatch, 'delete',`/products/${product._id}`, user?.accessToken, user?.isAdmin, postDataSuccess)
-      adminRequest<ProductData[]>(dispatch, 'get',  '/products', user?.accessToken, user?.isAdmin, addProducts)
+      .then(() => {reloadProducts()})
+      postNotification({
+        type: 'newProduct',
+        fromUser: user._id,
+        forAdmin: false,
+        message: `Продукт "${product.title}" удален и больше не доступен для заказа.`,
+      })
     }
-  }
-
-  let priceDifference = null;
-  if (product.priceHistory.length >= 2) {
-    const latestPrice = product.priceHistory[product.priceHistory.length - 1].price;
-    const previousPrice = product.priceHistory[product.priceHistory.length - 2].price;
-    priceDifference = latestPrice - previousPrice;
   }
 
   return (
@@ -96,7 +117,7 @@ const ProductItem = ({product}: ProductItemProps) => {
       <div className="gridCell centerCell">{product.measure}</div>
       <div className="gridCell b">{product.price.toFixed(2)} ₽</div>
       <div className="gridCell newPriceAnchor">
-        {priceDifference !== null && 
+        {priceDifference !== 0 && 
           <div className={priceDifference > 0 ?'red pp' : 'green pp'}>
             <div className="">{priceDifference.toFixed(2)} ₽</div>
             {priceDifference > 0
