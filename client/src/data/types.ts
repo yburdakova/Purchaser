@@ -95,6 +95,7 @@ export interface UserState {
 export interface AdminState {
   customerRequests: CustomerRequest[],
   users: UserData[];
+  orders: OrderData[];
   products: ProductData[];
   categories: CategoryData[];
   isFetching: boolean;

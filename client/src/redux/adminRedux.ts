@@ -6,6 +6,7 @@ const adminSlice = createSlice({
   initialState: {
     customerRequests: [],
     users: [],
+    orders: [],
     products: [],
     categories: [],
     isFetching: false,
@@ -35,9 +36,11 @@ const adminSlice = createSlice({
     addCategories: (state, action) => {
       state.categories = action.payload
     },
+    addOrders: (state, action) => {
+      state.orders = action.payload
+    },
     postDataSuccess: (state, action)=>{
       state.response = action.payload;
-      console.log("Записались данные в стейт:",state.response)
     },
     fetchingFailure: (state, action) => {
       state.isFetching = false;
@@ -55,6 +58,7 @@ export const {
   addCustomerRequests,
   addUsers,
   addProducts,
+  addOrders,
   addCategories,
   fetchingFailure,
   resetError,

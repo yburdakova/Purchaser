@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { adminRequest } from '../redux/apiCalls';
 import { RootState } from '../redux/store';
-import { CategoryData, CustomerRequest, NotificationData, ProductData, UserData } from '../data/types';
-import { addCategories, addCustomerRequests, addProducts, addUsers} from '../redux/adminRedux';
+import { CategoryData, CustomerRequest, NotificationData, OrderData, ProductData, UserData } from '../data/types';
+import { addCategories, addCustomerRequests, addOrders, addProducts, addUsers} from '../redux/adminRedux';
 import { getNotifications } from '../redux/notificationRedux';
 
 const AdminDashboard = () => {
@@ -20,6 +20,7 @@ const AdminDashboard = () => {
       adminRequest<ProductData[]>(dispatch, 'get','/products', user?.accessToken, user?.isAdmin, addProducts)
       adminRequest<CategoryData[]>(dispatch, 'get', '/categories', user?.accessToken, user?.isAdmin, addCategories)
       adminRequest<NotificationData[]>(dispatch, 'get','/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
+      adminRequest<OrderData[]>(dispatch, 'get','/orders', user?.accessToken, user?.isAdmin, addOrders)
     }
   }, [dispatch, user?.isAdmin, user?.accessToken]);
 

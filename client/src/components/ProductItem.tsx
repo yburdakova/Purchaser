@@ -10,7 +10,7 @@ import { adminRequest, postNotification} from '../redux/apiCalls';
 import { postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
-const ProductItem = ({product, reloadProducts}: ProductItemProps & { reloadProducts: () => void }) => {
+const ProductItem = ({product, reloadProducts}: ProductItemProps & { reloadProducts?: () => void }) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -43,7 +43,7 @@ const ProductItem = ({product, reloadProducts}: ProductItemProps & { reloadProdu
         );
         const previousPrice = product.price;
         const priceDifference = newPrice - previousPrice;
-        reloadProducts();
+        reloadProducts && reloadProducts();
         postNotification({
           type: 'priceChange',
           fromUser: user._id,
@@ -99,7 +99,7 @@ const ProductItem = ({product, reloadProducts}: ProductItemProps & { reloadProdu
   const handeDeleteProduct = () => {
     if (user?.isAdmin && user.accessToken && product._id) {
       adminRequest<ProductData[]>(dispatch, 'delete',`/products/${product._id}`, user?.accessToken, user?.isAdmin, postDataSuccess)
-      .then(() => {reloadProducts()})
+      .then(() => {reloadProducts && reloadProducts()})
       postNotification({
         type: 'newProduct',
         fromUser: user._id,

@@ -129,7 +129,7 @@ const UserProducts = () => {
           </div>
         </div>
         <div className="gridTable">
-          <div className="gridHeader">
+          <div className="gridHeader tableProduct">
             <div className="headerCell">ID</div>
             <div className="headerCell">Товар</div>
             <div className="headerCell">Категория</div>
@@ -139,9 +139,9 @@ const UserProducts = () => {
             <div className="headerCell iconColumn">Действия</div>
           </div>
         <div className="gridBodyWrapperUser">
-        <div className="gridBody">
+        <div className="gridBody tableProduct">
             {showProducts.map((product) => 
-              <ProductItem product={product} key={product._id}/>
+              <ProductItem product={product} key={product._id} />
             )}
           </div>
         </div>

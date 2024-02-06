@@ -1,29 +1,39 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { CategoryData, ProductData } from '../data/types';
-import { getAllUsersData } from '../redux/apiCalls';
+import { CategoryData, NotificationData, ProductData } from '../data/types';
+import { getAllUsersData, getAuthUsersData } from '../redux/apiCalls';
+import { getNotifications } from '../redux/notificationRedux';
 
 const UserDashboard = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const orderProducts = useSelector((state: RootState) => state.order.products)
+  const notifications = useSelector((state: RootState) => state.notifications.notifications);
+  const dispatch = useDispatch();
   
   const [productList, setProductList] = useState<ProductData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [allNotifications, setAllNotifications] = useState<NotificationData[]>([])
+  const [userNotifications, setUserNotifications] = useState<NotificationData[]>([])
 
   useEffect(()=>{
     getAllUsersData("products", setProductList)
     getAllUsersData("categories", setCategories)
-  }, [user]);
+    getAllUsersData('notifications/user_notifications', setAllNotifications)
+    user?.accessToken && getAuthUsersData(`notifications/user_notifications/${user?._id}`, user?.accessToken, setUserNotifications)
+
+  }, [user, allNotifications]);
+
+  useEffect(()=>{
+    const combinedNotifications = [...allNotifications, ...userNotifications];
+    dispatch(getNotifications(combinedNotifications))
+  }, [dispatch, allNotifications, userNotifications]);
 
   return (
     <div className='infopage'>
       UserDashboard
-      <div className="">{productList.length}</div>
-      <div className="">{categories.length}</div>
-      {orderProducts.map((product) => 
-        <div className="" key={product._id}>{product.title}</div>
-      )}
+      <div className="">Продукты{productList.length}</div>
+      <div className="">Уведомления {notifications.length}</div>
+      <div className="">Категории{categories.length}</div>
     </div>
   )
 }
