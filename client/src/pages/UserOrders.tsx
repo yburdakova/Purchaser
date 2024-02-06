@@ -10,17 +10,33 @@ const UserOrders = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
 
   const [orders, setOrders] = useState<OrderData[]>([]);
+  const [filter, setFilter] = useState('Все заявки');
 
   useEffect(()=>{
     user?.accessToken && getAuthUsersData(`orders/find/${user?._id}`, user?.accessToken, setOrders)
   }, [user]);
 
+  const filterOrders = () => {
+    let filteredOrders = orders;
+    if (filter !== 'Все заявки') {
+      filteredOrders = filteredOrders.filter(order => order.status === filter);
+    }
+    return filteredOrders;
+  };
 
   return (
     <div className='infopage'>
-      <div className="">
-        {orders.map((order) => 
-          <OrderItem  order={order} key={order._id}/>
+      <div className="statusButtonsBlock">
+        <button onClick={()=> setFilter('Все заявки')} >Все заявки</button>
+        <button onClick={()=> setFilter('На рассмотрении')} className='orangeButton'>На рассмотрении</button>
+        <button onClick={()=> setFilter('Подтверждена')} className='violetButton'>Подтверждена</button>
+        <button onClick={()=> setFilter('Оплачена')} className='purpleButton'>Оплачена</button>
+        <button onClick={()=> setFilter('Выполнена')} className='greenButton'>Выполнена</button>
+        <button onClick={()=> setFilter('Аннулирована')} className='redButton'>Аннулирована</button>
+      </div>
+      <div className="flexList scrollWrapper">
+        {filterOrders().map((order) => 
+          <OrderItem order={order} key={order._id} />
         )}
       </div>
     </div>

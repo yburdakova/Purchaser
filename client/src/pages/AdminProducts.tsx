@@ -18,7 +18,7 @@ const AdminProducts = () => {
   const response = useSelector((state: RootState) => state.admin.response);
   
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)
-  const [searchedProducts, setSelectedProducts] = useState('')
+  const [searchedProducts, setSearchedProducts] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -198,7 +198,7 @@ const AdminProducts = () => {
             <div className="toolBlockTitle">Быстрый поиск по названию продукта</div>
             <input 
               value={searchedProducts}
-              onChange={(e) => setSelectedProducts(e.target.value)}  
+              onChange={(e) => setSearchedProducts(e.target.value)}  
               className='searchInput'
             />
             <IoSearch className='searchIcon'/>

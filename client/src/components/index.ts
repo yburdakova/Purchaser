@@ -5,9 +5,8 @@ import MenuPanel from "./MenuPanel/MenuPanel";
 import MenuItem from "./MenuItem/MenuItem";
 import OrderListItem from "./OrderListItem";
 import ProductItem from "./ProductItem";
-import OrderItem from "./OrderItem";
 import CustomerItem from "./CustomerItem";
-import OrderItemAdm from "./OrderItemAdm";
+import OrderItem from "./OrderItem";
 
 
 
@@ -19,7 +18,6 @@ export {
   MenuItem,
   OrderListItem,
   ProductItem,
-  OrderItem,
   CustomerItem,
-  OrderItemAdm
+  OrderItem
 }

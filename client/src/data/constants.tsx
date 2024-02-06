@@ -88,7 +88,7 @@ export const notificationTitles: NotificationTitleMap = {
     icon: <PiShieldWarningBold />
   },
   orderStatusChange: {
-    title:"Изменение статуса заказа",
+    title:"Изменение статуса заявки",
     icon: <VscGitPullRequestGoToChanges />
   }
 };

@@ -15,6 +15,7 @@
   border-radius: 10px;
   border: 1px solid #57606E;
   padding: 10px;
+  position: relative;
 }
 .flexListItem:hover{
   background-color: #253043;
@@ -131,7 +132,10 @@ footer {
   align-items: center;
   color:  rgba(255, 255, 255, 0.87);
 }
-
+.statusButtonsBlock{
+  display: flex;
+  gap: 10px;
+}
 .footer_contact:hover .shake{
   animation: spin 0.5s ease-in-out;
   transition: all 0.3s ease 0s;
@@ -149,13 +153,42 @@ footer {
   text-decoration: none;
   position: relative;
 }
+.colorLabel{
+  width: 20px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.orderItem{
+  padding-left: 40px;
+}
 .green{
   color:rgb(27, 193, 27);
 }
 .red{
   color:red;
 }
-
+.orangeButton{
+  background-color: #ce8912;
+}
+.redButton{
+  background-color: #df1e2e;
+}
+.purpleButton{
+  background-color: #5b10e5;
+}
+.regularButton{
+  background-color: #4A7BD0;
+}
+.greenButton{
+  background-color: rgb(27, 193, 27);
+}
+.violetButton{
+  background-color: #8514b6;
+}
 .dev_link::after {
   content: '';
   position: absolute;
@@ -178,7 +211,9 @@ footer {
   display: flex;
   gap: 10px;
 }
-
+.odredDetails{
+  margin-left: 40px;
+}
 
 .widgetBox{
   margin: 10px;
@@ -310,7 +345,11 @@ footer {
 .tools{
   margin-top: 10px;
 }
-
+.scrollWrapper{
+  max-height: 680px;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
 .addSpace{
   display: flex;
   width: 100%;
@@ -378,6 +417,9 @@ footer {
 
   .footer_contact{
     color: #2b4357;
+  }
+  .flexListItem:hover{
+    background-color: #E1E8F5;
   }
 
   .footer_contact:hover .footerIcon{
