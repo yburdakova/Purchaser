@@ -63,7 +63,6 @@ router.get("/user_notifications", async (req, res) => {
   try {
     const notifications = await Notification.find({ toUser: null, forAdmin:false}).sort({ createdAt: -1 });
     res.status(200).json(notifications);
-    console.log(notifications);
   } catch (err) {
     res.status(500).json(err);
   }

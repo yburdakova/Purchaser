@@ -7,6 +7,7 @@ import OrderListItem from "./OrderListItem";
 import ProductItem from "./ProductItem";
 import OrderItem from "./OrderItem";
 import CustomerItem from "./CustomerItem";
+import OrderItemAdm from "./OrderItemAdm";
 
 
 
@@ -19,5 +20,6 @@ export {
   OrderListItem,
   ProductItem,
   OrderItem,
-  CustomerItem
+  CustomerItem,
+  OrderItemAdm
 }

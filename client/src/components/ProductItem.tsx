@@ -10,7 +10,7 @@ import { adminRequest, postNotification} from '../redux/apiCalls';
 import { postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
-const ProductItem = ({product, reloadProducts}: ProductItemProps & { reloadProducts?: () => void }) => {
+const ProductItem = ({product, reloadProducts}: ProductItemProps ) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);

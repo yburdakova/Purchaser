@@ -38,15 +38,12 @@ const AdminRequests = () => {
   }
 
   useEffect(() => {
-    console.log(requests)
     const filteredNewUserRequests = requests.filter(request => request.type === 'newUser');
     setNewUserRequests(filteredNewUserRequests);
     const filteredNewPasswordRequests = requests.filter(request => request.type === 'newPassword');
     setNewPasswordRequests(filteredNewPasswordRequests);
     const filteredClosedRequests = requests.filter(request => request.type === 'completed' || request.type === 'rejected' );
     setClosedRequests(filteredClosedRequests)
-    console.log("Заявки на нового клиента",newUserRequests)
-    console.log("Заявки на смену пароля", newPasswordRequests)
   }, [requests]);
 
   const handleReject = async (id: string) => {

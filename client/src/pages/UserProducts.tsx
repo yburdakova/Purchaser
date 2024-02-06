@@ -81,12 +81,13 @@ const UserProducts = () => {
         console.log(currentOrder);
         const res = await userRequest(user.accessToken).post("/orders", currentOrder);
         console.log(res.data);
-        dispatch(cleanOrder());
+        const requestId = res.data._id;
         postNotification ({
           fromUser: user?._id,
           type: 'newOrder',
           forAdmin: true,
           message: `Поступила новая заявка от клиента ${user?.title} на сумму ${order.totalPrice} ₽`,
+          data: {requestId}
         })
       } catch (error) {
         console.log(error);
@@ -96,9 +97,8 @@ const UserProducts = () => {
   };
 
   const addOrder = () => {
-    console.log("Clicked ADD ORDER")
     createOrder();
-    
+    dispatch(cleanOrder());
   }
 
   return (

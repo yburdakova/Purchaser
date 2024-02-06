@@ -63,8 +63,8 @@ export interface InputRefs {
 export interface OrderData {
   _id?: string;
   userId? : string;
-  products: ProductData[];
-  amount: number;
+  products?: ProductData[];
+  amount?: number;
   status: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -90,6 +90,7 @@ export interface UserState {
   isAdmin: boolean;
   isActive: boolean;
   error: string | null;
+  response: object | null;
 }
 
 export interface AdminState {
@@ -145,8 +146,14 @@ export interface OrderListItemProps {
 export interface CustomerItemProps{
   customer: UserData
 }
+
+export interface OrderItemAdmProps {
+  order: OrderData;
+  reloadOrders?: () => void 
+}
 export interface ProductItemProps {
   product: ProductData;
+  reloadProducts?: () => void 
 }
 export interface MenuItemProps{
   title: string;

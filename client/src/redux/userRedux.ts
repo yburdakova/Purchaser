@@ -8,7 +8,8 @@ const userSlice = createSlice({
     isFetching: false,
     isAdmin: false,
     isActive: true,
-    error: null
+    error: null,
+    response: null
   } as UserState,
   
   reducers: {
@@ -36,6 +37,9 @@ const userSlice = createSlice({
       } else {
         state.error = "Что-то пошло не так...";
       }
+    },
+    postDataSuccess: (state, action)=>{
+      state.response = action.payload;
     },
     resetError: (state) => {
       state.error = null;
