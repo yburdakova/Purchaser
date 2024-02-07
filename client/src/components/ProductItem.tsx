@@ -113,7 +113,7 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
 
   return (
     <div className={`gridRow ${focused && "focusedGridRow"}`} key={product._id} id={product._id} >
-      <div className="gridCell">{product.customId} {focused ? "1": "0"}</div>
+      <div className="gridCell">{product.customId}</div>
       <div className="gridCell b">{product.title}</div>
       <div className="gridCell">{product.category}</div>
       <div className="gridCell centerCell">{product.measure}</div>
@@ -175,8 +175,8 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
           </div>
         </div>
         :  <div className="gridCell iconColumn">
-            <div data-tooltip="Добавить в заказ" className="icon-button" >
-              <MdAssignmentAdd size={24} onClick={() => product && handleClickOrderButton(product)}/>
+            <div data-tooltip="Добавить в заказ" className={user?.isActive ? "icon-button" : "inactiveIcon"} >
+              <MdAssignmentAdd size={24} onClick={() => product && user?.isActive && handleClickOrderButton(product)}/>
             </div>
             <div className="inactiveIcon" data-tooltip="Посмотреть детали" >
               <FaRegEye size={24} />

@@ -25,7 +25,7 @@ const adminSlice = createSlice({
       state.error = null
     },
     addCustomerRequests: (state, action) => {
-      state.customerRequests = action.payload
+      state.customerRequests = [...action.payload].reverse();
     },
     addUsers: (state, action) => {
       state.users = action.payload
@@ -37,7 +37,7 @@ const adminSlice = createSlice({
       state.categories = action.payload
     },
     addOrders: (state, action) => {
-      state.orders = action.payload
+      state.orders = [...action.payload].reverse();
     },
     postDataSuccess: (state, action)=>{
       state.response = action.payload;

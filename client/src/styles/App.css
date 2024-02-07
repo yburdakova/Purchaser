@@ -6,7 +6,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 20px 0;
 }
 
 .flexListItem{
@@ -261,7 +260,7 @@ footer {
 }
 .inactiveIcon {
   color: #57606E;
-  
+  cursor: not-allowed;
 }
 .inactiveIcon:hover{
   cursor: not-allowed;
@@ -346,7 +345,7 @@ footer {
   margin-top: 10px;
 }
 .scrollWrapper{
-  max-height: 680px;
+  max-height: 660px;
   overflow-y: auto;
   padding-bottom: 20px;
 }

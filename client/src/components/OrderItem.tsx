@@ -7,18 +7,42 @@ import { adminRequest, postNotification } from '../redux/apiCalls';
 import { formatDate } from '../middleware/formatDate';
 import { AiOutlineFileAdd, AiOutlineFileDone, AiOutlineFileExcel } from 'react-icons/ai';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa6';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { OrderListItem } from '.';
 import { formatId } from '../middleware/formatId';
+import { setFocusedId } from '../redux/notificationRedux';
 
 const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   const dispatch = useDispatch();
+  const orderRef = useRef(null);
+  
   const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
   const user = useSelector((state: RootState) => state.user.currentUser);
   const users = useSelector((state: RootState) => state.admin.users);
   const customer = users.find(user => user._id === order.userId)
 
   const [showDetails, setShowDetails] = useState(false)
+
+  useEffect(() => {
+    if (focusedId === order._id && orderRef.current) {
+      orderRef.current.scrollIntoView({
+        behavior: 'smooth', // Плавная прокрутка
+        block: 'end', // Ближайшее краевое выравнивание
+      });
+    }
+  }, [focusedId, order._id]);
+
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      if (focusedId && e.target.closest('.orderItem') === null) {
+        dispatch(setFocusedId(''));
+      }
+    };
+    window.addEventListener('click', handleGlobalClick);
+    return () => {
+      window.removeEventListener('click', handleGlobalClick);
+    };
+  }, [focusedId, dispatch]);
 
   const toggleDetails = () => {
     setShowDetails(!showDetails)
@@ -86,7 +110,7 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   
   return (
     <div>
-      <div key={order._id} className={`orderItem flexListItem ${focusedId === order._id && `flexListItem flexListItemFocused`}`}>
+      <div key={order._id} id={order._id} ref={orderRef} className={`orderItem flexListItem ${focusedId === order._id && `flexListItem flexListItemFocused`}`}>
         <div className={`colorLabel       
           ${order.status === "На рассмотрении" ? "orangeButton" 
           : order.status === "Подтверждена" ? "violetButton" 
@@ -102,7 +126,7 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
         <div data-tooltip="Посмотреть детали" className="icon-button" onClick={toggleDetails}>
           {showDetails ? <FaRegEyeSlash size={24}/> : <FaRegEye size={24}/> }
         </div>
-        <div data-tooltip="Распечатать заявку" className="icon-button">
+        <div data-tooltip="Распечатать заявку" className="inactiveIcon">
           <MdPrint size={24}/>
         </div>
         {user?.isAdmin && availableActions()}

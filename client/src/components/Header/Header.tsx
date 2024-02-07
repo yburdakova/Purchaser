@@ -6,7 +6,7 @@ import styles from './Header.module.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { loginFinish } from '../../redux/userRedux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { menuLinks } from '../../data/constants';
+import { menuLinks, userMenuLinks } from '../../data/constants';
 import { RootState } from '../../redux/store';
 import { notificationTitles } from '../../data/constants';
 import { NotificationData, NotificationType } from '../../data/types';
@@ -31,9 +31,9 @@ const Header = () => {
 
   useEffect(() => {
     const currentPath = location.pathname.split('/').pop();
-    const currentMenuItem = menuLinks.find(link => link.path === currentPath);
+    const currentMenuItem = user?.isAdmin ? menuLinks.find(link => link.path === currentPath) : userMenuLinks.find(link => link.path === currentPath);
     setPageTitle(currentMenuItem ? currentMenuItem.title : 'Page Name');
-  }, [location]);
+  }, [location, user]);
 
   useEffect(() => {
     const filtredNotify = notifications.filter(notification => !notification.isRead)
