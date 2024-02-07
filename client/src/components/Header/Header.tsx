@@ -11,7 +11,6 @@ import { RootState } from '../../redux/store';
 import { notificationTitles } from '../../data/constants';
 import { NotificationData, NotificationType } from '../../data/types';
 import { userRequest } from '../../middleware/requestMethods';
-import { adminRequest } from '../../redux/apiCalls';
 import { MdAssignment } from 'react-icons/md';
 import { openOrder } from '../../redux/orderRedux';
 import { getNotifications, setFocusedId } from '../../redux/notificationRedux';
@@ -56,32 +55,45 @@ const Header = () => {
     }
   }
   
-  const toNotify = async (id: string, linkedId: string, type: NotificationType) => {
-    dispatch(setFocusedId(linkedId))
-    if (user && user?.accessToken && user?.isAdmin) {
+  const toNotify = async (id: string, type: NotificationType, linkedId?: string) => {
+    if (linkedId) {
+      dispatch(setFocusedId(linkedId));
+    }
+    if (user && user.accessToken) {
       try {
         await userRequest(user.accessToken).patch(`/notifications/update_notification/${id}`, {});
         switch (type) {
           case 'customerRequest':
-            navigate('/admin/requests');
+            navigate(user.isAdmin ? '/admin/requests' : '/user');
             break;
           case 'newOrder':
-            navigate('/admin/orders');
+            navigate(user.isAdmin ? '/admin/orders' : '/user');
             break;
           case 'newProduct':
-            navigate('/admin/products');
+            navigate('/user/products');
             break;
+          case 'orderStatusChange':
+            navigate('/user/orders');
+            break;
+          case 'statusChange':
+            navigate('/user/account');
+            break; 
+            case 'priceChange':
+              navigate('/user/products');
+              break; 
           default:
             console.log('Unknown notification type');
         }
-        adminRequest<NotificationData[]>(dispatch, 'get','/notifications/admin_notifications', user?.accessToken, user?.isAdmin, getNotifications)
-        setIsNotify(false)
+        const path = user.isAdmin ? '/notifications/admin_notifications' : `/notifications/user_notifications/${user._id}`;
+        const updatedNotifications = await userRequest(user.accessToken).get<NotificationData[]>(path);
+        dispatch(getNotifications(updatedNotifications.data));
+        setIsNotify(false);
       } catch (error) {
         console.error('Failed to update notification', error);
       }
     }
-      
-  }
+};
+
 
   return (
     <header>
@@ -116,7 +128,7 @@ const Header = () => {
               <div 
                 key={notification._id} 
                 className={styles.notifyItem} 
-                onClick={()=> toNotify(notification._id, notification.data.requestId, notification.type)}
+                onClick={()=> toNotify(notification._id, notification.type, notification.data?.requestId)}
               >
                 <div className={styles.notifyIcon}>{notificationTitles[notification.type].icon}</div>
                 <div className="">

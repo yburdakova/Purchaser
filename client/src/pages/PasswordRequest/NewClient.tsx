@@ -34,7 +34,6 @@ const NewClient = () => {
         setIsExist(true);
       } else if (response.data._id) {
         const requestId = response.data._id;
-        console.log(requestId);
         postNotification({
           type: 'customerRequest',
           forAdmin: true,

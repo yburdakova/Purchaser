@@ -1,6 +1,6 @@
 import express from 'express';
 import { Notification } from '../models/Notification.js';
-import { verifyTokenAndAuthorization, verifyTokenAndAdmin } from '../middleware/verifyToken.js';
+import { verifyTokenAndAuthorization, verifyTokenAndAdmin, verifyToken } from '../middleware/verifyToken.js';
 
 const router = express.Router();
 
@@ -33,7 +33,7 @@ router.get("/admin_notifications", verifyTokenAndAdmin, async (req, res) => {
 });
 
 // SET NOTIFICATION IS READ
-router.patch("/update_notification/:notificationId", verifyTokenAndAuthorization, async (req, res) => {
+router.patch("/update_notification/:notificationId", verifyToken, async (req, res) => {
   const notificationId = req.params.notificationId;
   try {
     const updatedNotification = await Notification.findByIdAndUpdate(

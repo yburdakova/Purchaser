@@ -14,6 +14,7 @@ const UserProducts = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
   const order = useSelector((state: RootState) => state.order);
+  const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
   const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
   const { products, totalPrice } = useSelector((state: RootState) => state.order);
 
@@ -141,7 +142,7 @@ const UserProducts = () => {
         <div className="gridBodyWrapperUser">
         <div className="gridBody tableProduct">
             {showProducts.map((product) => 
-              <ProductItem product={product} key={product._id} />
+              <ProductItem product={product} focused={focusedId === product._id} key={product._id} />
             )}
           </div>
         </div>
@@ -169,7 +170,7 @@ const UserProducts = () => {
             </thead>
             <tbody>
             {products.map((product, index) => (
-              <OrderListItem product={product} index={index} key={`${product._id}_${product.quantity}`} />
+                <OrderListItem product={product} index={index} key={`${product._id}_${product.quantity}`} />
             ))}
             </tbody>
           </table>

@@ -56,11 +56,11 @@ export const adminRequest = async <T, U = undefined>(
 
 export const getAllUsersData = async <T>(
   path: string, 
-  setData: (value: T | ((prevState: T) => T)) => void
+  setData?: (value: T | ((prevState: T) => T)) => void
 ) => {
   try {
     const res = await axios.get<T>(`http://localhost:5000/api/${path}`);
-    setData(res.data);
+    setData && setData(res.data);
   } catch (error) {
     const axiosError = error as AxiosError;
     if (error) {
@@ -73,11 +73,11 @@ export const getAllUsersData = async <T>(
 export const getAuthUsersData = async <T>(
   path: string, 
   token: string, 
-  setData: (value: T | ((prevState: T) => T)) => void
+  setData?: (value: T | ((prevState: T) => T)) => void
 ) => {
   try {
     const res = await userRequest(token).get<T>(path);
-    setData(res.data);
+    setData && setData(res.data);
   } catch (error) {
     const axiosError = error as AxiosError;
     if (error) {

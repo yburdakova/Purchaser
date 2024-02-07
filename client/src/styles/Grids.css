@@ -251,6 +251,9 @@ th, td{
   animation: slideInFromRight 0.2s ease-out forwards;
 }
 
+.focusedGridRow > div{
+  border: 2px solid #4A7BD0;
+}
 
 @keyframes slideInFromRight {
   from {

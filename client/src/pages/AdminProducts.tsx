@@ -36,12 +36,13 @@ const AdminProducts = () => {
 
   useEffect(()=> {
     if (user?.isAdmin && user.accessToken && response && readyNotify) {
+      const requestId = response._id
       postNotification({
         type: 'newProduct',
         fromUser: user._id,
         forAdmin: false,
         message: `Новый продукт "${response.title}" добавлен в базу и доступен для заказа.`,
-        data: { relatedId: response._id }
+        data: { requestId }
     })}
   },[readyNotify])
 

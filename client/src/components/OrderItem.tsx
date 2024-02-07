@@ -29,6 +29,7 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
     const data = {
       status: newStatus
     }
+    const requestId = order._id
     if (user?.isAdmin && user.accessToken) {
       adminRequest<OrderData[], OrderData>(dispatch, 'put', `/orders/${order._id}`, user?.accessToken, user?.isAdmin, postDataSuccess, data)
       .then (() => {
@@ -38,6 +39,7 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
           toUser: order.userId,
           forAdmin: false,
           message: `Статус вашей Зявки № ${order._id && formatId(order._id)} изменился. Заявка ${newStatus}. `,
+          data: { requestId }
       });}
       )
       
@@ -83,8 +85,8 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   }
   
   return (
-    <div className="">
-      <div className={`orderItem flexListItem ${focusedId === order._id && `flexListItem flexListItemFocused`}`}>
+    <div>
+      <div key={order._id} className={`orderItem flexListItem ${focusedId === order._id && `flexListItem flexListItemFocused`}`}>
         <div className={`colorLabel       
           ${order.status === "На рассмотрении" ? "orangeButton" 
           : order.status === "Подтверждена" ? "violetButton" 

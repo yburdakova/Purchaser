@@ -34,7 +34,7 @@ export interface NotificationData {
   isRead: boolean;
   type: NotificationType;
   forAdmin: boolean;
-  data: {
+  data?: {
     requestId: string;
   };
   createdAt: Date;
@@ -139,6 +139,7 @@ export interface CustomInputProps {
 
 export interface OrderListItemProps {
   product: ProductData; 
+
   index: number;
   createdOrder?: boolean;
 }
@@ -153,6 +154,7 @@ export interface OrderItemAdmProps {
 }
 export interface ProductItemProps {
   product: ProductData;
+  focused?: boolean;
   reloadProducts?: () => void 
 }
 export interface MenuItemProps{

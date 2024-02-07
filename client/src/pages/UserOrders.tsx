@@ -8,7 +8,7 @@ import { OrderItem } from "../components";
 const UserOrders = () => {
 
   const user = useSelector((state: RootState) => state.user.currentUser);
-
+  // const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
   const [orders, setOrders] = useState<OrderData[]>([]);
   const [filter, setFilter] = useState('Все заявки');
 

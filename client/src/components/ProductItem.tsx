@@ -10,7 +10,7 @@ import { adminRequest, postNotification} from '../redux/apiCalls';
 import { postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 
-const ProductItem = ({product, reloadProducts}: ProductItemProps ) => {
+const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -43,12 +43,14 @@ const ProductItem = ({product, reloadProducts}: ProductItemProps ) => {
         );
         const previousPrice = product.price;
         const priceDifference = newPrice - previousPrice;
+        const requestId = productId
         reloadProducts && reloadProducts();
         postNotification({
           type: 'priceChange',
           fromUser: user._id,
           forAdmin: false,
           message: `У продукта "${product.title}" изменилась цена. Теперь он на ${Math.abs(priceDifference).toFixed(2)} ₽ ${priceDifference < 0 ? "дешевле" : "дороже"}.`,
+          data: { requestId }
         });
       } catch (error) {
         console.error("Ошибка при обновлении цены продукта", error);
@@ -110,8 +112,8 @@ const ProductItem = ({product, reloadProducts}: ProductItemProps ) => {
   }
 
   return (
-    <div className="gridRow" key={product._id} id={product._id}>
-      <div className="gridCell">{product.customId}</div>
+    <div className={`gridRow ${focused && "focusedGridRow"}`} key={product._id} id={product._id} >
+      <div className="gridCell">{product.customId} {focused ? "1": "0"}</div>
       <div className="gridCell b">{product.title}</div>
       <div className="gridCell">{product.category}</div>
       <div className="gridCell centerCell">{product.measure}</div>
