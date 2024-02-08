@@ -11,9 +11,14 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/mongoose": "^5.11.97",
     "@types/react-redux": "^7.1.33",
     "@types/react-router-dom": "^5.3.3",
+    "@vercel/node": "^3.0.17",
     "axios": "^1.6.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.1",
+    "jsonwebtoken": "^9.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icon": "^1.0.0",
@@ -21,9 +26,13 @@
     "react-input-mask": "^2.0.4",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.21.3",
+    "recharts": "^2.11.0",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.11.16",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@types/react-input-mask": "^3.0.5",

@@ -56,6 +56,8 @@ const Header = () => {
   }
   
   const toNotify = async (id: string, type: NotificationType, linkedId?: string) => {
+    dispatch(setFocusedId(''));
+    await new Promise(resolve => setTimeout(resolve, 10));
     if (linkedId) {
       dispatch(setFocusedId(linkedId));
     }

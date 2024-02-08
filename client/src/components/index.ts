@@ -7,6 +7,8 @@ import OrderListItem from "./OrderListItem";
 import ProductItem from "./ProductItem";
 import CustomerItem from "./CustomerItem";
 import OrderItem from "./OrderItem";
+import ProductStatsBarChart from "./ProductStatsBarChart";
+
 
 
 
@@ -19,5 +21,6 @@ export {
   OrderListItem,
   ProductItem,
   CustomerItem,
-  OrderItem
+  OrderItem,
+  ProductStatsBarChart
 }

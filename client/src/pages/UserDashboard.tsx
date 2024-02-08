@@ -1,24 +1,31 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { CategoryData, NotificationData, ProductData } from '../data/types';
+import {  NotificationData, ProductData } from '../data/types';
 import { getAllUsersData } from '../redux/apiCalls';
 import { getNotifications } from '../redux/notificationRedux';
 import axios from 'axios';
 import { userRequest } from '../middleware/requestMethods';
+import { calculateProductStat, getProducts } from '../redux/dashboardRedux';
+import { ProductStatsBarChart } from '../components';
 
 const UserDashboard = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const notifications = useSelector((state: RootState) => state.notifications.notifications);
+  // const productStats = useSelector((state: RootState) => state.dashboard.productStats)
   const dispatch = useDispatch();
-  
   const [productList, setProductList] = useState<ProductData[]>([]);
-  const [categories, setCategories] = useState<CategoryData[]>([]);
+
 
   useEffect(() => {
     getAllUsersData("products", setProductList);
-    getAllUsersData("categories", setCategories);
+
 }, []); 
+
+  useEffect(() => {
+    dispatch(getProducts(productList))
+    dispatch(calculateProductStat());
+  },[productList])
 
 useEffect(() => {
   const fetchNotifications = async () => {
@@ -55,10 +62,18 @@ useEffect(() => {
 
   return (
     <div className='infopage'>
-      UserDashboard
-      <div className="">Продукты{productList.length}</div>
-      <div className="">Уведомления {notifications.length}</div>
-      <div className="">Категории{categories.length}</div>
+      
+      <div className="">На общую сумму: {notifications.length}</div>
+      <div className="">В этом месяце: {notifications.length}</div>
+
+      <div className="">Всего заявок: {productList.length}</div>
+      <div className="">На общую сумму: {notifications.length}</div>
+      <div className="">В этом месяце: {notifications.length}</div>
+      <div className="wigetBox">
+        <div className="">Всего продуктов в базе: {productList.length}</div>
+        <ProductStatsBarChart />
+      </div>
+
     </div>
   )
 }

@@ -52,9 +52,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
     try {
         const updatedCustomer = await Customer.findByIdAndUpdate(
             req.params.id,
-            {
-            $set: req.body,
-            },
+            { $set: req.body,},
             { new: true }
         );
         res.status(200).json(updatedCustomer);

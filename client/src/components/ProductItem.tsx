@@ -14,6 +14,7 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
 
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
+  const active = useSelector((state: RootState) => state.user.isActive);
   const orderProducts = useSelector((state: RootState) => state.order.products)
   const inputRefs = useRef<InputRefs>({});
   
@@ -175,8 +176,8 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
           </div>
         </div>
         :  <div className="gridCell iconColumn">
-            <div data-tooltip="Добавить в заказ" className={user?.isActive ? "icon-button" : "inactiveIcon"} >
-              <MdAssignmentAdd size={24} onClick={() => product && user?.isActive && handleClickOrderButton(product)}/>
+            <div data-tooltip="Добавить в заказ" className={active ? "icon-button" : "inactiveIcon"} >
+              <MdAssignmentAdd size={24} onClick={() => product && active && handleClickOrderButton(product)}/>
             </div>
             <div className="inactiveIcon" data-tooltip="Посмотреть детали" >
               <FaRegEye size={24} />

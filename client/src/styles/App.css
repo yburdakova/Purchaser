@@ -198,6 +198,11 @@ footer {
   background-color:  #4A7BD0; 
   transition: width 0.3s ease-in-out; 
 }
+/* ======================== ACCOUNT PAGE ============================= */
+
+.customerTitle{
+  font-size: 2em;
+}
 /* ======================== ORDER PAGE ============================= */
 
 .orderPageItem{

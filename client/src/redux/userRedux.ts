@@ -41,6 +41,10 @@ const userSlice = createSlice({
     postDataSuccess: (state, action)=>{
       state.response = action.payload;
     },
+    changeActive: (state, action)=>{
+      state.isActive = action.payload ;
+  
+    },
     resetError: (state) => {
       state.error = null;
     },
@@ -53,8 +57,8 @@ export const {
   loginSuccess,
   loginFailure,
   resetError,
+  changeActive,
   adminAccess
-
 } = userSlice.actions;
 
 export default userSlice.reducer;

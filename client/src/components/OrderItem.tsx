@@ -24,17 +24,8 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   const [showDetails, setShowDetails] = useState(false)
 
   useEffect(() => {
-    if (focusedId === order._id && orderRef.current) {
-      orderRef.current.scrollIntoView({
-        behavior: 'smooth', // Плавная прокрутка
-        block: 'end', // Ближайшее краевое выравнивание
-      });
-    }
-  }, [focusedId, order._id]);
-
-  useEffect(() => {
-    const handleGlobalClick = (e) => {
-      if (focusedId && e.target.closest('.orderItem') === null) {
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (focusedId && !(e.target as Element).closest('.orderItem')) {
         dispatch(setFocusedId(''));
       }
     };

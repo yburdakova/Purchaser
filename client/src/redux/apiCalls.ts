@@ -77,7 +77,12 @@ export const getAuthUsersData = async <T>(
 ) => {
   try {
     const res = await userRequest(token).get<T>(path);
-    setData && setData(res.data);
+    if ( setData){
+      setData(res.data)
+    } else {
+      return res.data
+    }
+
   } catch (error) {
     const axiosError = error as AxiosError;
     if (error) {
