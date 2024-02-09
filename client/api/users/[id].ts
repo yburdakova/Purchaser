@@ -1,42 +1,42 @@
-// Файл /api/users/[id].ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { connectToDatabase } from '../../utils/db';
-import { User } from '../models/User';
 import CryptoJS from 'crypto-js';
+import { connectToDatabase } from '../../utils/db';
+import { User } from '../models/User.ts';
 import { verifyTokenAndAdmin } from '../../utils/verifyToken';
+import { UserData } from '../../src/data/types.ts';
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   if (req.method !== 'PUT') {
-    return res.status(405).send(`Method ${req.method} Not Allowed`);
+    res.status(405).send(`Method ${req.method} Not Allowed`);
+    return;
   }
 
-  const { id } = req.query; 
-  let { password, contacts, ...update } = req.body;
-
-  if (password) {
-    password = CryptoJS.AES.encrypt(password, process.env.PASSWORD_SECRET).toString();
-  }
+  const { id } = req.query as { id: string };
+  const bodyData = req.body as UserData;
+  const { password: passwordFromBody, contacts } = bodyData;
 
   await connectToDatabase();
 
-  const adminCheck = await verifyTokenAndAdmin(req);
-  if (!adminCheck.success) {
-    return res.status(adminCheck.status).json(adminCheck.message);
+  const adminCheckResult = await verifyTokenAndAdmin(req);
+  if (!adminCheckResult.success) {
+    res.status(adminCheckResult.status!).json({ message: adminCheckResult.message! });
+    return;
+  }
+
+  const updateQuery: Omit<UserData, 'password'> & { password?: string } = { ...bodyData, password: undefined };
+  if (passwordFromBody) {
+    updateQuery.password = CryptoJS.AES.encrypt(passwordFromBody, process.env.PASSWORD_SECRET!).toString();
   }
 
   try {
-    if (contacts) {
-      await User.findByIdAndUpdate(id, {
-        $set: { ...update, password },
-        $push: { contacts: { $each: contacts } }
-      }, { new: true });
-    } else {
-      await User.findByIdAndUpdate(id, {
-        $set: { ...update, password }
-      }, { new: true });
+    const updateOptions = contacts ? { $set: updateQuery, $push: { contacts: { $each: contacts } } } : { $set: updateQuery };
+    const updatedUser = await User.findByIdAndUpdate(id, updateOptions, { new: true }).select('-password');
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
     }
 
-    const updatedUser = await User.findById(id);
     res.status(200).json(updatedUser);
   } catch (error) {
     console.error("Error updating user:", error);

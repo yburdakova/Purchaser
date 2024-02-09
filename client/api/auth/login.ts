@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import CryptoJS from 'crypto-js';
 import jwt from 'jsonwebtoken';
 import { connectToDatabase } from '../../utils/db';
-import { User } from '../models/User.ts'; // Убедитесь, что путь к модели корректный
+import { User } from '../models/User.ts'; 
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   if (req.method !== 'POST') {

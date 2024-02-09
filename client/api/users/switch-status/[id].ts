@@ -1,6 +1,6 @@
 // Файл /api/users/switch-status/[id].ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { connectToDatabase } from '../../utils/db';
+import { connectToDatabase } from '../../../utils/db.ts';
 import { User } from '../../models/User.ts';
 import { verifyTokenAndAdmin } from '../../middleware/verifyToken.js';
 
@@ -14,7 +14,6 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<void> =>
 
   await connectToDatabase();
 
-  // Проверка токена и прав администратора
   const adminCheck = await verifyTokenAndAdmin(req);
   if (!adminCheck.success) {
     return res.status(adminCheck.status).json(adminCheck.message);
