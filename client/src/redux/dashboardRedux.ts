@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DashboardSlice, ProductData, productStatsItem } from "../data/types";
+import { DashboardSlice, ProductData, ProductStatsItem} from "../data/types";
 
 const dashboardSlice = createSlice({
   name: "dashboard",
@@ -22,7 +22,7 @@ const dashboardSlice = createSlice({
           categoryCounts[product.category] = 1;
         }
       });
-      const productStats = Object.entries(categoryCounts).map(([categoryTitle, quantity]): productStatsItem => ({
+      const productStats = Object.entries(categoryCounts).map(([categoryTitle, quantity]): ProductStatsItem => ({
         categoryTitle,
         quantity: quantity
       }));

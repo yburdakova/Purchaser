@@ -1,9 +1,9 @@
-// api/auth/register.ts
+
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { connectToDatabase } from '../../utils/db';
-import { User }from '../../models/User.ts'; // Убедитесь, что путь к модели корректный
 import CryptoJS from 'crypto-js';
-import { RegisterRequestBody } from '../../types'; // Предполагается, что этот файл содержит определение типа
+import { User } from '../models/User.ts';
+import { UserData } from '../../src/data/types.ts';
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   if (req.method !== 'POST') {
@@ -13,8 +13,8 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<void> =>
 
   await connectToDatabase();
 
-  const { title, email, contacts, password }: RegisterRequestBody = req.body;
-  const hashedPassword = CryptoJS.AES.encrypt(password, process.env.PASSWORD_SECRET!).toString();
+  const { title, email, contacts, password }: UserData = req.body;
+  const hashedPassword = password && CryptoJS.AES.encrypt(password, process.env.PASSWORD_SECRET!).toString();
 
   try {
     const newUser = new User({ title, email, contacts, password: hashedPassword });

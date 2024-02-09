@@ -7,7 +7,7 @@ import { getNotifications } from '../redux/notificationRedux';
 import axios from 'axios';
 import { userRequest } from '../middleware/requestMethods';
 import { calculateProductStat, getProducts } from '../redux/dashboardRedux';
-import { ProductStatsBarChart } from '../components';
+import { CustomActiveShapePieChart, ProductStatsBarChart } from '../components';
 
 const UserDashboard = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -71,7 +71,10 @@ useEffect(() => {
       <div className="">В этом месяце: {notifications.length}</div>
       <div className="wigetBox">
         <div className="">Всего продуктов в базе: {productList.length}</div>
-        <ProductStatsBarChart />
+        <div className="flexBox">
+          <ProductStatsBarChart />
+          <CustomActiveShapePieChart/>
+        </div> 
       </div>
 
     </div>

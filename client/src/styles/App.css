@@ -7,6 +7,10 @@
   flex-direction: column;
   gap: 10px;
 }
+.flexBox{
+  display: flex;
+  gap: 10px;
+}
 
 .flexListItem{
   display: flex;

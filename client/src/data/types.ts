@@ -93,14 +93,15 @@ export interface UserState {
   response: object | null;
 }
 
-export interface productStatsItem{
+export interface ProductStatsItem{
+  value?: number;
   categoryTitle: string;
   quantity: number;
 }
 
 export interface DashboardSlice {
   products: ProductData[],
-  productStats: productStatsItem[],
+  productStats: ProductStatsItem[],
 }
 
 export interface AdminState {
