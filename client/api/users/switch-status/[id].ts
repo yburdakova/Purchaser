@@ -1,28 +1,36 @@
-// Файл /api/users/switch-status/[id].ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { connectToDatabase } from '../../../utils/db.ts';
+import { connectToDatabase } from '../../../utils/db';
 import { User } from '../../models/User.ts';
-import { verifyTokenAndAdmin } from '../../middleware/verifyToken.js';
+import { verifyTokenAndAdmin } from '../../../utils/verifyToken';
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<void> => {
   if (req.method !== 'PATCH') {
-    return res.status(405).send(`Method ${req.method} Not Allowed`);
+    res.status(405).send(`Method ${req.method} Not Allowed`);
+    return;
   }
 
-  const { id } = req.query;
-  const { isActive } = req.body;
+  const { id } = req.query as { id: string };
+  const isActive = req.body.isActive as boolean;
 
   await connectToDatabase();
 
-  const adminCheck = await verifyTokenAndAdmin(req);
-  if (!adminCheck.success) {
-    return res.status(adminCheck.status).json(adminCheck.message);
+  const adminCheckResult = await verifyTokenAndAdmin(req);
+  if (!adminCheckResult.success) {
+    res.status(adminCheckResult.status!).json({ message: adminCheckResult.message! });
+    return;
   }
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(id, {
-      $set: { isActive },
-    }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { $set: { isActive } },
+      { new: true }
+    ).select('-password');
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
 
     res.status(200).json(updatedUser);
   } catch (error) {
