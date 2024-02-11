@@ -14,7 +14,7 @@ import { setFocusedId } from '../redux/notificationRedux';
 
 const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   const dispatch = useDispatch();
-  const orderRef = useRef(null);
+  const orderRef = useRef<HTMLDivElement>(null);
   
   const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -24,17 +24,18 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   const [showDetails, setShowDetails] = useState(false)
 
   useEffect(() => {
-    if (focusedId === order._id && orderRef.current) {
+    if (focusedId === order._id && orderRef.current ) {
       orderRef.current.scrollIntoView({
-        behavior: 'smooth', // Плавная прокрутка
-        block: 'end', // Ближайшее краевое выравнивание
+        behavior: 'smooth',
+        block: 'end', 
       });
     }
   }, [focusedId, order._id]);
 
   useEffect(() => {
-    const handleGlobalClick = (e) => {
-      if (focusedId && e.target.closest('.orderItem') === null) {
+    const handleGlobalClick = (e: MouseEvent) => {
+      const targetElement = e.target as Element;
+      if (targetElement && focusedId && targetElement.closest('.orderItem') === null) {
         dispatch(setFocusedId(''));
       }
     };

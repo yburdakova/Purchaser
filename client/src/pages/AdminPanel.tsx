@@ -1,4 +1,3 @@
-import React from 'react'
 import { Footer, Header, MenuPanel } from '../components'
 import { Outlet } from 'react-router'
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { FiPhone } from "react-icons/fi";
 
 const Footer = () => {
