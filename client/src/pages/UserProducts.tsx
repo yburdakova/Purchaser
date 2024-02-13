@@ -141,7 +141,7 @@ const UserProducts = () => {
             <div className="headerCell iconColumn">Действия</div>
           </div>
         <div className="gridBodyWrapperUser">
-        <div className="gridBody tableProduct">
+        <div className={`gridBody tableProduct ${isOpenOrder && "sixcolumn"}`}>
             {showProducts.map((product) => 
               <ProductItem product={product} focused={focusedId === product._id} key={product._id} />
             )}

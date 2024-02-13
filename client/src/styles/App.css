@@ -96,6 +96,11 @@ header{
   position: relative;
 }
 
+.sectionTitle{
+  margin: 20px 0;
+  text-transform: uppercase;
+  font-weight: 600;
+}
 
 .popup{
   position: absolute;
@@ -134,7 +139,9 @@ footer {
 .statusButtonsBlock{
   display: flex;
   gap: 10px;
+  margin-bottom: 20px;
 }
+
 .footer_contact:hover .shake{
   animation: spin 0.5s ease-in-out;
   transition: all 0.3s ease 0s;
@@ -227,7 +234,6 @@ footer {
   width: 41%; 
 }
 .addForm{
-  padding: 0 10px 10px 0;
   display: flex;
   width: fit-content;
   border-radius: 10px;

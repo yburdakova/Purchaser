@@ -266,7 +266,7 @@ const AdminRequests = () => {
           <button className='newDataButton' data-tooltip="Добавить клиента"><FaRegAddressCard size={22}/></button>
         </form>
       </div>
-      <div className="">Обработанные запросы</div>
+      <div className="sectionTitle">Обработанные запросы</div>
       <div className="flexList">
         {closedRequests.map(request => (
             <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>

@@ -18,6 +18,7 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
   const orderProducts = useSelector((state: RootState) => state.order.products)
   const inputRefs = useRef<InputRefs>({});
   const active = useSelector((state: RootState) => state.user.isActive);
+  const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
 
   const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
   const [newPrice, setNewPrice] = useState('');
