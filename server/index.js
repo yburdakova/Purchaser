@@ -28,7 +28,7 @@ mongoose
         console.log(err.message);
     });
 
-app.listen(process.env.PORT || 80, ()=> {
+app.listen(process.env.PORT || 5000, ()=> {
     console.log('Backend server is running on 5000 port');
 });
 
