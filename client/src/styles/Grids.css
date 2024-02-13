@@ -194,7 +194,7 @@ th, td{
   cursor: pointer;
 }
 
-.icon-button::after {
+.icon-button::after, button::after {
   content: attr(data-tooltip); 
   position: absolute;
   bottom: -100%; 
@@ -213,7 +213,7 @@ th, td{
   pointer-events: none; 
 }
 
-.icon-button:hover::after {
+.icon-button:hover::after, button:hover::after {
   opacity: 1;
   visibility: visible; 
 }

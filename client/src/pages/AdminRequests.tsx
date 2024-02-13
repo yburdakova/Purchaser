@@ -9,6 +9,8 @@ import { adminRequest } from '../redux/apiCalls';
 import { CustomInput } from '../components';
 import { getNotifications, setFocusedId } from '../redux/notificationRedux';
 import { formatDate } from '../middleware/formatDate';
+import { AiOutlineUserDelete } from 'react-icons/ai';
+import { FaRegAddressCard } from 'react-icons/fa6';
 
 const AdminRequests = () => {
 
@@ -254,8 +256,14 @@ const AdminRequests = () => {
             valueProps={newCustomerPhone}
             getValue={setNewCustomerPhone}
           />
-          <button className="newDataButton" onClick={(e) =>cleanContacts(e)}>Очистить контактные данные</button>
-          <button className='newDataButton'>Добавить</button>
+          <button 
+            className="newDataButton" 
+            onClick={(e) =>cleanContacts(e)}
+            data-tooltip="Очистить контактные данные"
+          >
+            <AiOutlineUserDelete size={22}/>
+          </button>
+          <button className='newDataButton' data-tooltip="Добавить клиента"><FaRegAddressCard size={22}/></button>
         </form>
       </div>
       <div className="">Обработанные запросы</div>

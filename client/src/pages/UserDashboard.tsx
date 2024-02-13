@@ -5,7 +5,7 @@ import { CategoryData, NotificationData, ProductData } from '../data/types';
 import { getAllUsersData } from '../redux/apiCalls';
 import { getNotifications } from '../redux/notificationRedux';
 import axios from 'axios';
-import { userRequest } from '../middleware/requestMethods';
+import { BASE_URL, userRequest } from '../middleware/requestMethods';
 
 const UserDashboard = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -26,7 +26,7 @@ useEffect(() => {
 
           const fetchAllNotifications = async () => {
               try {
-                  const res = await axios.get<NotificationData[]>(`http://localhost:5000/api/notifications/user_notifications`);
+                  const res = await axios.get<NotificationData[]>(`${BASE_URL}/notifications/user_notifications`);
                   return res.data;
               } catch (error) {
                   console.error(error);

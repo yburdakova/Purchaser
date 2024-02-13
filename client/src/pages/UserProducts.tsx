@@ -18,6 +18,7 @@ const UserProducts = () => {
   const isOpenOrder = useSelector((state: RootState) => state.order.isOpen);
   const { products, totalPrice } = useSelector((state: RootState) => state.order);
 
+
   const [dbProducts, setDbProducts] = useState<ProductData[]>([]);
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [showProducts, setShowProducts] = useState<ProductData[]>(products)

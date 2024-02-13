@@ -38,6 +38,9 @@ const userSlice = createSlice({
         state.error = "Что-то пошло не так...";
       }
     },
+    changeActive: (state, action)=>{
+      state.isActive = action.payload ;
+    },
     postDataSuccess: (state, action)=>{
       state.response = action.payload;
     },
@@ -53,7 +56,8 @@ export const {
   loginSuccess,
   loginFailure,
   resetError,
-  adminAccess
+  adminAccess,
+  changeActive
 
 } = userSlice.actions;
 

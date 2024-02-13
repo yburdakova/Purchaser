@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 import { SuccessAction, UserData } from "../data/types.ts";
-import { publicRequest, userRequest } from "../middleware/requestMethods";
+import { BASE_URL, publicRequest, userRequest } from "../middleware/requestMethods";
 import { adminAccess, loginFailure, loginStart, loginSuccess } from "./userRedux"
 import { Dispatch } from 'redux';
 import { fetchingFailure, fetchingStart, fetchingSuccess } from "./adminRedux.ts";
@@ -59,7 +59,7 @@ export const getAllUsersData = async <T>(
   setData?: (value: T | ((prevState: T) => T)) => void
 ) => {
   try {
-    const res = await axios.get<T>(`http://localhost:5000/api/${path}`);
+    const res = await axios.get<T>(`${BASE_URL}/${path}`);
     setData && setData(res.data);
   } catch (error) {
     const axiosError = error as AxiosError;
@@ -78,12 +78,14 @@ export const getAuthUsersData = async <T>(
   try {
     const res = await userRequest(token).get<T>(path);
     setData && setData(res.data);
+    return res.data;
   } catch (error) {
     const axiosError = error as AxiosError;
     if (error) {
       const status = axiosError.response ? axiosError.response.status : 500; 
       console.log(status)
       }
+      throw error;
   }
 };
 
@@ -91,7 +93,7 @@ export const postNotification = async < U>(
   bodyObj: U,
 ) => {
   try {
-    const response = await axios.post(`http://localhost:5000/api/notifications/add_notification`, bodyObj);
+    const response = await axios.post(`${BASE_URL}/notifications/add_notification`, bodyObj);
     console.log(response.data)
   } catch (error) {
     const axiosError = error as AxiosError;

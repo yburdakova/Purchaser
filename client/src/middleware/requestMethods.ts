@@ -1,7 +1,9 @@
 import axios from "axios"
 
-export const BASE_URL = "https://18.224.139.223/api"
-export const LOCKAL_URL = "http://localhost:5000/api"
+export const LOCAL_URL = "http://localhost:5000/api"
+export const SERVER_URL = "https://server.burdakova.com/api"
+
+export const BASE_URL = LOCAL_URL
 
 export const publicRequest = axios.create({
   baseURL: BASE_URL

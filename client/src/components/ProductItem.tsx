@@ -6,9 +6,10 @@ import { InputRefs, ProductData, ProductItemProps } from '../data/types';
 import { addProduct, openOrder, updateProductQuantity } from '../redux/orderRedux';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { useEffect, useRef, useState } from 'react';
-import { adminRequest, postNotification} from '../redux/apiCalls'; 
+import { adminRequest, getAuthUsersData, postNotification} from '../redux/apiCalls'; 
 import { postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
+import { changeActive } from '../redux/userRedux';
 
 const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
 
@@ -16,7 +17,8 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
   const user = useSelector((state: RootState) => state.user.currentUser);
   const orderProducts = useSelector((state: RootState) => state.order.products)
   const inputRefs = useRef<InputRefs>({});
-  
+  const active = useSelector((state: RootState) => state.user.isActive);
+
   const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [priceDifference, setPriceDifference] = useState<number>(0);
@@ -28,6 +30,21 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
       setPriceDifference(latestPrice - previousPrice);
     }
   }, [product.priceHistory]);
+
+  useEffect(() => {
+    const fetchUserStatus = async () => {
+      if (user?.accessToken && user._id) {
+        try {
+          const isActive = await getAuthUsersData<boolean>(`/users/status/${user._id}`, user.accessToken);
+          dispatch(changeActive(isActive));
+        } catch (error) {
+          console.error("Error fetching user status", error);
+        }
+      }
+    };
+    fetchUserStatus();
+  }, [user, dispatch]);
+  
 
   const handleUpdatePrice = async (productId: string, newPrice: number) => {
     if (user?.isAdmin && user.accessToken) {
@@ -175,12 +192,12 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
           </div>
         </div>
         :  <div className="gridCell iconColumn">
-            <div data-tooltip="Добавить в заказ" className={user?.isActive ? "icon-button" : "inactiveIcon"} >
-              <MdAssignmentAdd size={24} onClick={() => product && user?.isActive && handleClickOrderButton(product)}/>
-            </div>
-            <div className="inactiveIcon" data-tooltip="Посмотреть детали" >
-              <FaRegEye size={24} />
-            </div>
+              <div data-tooltip="Добавить в заказ" className={active ? "icon-button" : "inactiveIcon"} >
+                <MdAssignmentAdd size={24} onClick={() => product && active && handleClickOrderButton(product)}/>
+              </div>
+              <div className="inactiveIcon" data-tooltip="Посмотреть детали" >
+                <FaRegEye size={24} />
+              </div>
           </div>
       }
     </div>
