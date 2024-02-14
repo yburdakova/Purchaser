@@ -91,7 +91,7 @@ const NewClient = () => {
       </form> 
     </div>
     {isSubmitted &&
-      <div className={styles.successMessage}>
+      <div className={`${styles.successMessage} ${styles.done}`}>
         <p className={styles.text}>Спасибо!</p>
         <p className={styles.text}> Запрос успешно отправлен. </p>
         <p className={styles.text}>Администратор системы свяжется с вами в ближайшее время.</p>
@@ -100,7 +100,7 @@ const NewClient = () => {
     </div>
     }
     {isExist &&
-      <div className={styles.successMessage}>
+      <div className={`${styles.successMessage} ${styles.reject}`}>
         <BiMessageRoundedError className={styles.icon}/>
         <p className={styles.text}>Клиент с таким email уже существует!</p>
         <p className={styles.textLink} onClick={()=> {setIsExist(false)}}>Продолжить заявку с другим email</p>

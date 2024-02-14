@@ -54,11 +54,12 @@ useEffect(() => {
 
 
   return (
-    <div className='infopage'>
-      UserDashboard
-      <div className="">Продукты{productList.length}</div>
-      <div className="">Уведомления {notifications.length}</div>
-      <div className="">Категории{categories.length}</div>
+    <div className='outletContainer'>
+      <div className="viewBox">
+        <div className="">Продукты{productList.length}</div>
+        <div className="">Уведомления {notifications.length}</div>
+        <div className="">Категории{categories.length}</div>
+      </div>
     </div>
   )
 }

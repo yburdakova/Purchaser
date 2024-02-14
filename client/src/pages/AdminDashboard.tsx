@@ -26,21 +26,23 @@ const AdminDashboard = () => {
 
   
   return (
-    <div className='infopage'>
-      <div className="widgetBox">
-        {requests&&
-          requests.map((request)=>
-            <div className="" key={request._id}>{request.contactName}</div>
-          )
-        }
-      </div>
-      
-      <div className="widgetBox">
-        {products&&
-          products.map((product)=>
-            <div className="" key={product._id}>{product.title}</div>
-          )
-        }
+    <div className='outletContainer'>
+      <div className="viewBox">
+        <div className="widgetBox">
+          {requests&&
+            requests.map((request)=>
+              <div className="" key={request._id}>{request.contactName}</div>
+            )
+          }
+        </div>
+        
+        <div className="widgetBox">
+          {products&&
+            products.map((product)=>
+              <div className="" key={product._id}>{product.title}</div>
+            )
+          }
+        </div>
       </div>
     </div>
   )

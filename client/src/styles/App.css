@@ -1,51 +1,48 @@
-#root {
+#root{
   display: flex;
-  width: 100%;
+  height: 100%;
 }
-.flexList{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.flexListItem{
-  display: flex;
-  gap: 20px;
-  border-radius: 10px;
-  border: 1px solid #57606E;
-  padding: 10px;
-  position: relative;
-}
-.flexListItem:hover{
-  background-color: #253043;
-}
-.flexListItemFocused {
-  border: 2px solid #4A7BD0;
-}
-
 .pageWrapper{
   display: flex;
-  width: 100%;
+  flex: 1;
+  overflow: hidden;
+  min-height: 100vh;
 }
-
-.pageContainer {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  flex-direction: column;
-  max-height: 100vh; 
-  overflow-y: hidden;
+.menuContainer {
+  width: 258px;
+  height: 100vh;
+  background-color: #253043;
+  flex-shrink: 0;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+.contentContainer {
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+.outletContainer{
+  flex: 1; 
+  display: flex;
+  overflow: hidden;
+  margin: 0 20px 0 40px;
+  gap: 10px;
+}
+.viewBox{
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  
+}
+.pageinfo{
+  flex: 1; 
 }
 
-header{
+/* ==========================Header, Footer=========================== */
+
+header, footer {
   display: flex;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  margin: 20px 0;
-  padding: 0 40px;
   justify-content: space-between;
+  margin: 20px 40px;
 }
 
 .headerIcon{
@@ -88,20 +85,65 @@ header{
   transition: all 0.3s ease 0s;
 }
 
-.infopage{
-  margin: 0 40px;
+/* ==========================ToolBox=========================== */
+
+.toolBox{
+  display: flex;
+  width: 100%;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+.toolBlock{
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
   position: relative;
 }
+.searchInput{
+  background-color:#1D2634;
+  border: 1px solid #57606E;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+.searchIcon{
+  position: absolute;
+  bottom: 14px;
+  right: 10px;
+}
 
+.toolBlockTitle{
+  margin-bottom: 10px;
+}
+/* ========================= */
+.bottom-space{
+  margin-bottom: 20px;
+}
 .sectionTitle{
   margin: 20px 0;
   text-transform: uppercase;
   font-weight: 600;
 }
 
+.flexList{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.flexListItem{
+  display: flex;
+  gap: 20px;
+  border-radius: 10px;
+  border: 1px solid #57606E;
+  padding: 10px;
+  position: relative;
+}
+.flexListItem:hover{
+  background-color: #253043;
+}
+.flexListItemFocused {
+  border: 2px solid #4A7BD0;
+}
 .popup{
   position: absolute;
   border-radius: 50px;
@@ -114,18 +156,6 @@ header{
   background-color:  #253043;
 }
 
-footer {
-  display: flex;
-  justify-content: space-between;
-  padding-left:  20px;
-  padding-top:  10px;
-  padding-right:  40px;
-  margin: 20px 0;
-  position: sticky;
-  bottom: 0;
-  z-index: 100;
-  background-color: #1D2634;
-}
 .priceBlock{
   display: flex;
 }
@@ -139,7 +169,6 @@ footer {
 .statusButtonsBlock{
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
 }
 
 .footer_contact:hover .shake{
@@ -303,7 +332,9 @@ footer {
   min-width: auto;
   font-size: 24px;
 }
-
+.orderItemContainer{
+  margin: 10px 0;
+}
 .newProductForm{
   display: flex;
   flex-direction: row;
@@ -351,15 +382,13 @@ footer {
   margin-top: 10px;
 }
 .scrollWrapper{
-  max-height: 660px;
   overflow-y: auto;
-  padding-bottom: 20px;
 }
 .addSpace{
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
+  gap: 40px;
   position: relative;
 }
 

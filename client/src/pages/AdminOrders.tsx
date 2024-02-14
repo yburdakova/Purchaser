@@ -1,4 +1,3 @@
-
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { adminRequest } from '../redux/apiCalls';
@@ -46,8 +45,9 @@ const AdminOrders = () => {
 
 
   return (
-    <div className='infopage'>
-      <div className="statusButtonsBlock">
+    <div className='outletContainer'>
+      <div className="viewBox">
+      <div className="statusButtonsBlock bottom-space">
         <button onClick={()=> setFilter('Все заявки')} >Все заявки</button>
         <button onClick={()=> setFilter('На рассмотрении')} className='orangeButton'>На рассмотрении</button>
         <button onClick={()=> setFilter('Подтверждена')} className='violetButton'>Подтверждена</button>
@@ -66,12 +66,15 @@ const AdminOrders = () => {
             <IoSearch className='searchIcon'/>
           </div>
         </div>
-      <div className="flexList scrollWrapper">
-      {filterOrders().map((order) => 
-        <OrderItem order={order} key={order._id} reloadOrders={loadOrders}/>
-      )}
+      <div className="pageinfo">
+        <div className="scrollWrapper customerOrderHeight">
+          {filterOrders().map((order) => 
+            <OrderItem order={order} key={order._id} reloadOrders={loadOrders}/>
+          )}
+        </div>
       </div>
       
+      </div>
     </div>
   )
 }

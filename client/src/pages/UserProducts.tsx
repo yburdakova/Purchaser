@@ -105,8 +105,7 @@ const UserProducts = () => {
 
   return (
     <div className='outletContainer'>
-      <div className="test">
-      <div className="pageContent">
+      <div className="viewBox">
         <div className="toolBox">
           <div className="toolBlock">
             <div className="toolBlockTitle">Быстрый поиск по названию продукта</div>
@@ -130,23 +129,25 @@ const UserProducts = () => {
             </select>
           </div>
         </div>
-        <div className="gridTable">
-          <div className="gridHeader tableProduct">
-            <div className="headerCell">ID</div>
-            <div className="headerCell">Товар</div>
-            <div className="headerCell">Категория</div>
-            <div className="headerCell centerCell">Фасовка</div>
-            <div className="headerCell">Цена</div>
-            <div className="headerCell centerCell">Изменение цены</div>
-            <div className="headerCell iconColumn">Действия</div>
+        <div className="pageinfo">
+          <div className="gridTable">
+            <div className="gridHeader tableProduct">
+              <div className="headerCell">ID</div>
+              <div className="headerCell">Товар</div>
+              <div className="headerCell">Категория</div>
+              <div className="headerCell centerCell">Фасовка</div>
+              <div className="headerCell">Цена</div>
+              <div className="headerCell centerCell">Изменение цены</div>
+              <div className="headerCell iconColumn">Действия</div>
+            </div>
+            <div className="scrollWrapper customerProductHeight">
+              <div className={`gridBody tableProduct ${isOpenOrder && "sixcolumn"}`}>
+                {showProducts.map((product) => 
+                  <ProductItem product={product} focused={focusedId === product._id} key={product._id} />
+                )}
+              </div>
+            </div>
           </div>
-        <div className="gridBodyWrapperUser">
-        <div className={`gridBody tableProduct ${isOpenOrder && "sixcolumn"}`}>
-            {showProducts.map((product) => 
-              <ProductItem product={product} focused={focusedId === product._id} key={product._id} />
-            )}
-          </div>
-        </div>
         </div>
       </div>
       { isOpenOrder &&
@@ -184,9 +185,7 @@ const UserProducts = () => {
           
         </div>
       }
-      </div>
     </div>
-
   )
 }
 

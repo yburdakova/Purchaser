@@ -24,19 +24,17 @@ a:hover {
   color:rgba(255, 255, 255, 0.87);
 }
 
-body {
+body, html {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
 
 form{
   display: flex;

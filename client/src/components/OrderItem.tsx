@@ -110,7 +110,7 @@ const OrderItem = ({order, reloadOrders}: OrderItemAdmProps) => {
   }
   
   return (
-    <div>
+    <div className='orderItemContainer'>
       <div key={order._id} id={order._id} ref={orderRef} className={`orderItem flexListItem ${focusedId === order._id && `flexListItem flexListItemFocused`}`}>
         <div className={`colorLabel       
           ${order.status === "На рассмотрении" ? "orangeButton" 

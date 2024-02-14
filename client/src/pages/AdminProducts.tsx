@@ -137,8 +137,9 @@ const AdminProducts = () => {
   }
 
   return (
-    <div className='infopage'>
-      <div className="addContainer">
+    <div className='outletContainer'>
+      <div className="viewBox">
+      <div className="addContainer bottom-space">
         <div className="addSpace"> 
             <div className="addForm">
               <form onSubmit={e => addNewProduct(e)} className='newProductForm'>
@@ -216,7 +217,7 @@ const AdminProducts = () => {
               {categories.map(category => <option value={category.title} key={category._id}>{category.title}</option>)}
             </select>
           </div>
-        </div>
+      </div>
       <div className="gridTable">
           <div className="gridHeader tableProduct">
             <div className="headerCell">ID</div>
@@ -227,13 +228,14 @@ const AdminProducts = () => {
             <div className="headerCell centerCell newPriceAnchor">Изменение цены</div>
             <div className="headerCell iconColumn">Действия</div>
           </div>
-          <div className="gridBodyWrapperAdmin">
+          <div className="scrollWrapper admProductHeight">
             <div className="gridBody tableProduct">
               {showProducts.map((product) => 
                 <ProductItem product={product} key={product._id} reloadProducts={loadProducts}/>
               )}
             </div>
           </div>
+      </div>
       </div>
     </div>
   )

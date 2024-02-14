@@ -1,156 +1,5 @@
 
 
-/* ================================================ */
-.outletContainer{
-  margin: 0 40px;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  position: relative;
-}
-
-.test{
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-.pageContent{
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease 0s;
-}
-.toolBox{
-  display: flex;
-  width: 100%;
-  gap: 40px;
-  margin-bottom: 20px;
-}
-.toolBlock{
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.searchInput{
-  background-color:#1D2634;
-  border: 1px solid #57606E;
-  padding: 10px;
-  border-radius: 8px;
-  font-size: 16px;
-}
-.searchIcon{
-  position: absolute;
-  bottom: 14px;
-  right: 10px;
-}
-
-.toolBlockTitle{
-  margin-bottom: 10px;
-}
-
-/* ====================== ORDER LIST ==================== */
-
-.orderContainer{
-  display: flex;
-  flex-direction: column;
-  width: 480px;
-  border: 1px solid #777E8A;
-  border-radius: 10px;
-  transition: all 0.3s ease-in-out 0s;
-  padding: 10px;
-  position: relative;
-}
-
-.orderList {
-  flex-grow: 1; 
-  overflow-y: auto;
-}
-
-th {
-  border-bottom:  1px solid #777E8A;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-th, td{
-  text-align: left;
-  vertical-align: top;
-
-}
-.closeIcon{
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  cursor: pointer;
-}
-
-.orderTitle{
-  color: #4A7BD0;
-  font-size: 24px;
-  font-weight: 600;
-  text-transform: uppercase;
-  padding: 10px;
-  text-align: center;
-}
-.orderItem{
-  display: flex;
-  gap: 10px;
-}
-.orderItemDel{
-  display: flex;
-  margin: 0 10px;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-.orderItemDel:hover{
-  color: #4A7BD0;
-}
-.costBox{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-}
-.quantityBox{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.priceButtons{
-  display: flex;
-  flex-direction: column;
-  color: #57606E;
-}
-
-.quantityBox > input{
-  width: 32px;
-  text-align: center;
-  background-color:#253043;
-  border: 1px solid #57606E;
-  padding: 6px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin: 0 4px;
-}
-.orderButtons{
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-.priceButtonsIcon {
-  display: flex;
-  cursor: pointer;
-}
-.priceButtonsIcon:hover {
-  color: #4A7BD0;
-}
-
-.amount {
-  margin-top: 20px;
-  font-weight: 600;
-}
-
 /* Grids */
 
 .gridTable {
@@ -165,22 +14,31 @@ th, td{
 .gridBody{
   margin-bottom: 20px;
 }
+/* ==============================================Custom Tables=================================================== */
+
 .tableProduct {
   grid-template-columns: 10% 25% 15% 10% 10% 15% auto; 
 }
 
 .tableCustomer {
-  grid-template-columns: 15% 20% 15% 15% 12% 8% 8%;
+  grid-template-columns: 12% 21% 18% 15% 12% 10% 10%;
 }
-
-.gridBodyWrapperAdmin{
-  max-height: 520px;
-  overflow-y: auto;
+.customerProductHeight{
+  max-height: 680px;
 }
-.gridBodyWrapperUser{
-  max-height: 612px;
-  overflow-y: auto;
+.customerOrderHeight{
+  max-height: 760px;
 }
+.admRequestHeight{
+  max-height: 760px;
+}
+.admProductHeight{
+  max-height: 600px;
+}
+.admCustomersHeight{
+  max-height: 600px;
+}
+/* ==============================================Custom Tables=================================================== */
 
 .iconColumn {
   display: flex;

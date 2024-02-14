@@ -13,7 +13,7 @@ const MenuPanel = () => {
   const accessPath = user?.isAdmin ? "/admin" : "/user"
   
   return (
-    <div className={styles.menuContainer}>
+    <div className="menuContainer">
       <div className={styles.logoBox}><img src={logo} alt="LOGO"/></div>
       <div className={styles.title}>{`Меню ${user?.isAdmin ? 'администратора' : ' клиента'}`}</div>
       <nav className="menu">

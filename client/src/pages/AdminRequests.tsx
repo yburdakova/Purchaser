@@ -30,6 +30,7 @@ const AdminRequests = () => {
   const [newCustomerName, setNewCustomerName] = useState('')
   const [processingId, setProcessingId] = useState('')
   const [relatedId, setRelatedId] = useState('')
+  const [openForm, setOpenForm] = useState(false)
 
 
   const refreshData = () => {
@@ -83,6 +84,7 @@ const AdminRequests = () => {
       if (relatedId) {
         setRelatedId(relatedId)
       }
+      setOpenForm(true)
       setProcessingId(id)
       setNewCustomerTitle(title);
       setNewCustomerPhone(phone);
@@ -129,7 +131,7 @@ const AdminRequests = () => {
     } catch (error) {
       console.error('Failed to add new customer or user', error);
     }
-    
+    setOpenForm(false)
     setNewCustomerTitle('');
     setNewCustomerEmail('');
     setNewCustomerPhone('');
@@ -151,10 +153,11 @@ const AdminRequests = () => {
   }
 
   return (
-    <div className='infopage'>
+    <div className='outletContainer'>
+      <div className="viewBox">
       {newUserRequests.length > 0 &&
         <>
-        <div>Запросы от новых клиентов</div>
+        <div className='sectionTitle'>Запросы от новых клиентов</div>
         <div className="flexList">
           {newUserRequests.map(request => (
             <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
@@ -183,7 +186,7 @@ const AdminRequests = () => {
       }
       {newPasswordRequests.length > 0 && 
         <>
-        <div>Запросы на смену пароля</div>
+        <div className='sectionTitle'>Запросы на смену пароля</div>
         <div className="flexList">
           {newPasswordRequests.map(request => (
               <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
@@ -209,65 +212,66 @@ const AdminRequests = () => {
         </div>
         </>
       }
-
-      <div className="addForm">
-        <form onSubmit={e => requetProcessing(e)} className='newProductForm'>
-          <CustomInput 
-            label='Название клиента' 
-            placeholder='Название клиента' 
-            getValue={setNewCustomerTitle} 
-            valueProps={newCustomerTitle}
-            required 
-            type='text'
-            dark
-          />
-          <CustomInput 
-            label='Email' 
-            placeholder='Email' 
-            getValue={setNewCustomerEmail}
-            valueProps={newCustomerEmail} 
-            type='email'
-            required 
-            dark
-          />
-          <CustomInput 
-            type="password" 
-            label="Пароль" 
-            placeholder='Пароль' 
-            required 
-            dark
-            valueProps={newCustomerPassword} 
-            getValue={setNewCustomerPassword}
-          />
-          <CustomInput 
-            label='Контактное лицо' 
-            placeholder='Контактное лицо' 
-            getValue={setNewCustomerName}
-            valueProps={newCustomerName} 
-            type='text'
-            dark
-          />
-          <CustomInput 
-            type="phone" 
-            label="Номер телефона" 
-            placeholder="Номер телефона" 
-            isMask 
-            dark
-            valueProps={newCustomerPhone}
-            getValue={setNewCustomerPhone}
-          />
-          <button 
-            className="newDataButton" 
-            onClick={(e) =>cleanContacts(e)}
-            data-tooltip="Очистить контактные данные"
-          >
-            <AiOutlineUserDelete size={22}/>
-          </button>
-          <button className='newDataButton' data-tooltip="Добавить клиента"><FaRegAddressCard size={22}/></button>
-        </form>
-      </div>
+      { openForm &&
+        <div className="addForm">
+          <form onSubmit={e => requetProcessing(e)} className='newProductForm'>
+            <CustomInput 
+              label='Название клиента' 
+              placeholder='Название клиента' 
+              getValue={setNewCustomerTitle} 
+              valueProps={newCustomerTitle}
+              required 
+              type='text'
+              dark
+            />
+            <CustomInput 
+              label='Email' 
+              placeholder='Email' 
+              getValue={setNewCustomerEmail}
+              valueProps={newCustomerEmail} 
+              type='email'
+              required 
+              dark
+            />
+            <CustomInput 
+              type="password" 
+              label="Пароль" 
+              placeholder='Пароль' 
+              required 
+              dark
+              valueProps={newCustomerPassword} 
+              getValue={setNewCustomerPassword}
+            />
+            <CustomInput 
+              label='Контактное лицо' 
+              placeholder='Контактное лицо' 
+              getValue={setNewCustomerName}
+              valueProps={newCustomerName} 
+              type='text'
+              dark
+            />
+            <CustomInput 
+              type="phone" 
+              label="Номер телефона" 
+              placeholder="Номер телефона" 
+              isMask 
+              dark
+              valueProps={newCustomerPhone}
+              getValue={setNewCustomerPhone}
+            />
+            <button 
+              className="newDataButton" 
+              onClick={(e) =>cleanContacts(e)}
+              data-tooltip="Очистить контактные данные"
+            >
+              <AiOutlineUserDelete size={22}/>
+            </button>
+            <button className='newDataButton' data-tooltip="Добавить клиента"><FaRegAddressCard size={22}/></button>
+          </form>
+        </div>
+      }
       <div className="sectionTitle">Обработанные запросы</div>
-      <div className="flexList">
+      <div className="scrollWrapper admRequestHeight">
         {closedRequests.map(request => (
             <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
               <div className="">{formatDate(request.createdAt.toString())}</div>
@@ -279,6 +283,7 @@ const AdminRequests = () => {
             </div>
           ))}
         
+      </div>
       </div>
     </div>
   )

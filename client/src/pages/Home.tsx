@@ -5,14 +5,13 @@ const Home = () => {
 
   return (
     <div className="pageWrapper">
-    <MenuPanel/>
-    <div className="pageContainer">
-      <Header/>
-      <Outlet/> 
-      <Footer/>
+      <MenuPanel/>
+      <div className="contentContainer">
+        <Header/>
+        <Outlet/> 
+        <Footer/>
+      </div>
     </div>
-    
-  </div>
   )
 }
 

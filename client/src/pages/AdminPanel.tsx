@@ -5,12 +5,11 @@ const AdminPanel = () => {
   return (
     <div className="pageWrapper">
       <MenuPanel/>
-      <div className="pageContainer">
+      <div className="contentContainer">
         <Header/>
         <Outlet/> 
         <Footer/>
       </div>
-      
     </div>
   )
 }

@@ -1,0 +1,103 @@
+
+.orderContainer{
+  width: 480px; 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; 
+  border: 1px solid #777E8A;
+  border-radius: 10px;
+  transition: all 0.3s ease-in-out 0s;
+  position: relative;
+}
+
+.closeIcon{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+
+.orderList {
+  flex-grow: 1; 
+  overflow-y: auto;
+  margin: 0 10px;
+}
+
+th {
+  border-bottom:  1px solid #777E8A;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+th, td{
+  text-align: left;
+  vertical-align: top;
+}
+
+.orderTitle{
+  color: #4A7BD0;
+  font-size: 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 20px;
+}
+.orderItem{
+  display: flex;
+  gap: 10px;
+}
+.orderItemDel{
+  display: flex;
+  margin: 0 10px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.orderItemDel:hover{
+  color: #4A7BD0;
+}
+.costBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.quantityBox{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.priceButtons{
+  display: flex;
+  flex-direction: column;
+  color: #57606E;
+}
+
+.quantityBox > input{
+  width: 32px;
+  text-align: center;
+  background-color:#253043;
+  border: 1px solid #57606E;
+  padding: 6px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin: 0 4px;
+}
+.orderButtons{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px;
+}
+.priceButtonsIcon {
+  display: flex;
+  cursor: pointer;
+}
+.priceButtonsIcon:hover {
+  color: #4A7BD0;
+}
+
+.amount {
+  margin-top: 20px;
+  font-weight: 600;
+}

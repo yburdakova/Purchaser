@@ -1,12 +1,4 @@
-.menuContainer {
-  width: 258px;
-  overflow-y: auto;
-  height: 100vh;
-  background-color: #253043;
-  flex-shrink: 0;
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
-}
 
 .logoBox{
   width: 80px;

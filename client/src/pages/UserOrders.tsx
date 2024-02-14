@@ -25,19 +25,26 @@ const UserOrders = () => {
   };
 
   return (
-    <div className='infopage'>
-      <div className="statusButtonsBlock">
-        <button onClick={()=> setFilter('Все заявки')} >Все заявки</button>
-        <button onClick={()=> setFilter('На рассмотрении')} className='orangeButton'>На рассмотрении</button>
-        <button onClick={()=> setFilter('Подтверждена')} className='violetButton'>Подтверждена</button>
-        <button onClick={()=> setFilter('Оплачена')} className='purpleButton'>Оплачена</button>
-        <button onClick={()=> setFilter('Выполнена')} className='greenButton'>Выполнена</button>
-        <button onClick={()=> setFilter('Аннулирована')} className='redButton'>Аннулирована</button>
-      </div>
-      <div className="flexList scrollWrapper">
-        {filterOrders().map((order) => 
-          <OrderItem order={order} key={order._id} />
-        )}
+    <div className='outletContainer'>
+      <div className="viewBox">
+        <div className="toolBox">
+          <div className="statusButtonsBlock">
+            <button onClick={()=> setFilter('Все заявки')} >Все заявки</button>
+            <button onClick={()=> setFilter('На рассмотрении')} className='orangeButton'>На рассмотрении</button>
+            <button onClick={()=> setFilter('Подтверждена')} className='violetButton'>Подтверждена</button>
+            <button onClick={()=> setFilter('Оплачена')} className='purpleButton'>Оплачена</button>
+            <button onClick={()=> setFilter('Выполнена')} className='greenButton'>Выполнена</button>
+            <button onClick={()=> setFilter('Аннулирована')} className='redButton'>Аннулирована</button>
+          </div>
+        </div>
+        <div className="pageinfo">
+          <div className="scrollWrapper customerOrderHeight">
+          {filterOrders().map((order) => 
+              <OrderItem order={order} key={order._id} />
+            )}
+          </div>
+        </div>
+        
       </div>
     </div>
   )

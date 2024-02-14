@@ -88,7 +88,7 @@ const PasswordRequest = () => {
       </form> 
     </div>
     {isSubmitted &&
-      <div className={styles.successMessage}>
+      <div className={`${styles.successMessage} ${styles.done}`}>
         <p className={styles.text}>Спасибо!</p>
         <p className={styles.text}> Запрос успешно отправлен. </p>
         <p className={styles.text}>Администратор системы свяжется с вами в ближайшее время.</p>
@@ -97,7 +97,7 @@ const PasswordRequest = () => {
     </div>
     }
     {errorWindow &&
-      <div className={styles.successMessage}>
+      <div className={`${styles.successMessage} ${styles.reject}`}>
         <BiMessageRoundedError className={styles.icon}/>
         <p className={styles.text}>Клиентa с таким email не существует!</p>
         <p className={styles.textLink} onClick={()=> {setErrorWindow(false)}}>Повторить попытку</p>
