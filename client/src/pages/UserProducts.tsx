@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { CategoryData, ProductData } from '../data/types';
+import { CategoryData, NotificationData, ProductData } from '../data/types';
 import { IoClose, IoSearch } from 'react-icons/io5';
 import {  cleanOrder, openOrder } from '../redux/orderRedux';
-import { getAllUsersData, postNotification } from '../redux/apiCalls';
+import { getAllUsersData, getAuthUsersData, postNotification } from '../redux/apiCalls';
 import { OrderListItem, ProductItem } from '../components';
 import { formatPrice } from '../middleware/formatPrice';
-import { userRequest } from '../middleware/requestMethods';
+import { BASE_URL, userRequest } from '../middleware/requestMethods';
+import { changeActive } from '../redux/userRedux';
+import { getNotifications } from '../redux/notificationRedux';
+import axios from 'axios';
 
 const UserProducts = () => {
 
@@ -39,6 +42,52 @@ const UserProducts = () => {
   const handleCategoryFilterChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setSelectedCategory(e.target.value);
   };
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+        if (user?.accessToken) {
+  
+            const fetchAllNotifications = async () => {
+                try {
+                    const res = await axios.get<NotificationData[]>(`${BASE_URL}/notifications/user_notifications`);
+                    return res.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
+  
+            const fetchUserNotifications = async () => {
+                try {
+                    const res = await userRequest(user.accessToken).get<NotificationData[]>(`notifications/user_notifications/${user._id}`);
+                    return res.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
+  
+            const allNotifications = await fetchAllNotifications();
+            const userNotifications = await fetchUserNotifications();
+            dispatch(getNotifications([...allNotifications, ...userNotifications]));
+        }
+    };
+    fetchNotifications();
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    const fetchUserStatus = async () => {
+      if (user?.accessToken && user._id) {
+        try {
+          const isActive = await getAuthUsersData<boolean>(`/users/status/${user._id}`, user.accessToken);
+          dispatch(changeActive(isActive));
+        } catch (error) {
+          console.error("Error fetching user status", error);
+        }
+      }
+    };
+    fetchUserStatus();
+  }, [user, dispatch]);
 
   useEffect(() => {
     let filteredProducts = dbProducts;

@@ -1,9 +1,12 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { OrderData } from "../data/types";
+import { NotificationData, OrderData } from "../data/types";
 import { useEffect, useState } from "react";
 import { getAuthUsersData } from "../redux/apiCalls";
 import { OrderItem } from "../components";
+import { BASE_URL, userRequest } from "../middleware/requestMethods";
+import { getNotifications } from "../redux/notificationRedux";
+import axios from "axios";
 
 const UserOrders = () => {
 
@@ -11,10 +14,43 @@ const UserOrders = () => {
   // const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
   const [orders, setOrders] = useState<OrderData[]>([]);
   const [filter, setFilter] = useState('Все заявки');
-
+  const dispatch = useDispatch();
+  
   useEffect(()=>{
     user?.accessToken && getAuthUsersData(`orders/find/${user?._id}`, user?.accessToken, setOrders)
   }, [user]);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+        if (user?.accessToken) {
+  
+            const fetchAllNotifications = async () => {
+                try {
+                    const res = await axios.get<NotificationData[]>(`${BASE_URL}/notifications/user_notifications`);
+                    return res.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
+  
+            const fetchUserNotifications = async () => {
+                try {
+                    const res = await userRequest(user.accessToken).get<NotificationData[]>(`notifications/user_notifications/${user._id}`);
+                    return res.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
+  
+            const allNotifications = await fetchAllNotifications();
+            const userNotifications = await fetchUserNotifications();
+            dispatch(getNotifications([...allNotifications, ...userNotifications]));
+        }
+    };
+    fetchNotifications();
+  }, [user, dispatch]);
 
   const filterOrders = () => {
     let filteredOrders = orders;
@@ -40,7 +76,7 @@ const UserOrders = () => {
         <div className="pageinfo">
           <div className="scrollWrapper customerOrderHeight">
           {filterOrders().map((order) => 
-              <OrderItem order={order} key={order._id} />
+              <OrderItem order={order} key={order._id}/>
             )}
           </div>
         </div>
@@ -51,3 +87,4 @@ const UserOrders = () => {
 }
 
 export default UserOrders
+

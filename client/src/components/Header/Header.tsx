@@ -78,9 +78,9 @@ const Header = () => {
           case 'statusChange':
             navigate('/user/account');
             break; 
-            case 'priceChange':
-              navigate('/user/products');
-              break; 
+          case 'priceChange':
+            navigate('/user/products');
+            break; 
           default:
             console.log('Unknown notification type');
         }

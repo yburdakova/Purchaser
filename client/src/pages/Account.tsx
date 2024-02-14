@@ -4,6 +4,11 @@ import { useEffect } from "react";
 import { getAuthUsersData } from "../redux/apiCalls";
 import { changeActive } from "../redux/userRedux";
 import { formatId } from "../middleware/formatId";
+import { getNotifications } from "../redux/notificationRedux";
+import { BASE_URL, userRequest } from "../middleware/requestMethods";
+import { NotificationData } from "../data/types";
+import axios from "axios";
+import { DiJava } from "react-icons/di";
 
 const Account = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
@@ -24,12 +29,51 @@ const Account = () => {
     fetchUserStatus();
   }, [user, dispatch]);
 
+  useEffect(() => {
+    const fetchNotifications = async () => {
+        if (user?.accessToken) {
+  
+            const fetchAllNotifications = async () => {
+                try {
+                    const res = await axios.get<NotificationData[]>(`${BASE_URL}/notifications/user_notifications`);
+                    return res.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
+  
+            const fetchUserNotifications = async () => {
+                try {
+                    const res = await userRequest(user.accessToken).get<NotificationData[]>(`notifications/user_notifications/${user._id}`);
+                    return res.data;
+                } catch (error) {
+                    console.error(error);
+                    return [];
+                }
+            };
+  
+            const allNotifications = await fetchAllNotifications();
+            const userNotifications = await fetchUserNotifications();
+            dispatch(getNotifications([...allNotifications, ...userNotifications]));
+        }
+    };
+    fetchNotifications();
+  }, [user, dispatch]);
+
   return (
     <div className='outletContainer'>
       <div className="viewBox">
-        <div className="">{user&&user.title}</div>
-        <div className="">Уникальный номер клиента: {user && user._id && formatId(user._id)}</div>
-        <div className="">Статус: {active ? " Подключен" : "Отключен"}</div>
+        <h2 className="">{user&&user.title}</h2>
+        <div className="bottom-space">Уникальный номер клиента: {user && user._id && formatId(user._id)}</div>
+        <div className="bottom-space">Статус: {active ? " Подключен" : "Отключен"}</div>
+        <div className="">Ваши контакты, указанные в системе:</div>
+        {user?.contacts?.map(contact => 
+          <div className="contactBlock">
+            <div className="">{contact.contactName}</div>
+            <div className="">{contact.contactPhone}</div>
+          </div>
+          )}
       </div>
     </div>
   )

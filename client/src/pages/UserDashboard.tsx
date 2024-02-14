@@ -1,24 +1,31 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { CategoryData, NotificationData, ProductData } from '../data/types';
-import { getAllUsersData } from '../redux/apiCalls';
+import { NotificationData, OrderData, ProductData } from '../data/types';
+import { getAllUsersData, getAuthUsersData } from '../redux/apiCalls';
 import { getNotifications } from '../redux/notificationRedux';
 import axios from 'axios';
 import { BASE_URL, userRequest } from '../middleware/requestMethods';
+import { calculateOrdersStat, calculateProductStat, getOrders, getProducts } from '../redux/custDashboardRedux';
+import { CustomActiveShapePieChart, ProductStatsBarChart } from '../components';
 
 const UserDashboard = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const notifications = useSelector((state: RootState) => state.notifications.notifications);
   const dispatch = useDispatch();
-  
   const [productList, setProductList] = useState<ProductData[]>([]);
-  const [categories, setCategories] = useState<CategoryData[]>([]);
+  const [orders, setOrders] = useState<OrderData[]>([]);
 
   useEffect(() => {
     getAllUsersData("products", setProductList);
-    getAllUsersData("categories", setCategories);
+    user?.accessToken && getAuthUsersData(`orders/find/${user?._id}`, user?.accessToken, setOrders)
 }, []); 
+
+useEffect(() => {
+  dispatch(getProducts(productList));
+  dispatch(calculateProductStat());
+  dispatch(getOrders(orders));
+  dispatch(calculateOrdersStat());
+},[dispatch, productList, orders])
 
 useEffect(() => {
   const fetchNotifications = async () => {
@@ -56,9 +63,16 @@ useEffect(() => {
   return (
     <div className='outletContainer'>
       <div className="viewBox">
-        <div className="">Продукты{productList.length}</div>
-        <div className="">Уведомления {notifications.length}</div>
-        <div className="">Категории{categories.length}</div>
+        <div className="dashboardPanel">
+          <div className="widgetBox">
+            <div className="">Всего продуктов в базе: {productList.length}, из них</div>
+              <ProductStatsBarChart type="products"/>
+            </div>
+          <div className="widgetBox">
+            <div className="">В вашей истории заявок: {orders.length} . Статистика стасуса заявок: </div>
+            <CustomActiveShapePieChart/>
+          </div>
+        </div>
       </div>
     </div>
   )

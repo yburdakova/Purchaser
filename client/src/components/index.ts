@@ -7,6 +7,8 @@ import OrderListItem from "./OrderListItem";
 import ProductItem from "./ProductItem";
 import CustomerItem from "./CustomerItem";
 import OrderItem from "./OrderItem";
+import ProductStatsBarChart from "./ProductStatsBarChart";
+import CustomActiveShapePieChart from "./CustomActiveShapePieChart";
 
 
 
@@ -19,5 +21,7 @@ export {
   OrderListItem,
   ProductItem,
   CustomerItem,
-  OrderItem
+  OrderItem,
+  ProductStatsBarChart,
+  CustomActiveShapePieChart
 }

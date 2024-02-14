@@ -273,7 +273,7 @@ const AdminRequests = () => {
       <div className="sectionTitle">Обработанные запросы</div>
       <div className="scrollWrapper admRequestHeight">
         {closedRequests.map(request => (
-            <div key={request._id} className={focusedId === request._id? `flexListItem flexListItemFocused` : "flexListItem"}>
+            <div key={request._id} className={focusedId === request._id? `flexListItem orderItemContainer flexListItemFocused` : "flexListItem orderItemContainer"}>
               <div className="">{formatDate(request.createdAt.toString())}</div>
               <div>{request.title}</div>
               <div>{request.email}</div>

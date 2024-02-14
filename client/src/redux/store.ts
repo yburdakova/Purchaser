@@ -3,6 +3,8 @@ import userReducer from "./userRedux";
 import adminReducer from "./adminRedux";
 import orderReducer from "./orderRedux"
 import notificationReducer from "./notificationRedux"
+import custdashboardReducer from "./custDashboardRedux"
+import admDashboardRedux from "./admDashboardRedux";
 
 import {
   persistStore,
@@ -25,7 +27,9 @@ const rootReducer = combineReducers({
   user: userReducer,
   admin: adminReducer,
   order: orderReducer,
-  notifications: notificationReducer
+  notifications: notificationReducer,
+  custdashboard: custdashboardReducer,
+  admdashboard: admDashboardRedux
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

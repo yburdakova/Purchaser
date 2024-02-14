@@ -185,3 +185,38 @@ export type NotificationType =
   'priceChange' | 
   'statusChange' | 
   'orderStatusChange';
+
+export interface ProductStatsItem{
+  value?: number;
+  categoryTitle: string;
+  quantity: number;
+}
+
+export interface CustDashboardSlice {
+  products: ProductData[],
+  productStats: ProductStatsItem[],
+  orders: OrderData[],
+  ordersStats: OrderStatsItem[],
+  totalAmount: number,
+  monthAmount:[]
+}
+export interface OrderStatsItem{
+  value?: number;
+  statusTitle: string;
+  quantity: number;
+}
+
+export interface ProductStatsItem{
+  value?: number;
+  categoryTitle: string;
+  quantity: number;
+}
+
+export interface AdmDashboardSlice {
+  products: ProductData[],
+  productStats: ProductStatsItem[],
+}
+
+export interface ProductStatsBarChartProps {
+  type: 'products' | 'orders';
+}

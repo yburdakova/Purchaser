@@ -36,7 +36,7 @@ const AdminCustomers = () => {
   useEffect(() => {
     let filteredCustomers = users.filter(user => !user.isAdmin);
     if (searchedCustomer) {
-      filteredCustomers = filteredCustomers.filter(customer => customer.title.toLowerCase().includes(searchedCustomer.toLowerCase()));
+      filteredCustomers = filteredCustomers.filter(customer => customer.title && customer.title.toLowerCase().includes(searchedCustomer.toLowerCase()));
     }
     setCustomers(filteredCustomers);
   }, [searchedCustomer, users]);

@@ -36,7 +36,11 @@
 .pageinfo{
   flex: 1; 
 }
-
+.dashboardPanel{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
 /* ==========================Header, Footer=========================== */
 
 header, footer {
@@ -234,6 +238,11 @@ header, footer {
   background-color:  #4A7BD0; 
   transition: width 0.3s ease-in-out; 
 }
+
+.contactBlock{
+  display: flex;
+  gap: 20px;
+}
 /* ======================== ORDER PAGE ============================= */
 
 .orderPageItem{
@@ -251,8 +260,6 @@ header, footer {
 }
 
 .widgetBox{
-  margin: 10px;
-  width: 20%;
   padding: 20px;
   border-radius: 10px;
   background-color: #253043;

@@ -10,6 +10,7 @@ import { adminRequest, getAuthUsersData, postNotification} from '../redux/apiCal
 import { postDataSuccess } from '../redux/adminRedux';
 import { HiArrowLongDown, HiArrowLongUp } from 'react-icons/hi2';
 import { changeActive } from '../redux/userRedux';
+import { setFocusedId } from '../redux/notificationRedux';
 
 const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
 
@@ -18,7 +19,8 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
   const orderProducts = useSelector((state: RootState) => state.order.products)
   const inputRefs = useRef<InputRefs>({});
   const active = useSelector((state: RootState) => state.user.isActive);
-
+  const focusedId = useSelector((state: RootState) => state.notifications.focusedId);
+  
   const [openPriceFormProductId, setOpenPriceFormProductId] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [priceDifference, setPriceDifference] = useState<number>(0);
@@ -45,7 +47,19 @@ const ProductItem = ({product, focused, reloadProducts}: ProductItemProps ) => {
     fetchUserStatus();
   }, [user, dispatch]);
   
-
+  useEffect(() => {
+    const handleGlobalClick = (e: MouseEvent) => {
+      const targetElement = e.target as Element;
+      if (targetElement && focusedId && targetElement.closest('.orderItem') === null) {
+        dispatch(setFocusedId(''));
+      }
+    };
+    window.addEventListener('click', handleGlobalClick);
+    return () => {
+      window.removeEventListener('click', handleGlobalClick);
+    };
+  }, [focusedId, dispatch]);
+  
   const handleUpdatePrice = async (productId: string, newPrice: number) => {
     if (user?.isAdmin && user.accessToken) {
       const bodyObj = { newPrice };
