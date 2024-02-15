@@ -9,6 +9,7 @@ import CustomerItem from "./CustomerItem";
 import OrderItem from "./OrderItem";
 import ProductStatsBarChart from "./ProductStatsBarChart";
 import CustomActiveShapePieChart from "./CustomActiveShapePieChart";
+import LineChartComponent from "./LineChartComponent";
 
 
 
@@ -23,5 +24,6 @@ export {
   CustomerItem,
   OrderItem,
   ProductStatsBarChart,
-  CustomActiveShapePieChart
+  CustomActiveShapePieChart,
+  LineChartComponent
 }

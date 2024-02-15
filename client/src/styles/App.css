@@ -239,7 +239,7 @@ header, footer {
   transition: width 0.3s ease-in-out; 
 }
 
-.contactBlock{
+.textBlock{
   display: flex;
   gap: 20px;
 }

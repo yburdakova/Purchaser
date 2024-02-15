@@ -5,11 +5,12 @@ import { RootState } from '../redux/store';
 import { CategoryData, CustomerRequest, NotificationData, OrderData, ProductData, UserData } from '../data/types';
 import { addCategories, addCustomerRequests, addOrders, addProducts, addUsers} from '../redux/adminRedux';
 import { getNotifications } from '../redux/notificationRedux';
+import { calculateTopProducts } from '../redux/admDachboardThunk';
+import { LineChartComponent } from '../components';
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
-  const requests = useSelector((state: RootState) => state.admin.customerRequests);
   const topProducts = useSelector((state: RootState) => state.admdashboard.favoriteProducts);
   // const users = useSelector((state: RootState) => state.admin.users);
 
@@ -24,21 +25,32 @@ const AdminDashboard = () => {
     }
   }, [dispatch, user?.isAdmin, user?.accessToken]);
 
+  useEffect(() => {
+    dispatch(calculateTopProducts());
+  }, [dispatch]);
+
   
   return (
     <div className='outletContainer'>
       <div className="viewBox">
       <div className="dashboardPanel">
       <div className="widgetBox">
+        <div className="bottom-space">Продукты, которые заказывают чаще других:</div>
           {topProducts&&
-            topProducts.map((product)=>
-              <div className="" key={product._id}>{product.title}</div>
+            topProducts.map((product, index)=>
+              <div className="textBlock" key={product}>
+                <div className="">{ index +1 }</div>
+                <div className="">{product}</div>
+              </div>
             )
           }
         </div>
-
+        <div className="widgetBox">
+        <div className="bottom-space">Изменение цены:</div>
+        <LineChartComponent/>
+        </div>
       </div>
-        
+      
       </div>
     </div>
   )

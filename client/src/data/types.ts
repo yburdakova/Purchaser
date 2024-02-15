@@ -213,19 +213,11 @@ export interface ProductStatsItem{
   quantity: number;
 }
 
-export interface PriceHistoryItemProps {
-  price: number;
-  date: Date;
-}
-
-export interface FavoriteProductsProps {
-  title: string;
-  amountChange: number;
-  priceHistory: PriceHistoryItemProps[]
-}
 
 export interface AdmDashboardSlice {
-  favoriteProducts: FavoriteProductsProps[],
+  favoriteProducts: string[];
+  loading: boolean;
+  error: null | string;
 }
 
 export interface ProductStatsBarChartProps {

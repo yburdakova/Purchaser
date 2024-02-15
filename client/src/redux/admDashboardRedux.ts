@@ -6,8 +6,8 @@ const admDashboardSlice = createSlice({
   name: "admdashboard",
   initialState: {
     favoriteProducts: [],
-    loading: false, // Добавлено
-    error: null // Добавлено
+    loading: false,
+    error: null
   } as AdmDashboardSlice,
   
   reducers: {
@@ -15,18 +15,18 @@ const admDashboardSlice = createSlice({
   },
   extraReducers:  (builder) => {
     builder
-      .addCase(calculateTopProducts.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(calculateTopProducts.fulfilled, (state, action) => {
-        state.favoriteProducts = action.payload;
-        state.loading = false;
-      })
-      .addCase(calculateTopProducts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || 'Не удалось получить данные о популярных продуктах';
-      });
+    .addCase(calculateTopProducts.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+    .addCase(calculateTopProducts.fulfilled, (state, action) => {
+      state.favoriteProducts = action.payload;
+      state.loading = false;
+    })
+    .addCase(calculateTopProducts.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || 'Не удалось получить данные о популярных продуктах';
+    });
   }
 });
 

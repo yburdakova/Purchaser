@@ -19,8 +19,7 @@ export const calculateTopProducts = createAsyncThunk(
       .slice(0, 5)
       .map(([title]) => title);
 
-
     return topProducts;
-    
+
   }
 );
