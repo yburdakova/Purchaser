@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import axios from "axios";
 import { useEffect } from "react";
+import { RootState } from "../redux/store";
 import { getAuthUsersData } from "../redux/apiCalls";
 import { changeActive } from "../redux/userRedux";
 import { formatId } from "../middleware/formatId";
 import { getNotifications } from "../redux/notificationRedux";
 import { BASE_URL, userRequest } from "../middleware/requestMethods";
 import { NotificationData } from "../data/types";
-import axios from "axios";
-import { DiJava } from "react-icons/di";
+
 
 const Account = () => {
   const user = useSelector((state: RootState) => state.user.currentUser);

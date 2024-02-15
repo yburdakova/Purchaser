@@ -1,43 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AdmDashboardSlice, ProductData, ProductStatsItem} from "../data/types";
+import { AdmDashboardSlice} from "../data/types";
+import { calculateTopProducts } from "./admDachboardThunk";
 
 const admDashboardSlice = createSlice({
-  name: "admcustdashboard",
+  name: "admdashboard",
   initialState: {
-    products: [],
-    productStats: []
+    favoriteProducts: [],
+    loading: false, // Добавлено
+    error: null // Добавлено
   } as AdmDashboardSlice,
   
   reducers: {
-    getProducts: (state, action) => {
-      state.products = action.payload
-      console.log(state.products)
-    },
-    calculateProductStat: (state) => {
-      const categoryCounts: { [key: string]: number } = {};
-      state.products.forEach((product: ProductData) => {
-        if (product.category in categoryCounts) {
-          categoryCounts[product.category]++;
-        } else {
-          categoryCounts[product.category] = 1;
-        }
+    
+  },
+  extraReducers:  (builder) => {
+    builder
+      .addCase(calculateTopProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(calculateTopProducts.fulfilled, (state, action) => {
+        state.favoriteProducts = action.payload;
+        state.loading = false;
+      })
+      .addCase(calculateTopProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Не удалось получить данные о популярных продуктах';
       });
-      const productStats = Object.entries(categoryCounts).map(([categoryTitle, quantity]): ProductStatsItem => ({
-        categoryTitle,
-        quantity: quantity
-      }));
-
-      state.productStats = productStats;
-      console.log(state.productStats)
-    }
-
   }
 });
-
-export const { 
-  getProducts,
-  calculateProductStat
-} = admDashboardSlice.actions;
 
 export default admDashboardSlice.reducer;
 

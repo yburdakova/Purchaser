@@ -56,6 +56,7 @@ export interface ProductData {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
 export interface InputRefs {
   [key: string]: HTMLInputElement | null;
 }
@@ -65,7 +66,7 @@ export interface OrderData {
   userId? : string;
   products?: ProductData[];
   amount?: number;
-  status: string;
+  status?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -212,9 +213,19 @@ export interface ProductStatsItem{
   quantity: number;
 }
 
+export interface PriceHistoryItemProps {
+  price: number;
+  date: Date;
+}
+
+export interface FavoriteProductsProps {
+  title: string;
+  amountChange: number;
+  priceHistory: PriceHistoryItemProps[]
+}
+
 export interface AdmDashboardSlice {
-  products: ProductData[],
-  productStats: ProductStatsItem[],
+  favoriteProducts: FavoriteProductsProps[],
 }
 
 export interface ProductStatsBarChartProps {

@@ -10,8 +10,8 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user.currentUser);
   const requests = useSelector((state: RootState) => state.admin.customerRequests);
+  const topProducts = useSelector((state: RootState) => state.admdashboard.favoriteProducts);
   // const users = useSelector((state: RootState) => state.admin.users);
-  const products = useSelector((state: RootState) => state.admin.products);
 
   useEffect(() => {
     if (user?.isAdmin && user.accessToken) {
@@ -28,21 +28,17 @@ const AdminDashboard = () => {
   return (
     <div className='outletContainer'>
       <div className="viewBox">
-        <div className="widgetBox">
-          {requests&&
-            requests.map((request)=>
-              <div className="" key={request._id}>{request.contactName}</div>
-            )
-          }
-        </div>
-        
-        <div className="widgetBox">
-          {products&&
-            products.map((product)=>
+      <div className="dashboardPanel">
+      <div className="widgetBox">
+          {topProducts&&
+            topProducts.map((product)=>
               <div className="" key={product._id}>{product.title}</div>
             )
           }
         </div>
+
+      </div>
+        
       </div>
     </div>
   )

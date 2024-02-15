@@ -42,7 +42,7 @@ const custDashboardSlice = createSlice({
         statusCounts[status] = 0;
       });
       state.orders.forEach((order: OrderData) => {
-        if (order.status in statusCounts) {
+        if (order.status && order.status in statusCounts) {
           statusCounts[order.status]++;
         }
       });
