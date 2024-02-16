@@ -146,9 +146,9 @@ const AdminRequests = () => {
 
   if ( requests.length == 0 ) {
     return (
-      <div className='infopage'>
-      <div className="">Запросов нет</div>
-  </div>
+      <div className='outletContainer'>
+        <div className="">Запросов нет</div>
+      </div>
     )
   }
 

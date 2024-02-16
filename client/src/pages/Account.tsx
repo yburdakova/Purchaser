@@ -64,12 +64,12 @@ const Account = () => {
   return (
     <div className='outletContainer'>
       <div className="viewBox">
-        <h2 className="">{user&&user.title}</h2>
+        <h2>{user&&user.title}</h2>
         <div className="bottom-space">Уникальный номер клиента: {user && user._id && formatId(user._id)}</div>
         <div className="bottom-space">Статус: {active ? " Подключен" : "Отключен"}</div>
         <div className="">Ваши контакты, указанные в системе:</div>
         {user?.contacts?.map(contact => 
-          <div className="contactBlock">
+          <div className="textBlock">
             <div className="">{contact.contactName}</div>
             <div className="">{contact.contactPhone}</div>
           </div>

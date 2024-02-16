@@ -69,7 +69,7 @@ useEffect(() => {
               <ProductStatsBarChart type="products"/>
             </div>
           <div className="widgetBox">
-            <div className="">В вашей истории заявок: {orders.length} . Статистика стасуса заявок: </div>
+            <div className="">В вашей истории заявок: {orders.length} . Статистика статуса заявок: </div>
             <CustomActiveShapePieChart/>
           </div>
         </div>

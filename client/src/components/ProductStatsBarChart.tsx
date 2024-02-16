@@ -43,7 +43,7 @@ const ProductStatsBarChart: React.FC<ProductStatsBarChartProps> = ({ type }) => 
         >
         <XAxis padding={{ left: 2, right: 2 }} tickFormatter={(value) => value + 1}/>
         <Tooltip content={<CustomTooltip active payload={productStats} />} cursor={false}/>
-        <Bar dataKey="quantity" fill="#33425c" activeBar={{ stroke: '#4A7BD0', strokeWidth: 2 }} radius={[10, 10, 0, 0]}>
+        <Bar dataKey="quantity" fill="#4A7BD0" activeBar={{ stroke: '#4A7BD0', strokeWidth: 2 }} radius={[10, 10, 0, 0]}>
           <LabelList dataKey={dataKey} position="top" fontSize={12}/>
         </Bar>
       </BarChart>

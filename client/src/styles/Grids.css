@@ -24,19 +24,19 @@
   grid-template-columns: 12% 21% 18% 15% 12% 10% 10%;
 }
 .customerProductHeight{
-  max-height: 680px;
+  max-height: 500px;
 }
 .customerOrderHeight{
-  max-height: 760px;
+  max-height: 600px;
 }
 .admRequestHeight{
   max-height: 760px;
 }
 .admProductHeight{
-  max-height: 600px;
+  max-height: 500px;
 }
 .admCustomersHeight{
-  max-height: 600px;
+  max-height: 520px;
 }
 /* ==============================================Custom Tables=================================================== */
 

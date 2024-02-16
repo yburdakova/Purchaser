@@ -75,5 +75,8 @@ button {
   a:hover {
     color: #1D2634;
   }
+  h1, h2, h3 {
+    color: #213547;
+  }
 
 }

@@ -101,3 +101,11 @@ th, td{
   margin-top: 20px;
   font-weight: 600;
 }
+
+@media (prefers-color-scheme: light) {
+  .quantityBox > input{
+    background-color: #F8F9FC;
+  }
+  
+}
+

@@ -63,19 +63,30 @@ const AdminDashboard = () => {
       <div className="viewBox">
       <div className="dashboardPanel">
       <div className="widgetBox">
-        <div className="bottom-space">Ваши самые популярные продукты:</div>
-          {topProducts&&
-            topProducts.map((product)=>
-              <div className="textBlock bottom-space cursor uppercase" key={product} onClick={() => hadleClickSetChartProduct(product)}>
-                <PiStarBold size={26} color={productForChart === product ? "#4A7BD0" : "white"}/>
-                <div className="">{product}</div>
-              </div>
-            )
-          }
+        {topProducts.length > 0 
+          ? <div className="">
+              <div className="bottom-space">Ваши самые популярные продукты:</div>
+              {topProducts&&
+                topProducts.map((product)=>
+                  <div className="textBlock bottom-space cursor uppercase" key={product} onClick={() => hadleClickSetChartProduct(product)}>
+                    <PiStarBold size={26} color={productForChart === product ? "#4A7BD0" : "#B1B4B8"}/>
+                    <div className="">{product}</div>
+                  </div>
+                )
+              }
+            </div>
+          : <div className="">Недостаточно данных</div>
+        }
         </div>
         <div className="widgetBox">
-        <div className="bottom-space">Изменение цены для продукта "{productForChart}"</div>
-        <LineChartComponent date={chartData}/>
+        {topProducts.length > 0 
+          ? <div className="">
+              <div className="bottom-space">Изменение цены для продукта "{productForChart}"</div>
+              <LineChartComponent date={chartData}/>
+            </div>
+          : <div className="">Недостаточно данных</div>
+        }
+        
         </div>
       </div>
       

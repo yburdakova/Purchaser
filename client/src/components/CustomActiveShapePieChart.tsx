@@ -91,7 +91,7 @@ const CustomActiveShapePieChart = () => {
         cy={200}
         innerRadius={100}
         outerRadius={140}
-        fill="#576E93"
+        fill="#4A7BD0"
         dataKey="quantity"
         onMouseEnter={onPieEnter}
       />
