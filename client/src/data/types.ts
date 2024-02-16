@@ -39,10 +39,17 @@ export interface NotificationData {
   };
   createdAt: Date;
 }
-interface HisoryPrice {
+export interface HisoryPrice {
+    _id?: string;
     price: number;
     date?: Date;
 }
+
+export interface TransformedDataItem {
+  date: string;
+  price: number;
+}
+
 export interface ProductData {
   _id?: string;
   customId? : string;

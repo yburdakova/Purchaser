@@ -238,7 +238,14 @@ header, footer {
   background-color:  #4A7BD0; 
   transition: width 0.3s ease-in-out; 
 }
-
+.cursor{
+  cursor: pointer;
+}
+.uppercase{
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 1em;
+}
 .textBlock{
   display: flex;
   gap: 20px;
