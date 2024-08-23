@@ -78,12 +78,13 @@
   border: none;
   cursor: pointer;
   color:  #57606E;
+  
 }
 
 
 @media (prefers-color-scheme: light) {
   .input, .label, .inputDark, .labelDark {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.863);
   }
 
   .focused .label, .focusedDark .labelDark,

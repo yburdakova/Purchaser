@@ -1,6 +1,6 @@
-# Purchaser
+# Project Management Application for High-Volume Scanning Projects
 
-Welcome to the Purchaser project! This is a full-stack web application for B2C food wholesale business. In addition, it comes with an admin dashboard to manage the platform effectively.
+Welcome to the Project Management Application for High-Volume Scanning Projects! This is a quality management system designed specifically for high-volume scanner teams. The application helps track box readiness indicators and team performance metrics, such as task completion speed, all through a modern, responsive dashboard.
 
 ## Table of Contents
 
@@ -8,62 +8,53 @@ Welcome to the Purchaser project! This is a full-stack web application for B2C f
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
-- [Admin Dashboard](#admin-dashboard)
+- [Dashboard](#dashboard)
 - [Author](#author)
-
 
 ## Features
 
-- **Client Token Authentication**: Allow clients to use DB for orders.
-
-- **Product Listings**: Display a wide range of farm-fresh products with details, pricing, and images.
-
-- **Orders**: Create, save and manage orders using a convenient dashboard for client and administator.
-
-- **Admin Dashboard**: Provide administrators with tools to manage products, orders, and user accounts.
-
+- **Box Readiness Tracking**: Monitor the readiness status of boxes in real-time.
+- **Performance Metrics**: Track key performance metrics, including task completion speed for team members.
+- **Interactive Dashboard**: Visualize performance data with charts and graphs for better decision-making.
+- **State Management**: Efficient state management using Redux Toolkit.
+- **Routing**: Navigate smoothly between different sections of the application with React Router.
+- **Iconography**: Enhance the user experience with a comprehensive set of icons from react-icons.
 
 ## Technologies Used
 
-- **Frontend**: React, Redux, HTML, CSS
-
-- **Backend**: Node.js, Express, MongoDB, CryptoJS, JSON Web Tokens (JWT)
-
-- **Authentication**: [CryptoJS](https://cryptojs.gitbook.io/docs/) using The Advanced Encryption Standard (AES)
-
-- **Deployment**: 
+- **Frontend**: React, Redux Toolkit, TypeScript, Vite
+- **Routing**: React Router
+- **Icons**: React Icons
+- **State Management**: Redux Persist, Redux Toolkit
+- **Build Tool**: Vite
+- **Linting**: ESLint, TypeScript ESLint
 
 ## Getting Started
 
-1. Clone the repository:
- ```bash
-    git clone https://github.com/yburdakova/Purchaser
-```
+Clone the repository:
+    ```bash
+    git clone https://github.com/yburdakova/CCS.git
+    ```
 
-2. Install dependencies for the frontend and backend
-3. Set up your environment variables
-4. Initialize the database
-5. Start the development server
 
 ## Usage
 
-- Users can sign up or log in to their accounts.
-- Browse products, add them to the cart, and proceed to checkout.
-- Make payments using the available payment options.
-- View order history and manage their profiles.
+- **Dashboard**: View real-time data on box readiness and team performance metrics.
+- **Navigation**: Use the navigation menu to access different sections of the application.
+- **Metrics Visualization**: See visual representations of team performance, such as task completion speed.
 
-## Admin Dashboard
+## Dashboard
 
-The admin dashboard is accessible at `/admin`. Admins can:
+The dashboard provides an interactive interface where users can:
 
-- Add, edit, or delete product listings.
-- Manage user accounts, including roles and permissions.
-- View and process incoming orders.
+- Monitor box readiness indicators.
+- Track team performance metrics.
+- View detailed visualizations through charts and graphs.
 
 ## Author
 
 - **Author Name**: Yana Burdakova
 - **Email**: burdakovacom@gmail.com
-- **Portfolio**: https://burdakova.com
-- **GitHub**: [Your GitHub Profile](https://github.com/yburdakova)
-- **LinkedIn**: [Your LinkedIn Profile](https://www.linkedin.com/in/yana-burdakova/)
+- **Portfolio**: [Yana Burdakova](https://burdakova.com)
+- **GitHub**: [Yana's GitHub Profile](https://github.com/yburdakova)
+- **LinkedIn**: [Yana's LinkedIn Profile](https://www.linkedin.com/in/yana-burdakova/)
