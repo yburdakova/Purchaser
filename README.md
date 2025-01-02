@@ -27,7 +27,7 @@ Welcome to the Purchaser project! This is a full-stack web application for B2C f
 
 - **Frontend**: React, Redux, HTML, CSS
 
-- **Backend**: Node.js, Express, MongoDB, CryptoJS, JSON Web Tokens (JWT)
+- **Backend**: PHP, Apache, MySQL, OpenSSL, Sessions (replacing CryptoJS and JSON Web Tokens).
 
 - **Authentication**: [CryptoJS](https://cryptojs.gitbook.io/docs/) using The Advanced Encryption Standard (AES)
 
